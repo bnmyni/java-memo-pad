@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.devops.report.dao.UserDao">
+
+	<select id="login" resultType="com.aspire.devops.report.model.UserInfo">
+		select login_name as username from ops_user where login_name = #{0} and passwd = #{1} and status=1
+	</select>
+
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.devops.report.dao.ReportDao">
+
+	<sql id="commonWhereSQL">
+		<if test="startDate != null and endDate != null">
+			and (a._end_date BETWEEN STR_TO_DATE('${startDate}', '%Y-%m-%d') and STR_TO_DATE('${endDate}', '%Y-%m-%d')
+			or
+			a._start_date BETWEEN STR_TO_DATE('${startDate}', '%Y-%m-%d') and STR_TO_DATE('${endDate}', '%Y-%m-%d'))
+		</if>
+		<if test="sub_pid != null">
+			and a._sub_Id  = ${sub_pid}
+		</if>
+		<if test="pid != null">
+			and (a._sub_Id in (
+			select b._sub_Id from zt_sub_project b where b._id = ${pid}
+			) or a._sub_Id = ${pid})
+		</if>
+	</sql>
+
+	<!--progress(Long pid, Long sub_pid, String startDate, String endDate);-->
+	<select id="progress" parameterType="com.aspire.devops.report.vo.ProgressVo" resultType="com.aspire.devops.report.model.ProgressInfo">
+		<![CDATA[
+		SELECT
+		sum((case when a._released_date is null and a._end_date >= CURDATE() then 1 else 0 end)) developing,
+		sum((case when a._released_date is null and a._end_date < CURDATE() then 1 else 0 end)) delay_developing,
+		sum((case when a._released_date is not null and a._end_date >= a._released_date then 1 else 0 end)) released,
+		sum((case when a._released_date is not null and a._end_date < a._released_date then 1 else 0 end)) delay_released
+		FROM
+			zt_build a
+		WHERE 1=1
+		]]>
+		<include refid="commonWhereSQL"/>
+	</select>
+	
+	
+	<select id="top5byManhaur" resultType="com.aspire.devops.report.model.BuildManHaurTop5Info"
+			parameterType="com.aspire.devops.report.vo.BuildBugsQueryParamsVo">
+		select sum(IFNULL(y._quantity, 0))/174 man_haur, f.id, f.`name` from
+		(
+		select a._id as nid,c._id as id, c._name as `name` from zt_build a, zt_sub_project b, zt_project c
+		where a._sub_Id = b._sub_Id
+		and b._id = c._id
+		<include refid="commonWhereSQL"/>
+		UNION all
+		select a._id as nid, b._id as id, b._name as `name` from zt_build a,  zt_project b
+		where a._sub_Id = b._id
+		<include refid="commonWhereSQL"/>
+		) f LEFT JOIN zt_story t on f.nid = t._id
+		LEFT JOIN zt_man_haur y on t._story_id = y._story_id
+		 group by f.id,f.`name` order by man_haur desc limit ${limits}
+	</select>
+
+	<select id="getBuildBugs"
+			resultType="com.aspire.devops.report.model.BuildBugsQueryResut"
+			parameterType="com.aspire.devops.report.vo.BuildBugsQueryParamsVo">
+		select a._id as `id`,sum(IFNULL(b.bugs,0)) as bugs,sum(IFNULL(b.test_bugs,0)) as test_bugs, FORMAT(IFNULL(MAX(ut),0), 4) ut, FORMAT(IFNULL(MAX(issues),0), 4) issues
+		from zt_sub_project a ,
+		(select a.*,b.ut,
+		b.issues*1000/(select f.total_line from ops_code_statistics f where f._num = a._num) as issues,
+		(select IFNULL(_sum,0) _sum from zt_bugs t where t._id = a._id and t._type = 2) bugs,
+		(select IFNULL(_sum,0) _sum from zt_bugs t where t._id = a._id and t._type = 1) test_bugs
+		from zt_build a LEFT JOIN ops_sonar_data b on a._num = b._num ) b
+		where (a._sub_Id = b._sub_Id or a._id = b._sub_id)
+		<if test="ids != null">
+		and a._id  in (${ids})
+		</if>
+		<if test="startDate != null and endDate != null">
+			and (b._end_date BETWEEN STR_TO_DATE('${startDate}', '%Y-%m-%d') and STR_TO_DATE('${endDate}', '%Y-%m-%d')
+			or
+			b._start_date BETWEEN STR_TO_DATE('${startDate}', '%Y-%m-%d') and STR_TO_DATE('${endDate}', '%Y-%m-%d'))
+		</if>
+		group by a._id
+	</select>
+
+	<select id="top5ByPid"
+			resultType="com.aspire.devops.report.model.Top5ResultInfo"
+			parameterType="com.aspire.devops.report.vo.BuildBugsQueryParamsVo">
+		select g._id as pid,
+		g._name as pname,
+		IFNULL(SUM(IFNULL(g.issues,0))*1000/SUM(IFNULL(g.total_line,0)),0) as code_quality,
+		SUM(IFNULL(g.bugs,0)) as bugs ,
+		SUM(IFNULL(g.test_bugs,0)) as test_bugs ,
+		IFNULL(max(g.ut),0) ut,
+		SUM(IFNULL(g._quantity,0))/174 as man_haur
+		from (
+		select a._id,a._name,b._num,c._content, d._quantity, e.total_line as total_line, f.issues,f.ut ,
+		(select IFNULL(_sum,0) _sum from zt_bugs t where t._id = b._id and t._type = 2) bugs,
+		(select IFNULL(_sum,0) _sum from zt_bugs t where t._id = b._id and t._type = 1) test_bugs
+		from zt_sub_project a LEFT JOIN zt_build b
+		on a._sub_id = b._sub_id
+		LEFT JOIN zt_story c
+		on b._id = c._id
+		LEFT JOIN zt_man_haur d
+		on c._story_id = d._story_id
+		LEFT JOIN ops_code_statistics e
+		on b._num = e._num
+		LEFT JOIN ops_sonar_data f
+		on f._num = b._num
+		and a._id = ${pid}
+		<if test="startDate != null and endDate != null">
+			and (b._end_date BETWEEN STR_TO_DATE('${startDate}', '%Y-%m-%d') and STR_TO_DATE('${endDate}', '%Y-%m-%d')
+			or
+			b._start_date BETWEEN STR_TO_DATE('${startDate}', '%Y-%m-%d') and STR_TO_DATE('${endDate}', '%Y-%m-%d'))
+		</if>
+		) g  where g._id = ${pid}
+		group by g._id, g._name order by SUM(IFNULL(g._quantity,0)) desc limit ${limits}
+	</select>
+</mapper>

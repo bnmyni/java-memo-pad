@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.devops.report.dao.DetailDao">
+
+	<sql id="commonWhereSQL">
+		<if test="startDate != null and endDate != null">
+			and (a._end_date BETWEEN STR_TO_DATE('${startDate}', '%Y-%m-%d') and STR_TO_DATE('${endDate}', '%Y-%m-%d')
+			or
+			a._start_date BETWEEN STR_TO_DATE('${startDate}', '%Y-%m-%d') and STR_TO_DATE('${endDate}', '%Y-%m-%d'))
+		</if>
+		<if test="sub_pid != null">
+			and a._sub_Id  = ${sub_pid}
+		</if>
+		<if test="pid != null">
+			and (a._sub_Id in (
+			select b._sub_Id from zt_sub_project b where b._id = ${pid}
+			) or a._sub_Id = ${pid})
+		</if>
+	</sql>
+
+	<sql id="commonStatusWhereSQL">
+		<if test="status != null and status == 1">
+			and a._released_date is not null and a._released_date &lt;= a._end_date
+		</if>
+		<if test="status != null and status == 2">
+			and a._released_date is null and a._end_date >= CURDATE()
+		</if>
+		<if test="status != null and status == 3">
+			and a._released_date is not null and a._released_date > a._end_date
+		</if>
+		<if test="status != null and status == 4">
+			and a._released_date is null and a._end_date &lt; CURDATE()
+		</if>
+	</sql>
+
+	<select id="getProgressDetail" parameterType="com.aspire.devops.report.vo.ProgressVo"
+			resultType="com.aspire.devops.report.model.BuildProgressDetailInfo">
+		<![CDATA[
+		select a._num as num, a._end_date end_date, a._start_date start_date,a._released_date released_date,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status,
+		b._sub_Id as  sub_pid,b._name as sub_pname, c._id as pid, c._name as pname
+		from  zt_build a , zt_sub_project b, zt_project c
+		where a._sub_Id = b._sub_Id
+		and b._id = c._id
+		]]>
+		<include refid="commonStatusWhereSQL"/>
+		<include refid="commonWhereSQL"/>
+		union ALL
+		<![CDATA[
+		select a._num as num, a._end_date end_date, a._start_date start_date,a._released_date released_date,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status,
+		NULL as  sub_pid,NULL as sub_pname, b._id as pid, b._name as pname
+		from zt_build a, zt_project b
+		where a._sub_Id = b._id
+		]]>
+		<include refid="commonStatusWhereSQL"/>
+		<include refid="commonWhereSQL"/>
+		order by pname, sub_pname, end_date desc
+	</select>
+
+	<select id="getCostDetail" parameterType="com.aspire.devops.report.vo.ProgressVo"
+			resultType="com.aspire.devops.report.model.BuildCostDetailInfo">
+		<![CDATA[
+		select sum(IFNULL(f._quantity,0)) actual_workload, sum(IFNULL(b._workload,0)) expected_workload,
+		a._num as num,a._end_date as end_date,a._start_date as start_date,
+		d._sub_Id as sub_pid,d._name as sub_pname ,e._id as pid , e._name as pname,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status
+		from zt_man_haur f, zt_story b, zt_build a, zt_sub_project d, zt_project e
+		where f._story_id = b._story_id
+		]]>
+		and b._id = a._id
+		and a._sub_Id = d._sub_Id
+		and d._id = e._id
+		<include refid="commonWhereSQL"/>
+		group by num,a._end_date,a._start_date,d._name,d._sub_Id,e._id,e._name
+	</select>
+	
+	<select id="getUtDetail" parameterType="com.aspire.devops.report.vo.ProgressVo" resultType="com.aspire.devops.report.model.BuildUtDetailInfo">
+		<![CDATA[
+		select c._id as pid,c._name as pname, b._sub_Id as sub_pid,b._name as sub_pname,
+		a._num as num,a._start_date as start_date, _end_date as end_date,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status, 0 as ut
+		from zt_build a, zt_sub_project b, zt_project c
+		where a._sub_Id = b._sub_Id
+		and b._id = c._id
+		]]>
+		<include refid="commonWhereSQL"/>
+		union ALL
+		<![CDATA[
+		select b._id as pid,b._name as pname, null as sub_pid, null as sub_pname, a._num as num,
+		a._start_date as start_date, _end_date as end_date,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status, 0 as ut
+		from zt_build a, zt_project b
+		where a._sub_Id = b._id
+		]]>
+		<include refid="commonWhereSQL"/>
+	</select>
+
+
+	<select id="getBugsDetail" parameterType="com.aspire.devops.report.vo.ProgressVo" resultType="com.aspire.devops.report.model.BuildBugsDetailInfo">
+		<![CDATA[
+		select c._id as pid,c._name as pname, b._sub_Id as sub_pid,b._name as sub_pname,
+		a._num as num,a._start_date as start_date, _end_date as end_date,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status,
+		IFNULL((select _sum from zt_bugs f where f._id = a._id and f._type = 1),0) as test_bugs,
+IFNULL((select _sum from zt_bugs f where f._id = a._id and f._type = 2),0) as bugs
+		from zt_build a, zt_sub_project b, zt_project c
+		where a._sub_Id = b._sub_Id
+		and b._id = c._id
+		]]>
+		<include refid="commonWhereSQL"/>
+		union ALL
+		<![CDATA[
+		select b._id as pid,b._name as pname, null as sub_pid, null as sub_pname, a._num as num,
+		a._start_date as start_date, _end_date as end_date,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status,
+		IFNULL((select _sum from zt_bugs f where f._id = a._id and f._type = 1),0) as test_bugs,
+		IFNULL((select _sum from zt_bugs f where f._id = a._id and f._type = 2),0) as bugs
+		from zt_build a, zt_project b
+		where a._sub_Id = b._id
+		]]>
+		<include refid="commonWhereSQL"/>
+	</select>
+	
+	<select id="getCodeAnalysis" parameterType="com.aspire.devops.report.vo.ProgressVo" resultType="com.aspire.devops.report.model.BuildCodeAnalysisInfo">
+		<![CDATA[
+		select c._id as pid,c._name as pname, b._sub_Id as sub_pid,b._name as sub_pname,
+		a._num as num,a._start_date as start_date, _end_date as end_date,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status,	0 as issue
+		from zt_build a, zt_sub_project b, zt_project c
+		where a._sub_Id = b._sub_Id
+		and b._id = c._id
+		]]>
+		<include refid="commonWhereSQL"/>
+		union ALL
+		<![CDATA[
+		select b._id as pid,b._name as pname, null as sub_pid, null as sub_pname, a._num as num,
+		a._start_date as start_date, _end_date as end_date,
+		(case when a._released_date is not null and a._released_date <= a._end_date then 1
+		when a._released_date is null and a._end_date >= CURDATE() then 2
+		when a._released_date is not null and a._released_date > a._end_date then 3
+		when a._released_date is null and a._end_date < CURDATE() then 4
+		else 5 end) status,	0 as issue
+		from zt_build a, zt_project b
+		where a._sub_Id = b._id
+		]]>
+		<include refid="commonWhereSQL"/>
+	</select>
+
+</mapper>

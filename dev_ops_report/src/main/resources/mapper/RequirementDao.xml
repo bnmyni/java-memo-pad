@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.devops.report.dao.RequirementDao">
+
+    <select id="list" resultType="com.aspire.devops.report.model.RequirementInfo" parameterType="java.lang.String">
+        <![CDATA[
+        select b._num as num,
+            (case when b._released_date is not null and b._released_date <= b._end_date then 1
+            when b._released_date is null and b._end_date >= CURDATE() then 2
+            when b._released_date is not null and b._released_date > b._end_date then 3
+            when b._released_date is null and b._end_date < CURDATE() then 4
+            else 5 end) status,a._content as demand,a._workload as quantity,b._end_date as end_date,
+            b._start_date as start_date,
+			b._released_date as released_date
+            from zt_story a , zt_build b
+            where a._id = b._id
+            and a._content like CONCAT('%',#{content},'%')
+            limit 20
+        ]]>
+    </select>
+
+</mapper>
