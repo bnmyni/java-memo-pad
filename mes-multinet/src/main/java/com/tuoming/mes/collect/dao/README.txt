@@ -1,0 +1,11 @@
+目录功能说明：
+/impl包:数据采集数据库操作具体实现
+/CommandMapDao：定义指令字典对象的数据库操作接口。
+/CommandTemplateDao:定义指令模板对象的数据库操作接口
+/DbQueryCommandDao：定义"数据库查询采集对象"的数据库操作接口
+/FtpLogCommandDao：定义FTP采集数据任务实体对象的数据库操作接口
+/FtpServerDao：定义ftp服务器对象数据库操作接口
+/LogCommandDao：定义指令采集对象数据库操作接口
+/OperationLogDao：定义操作日志对象数据库操作接口
+/ServerCommandDao：定义服务器对象固化指令数据库操作接口
+/ServerDao：定义服务器对象数据库操作接口

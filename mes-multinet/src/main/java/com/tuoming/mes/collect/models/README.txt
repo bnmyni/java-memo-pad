@@ -1,0 +1,12 @@
+AdjustCommand:业务调整指令存储对象 ,对应aos_adjust_command数据表中存储的内容
+CommandMap:指令字典对象 ,对应aos_command_map数据表中存储的内容 该对象存储某个指令对应的一些公共配置，如 结束标识、成功标识、失败标识、成功及失败之后需要执行的动作 等
+CommandTemplate:指令模板对象，用于存储系统内需要生成的指令格式，通过通配符配置
+DbQueryCommand:数据库查询采集任务配置对象，对应数据表 aos_db_command
+FtpLogCommand:配置通过FTP采集数据的任务实体对象
+FtpServer:配置ftp服务器信息
+LogCommand：指令采集配置对象，对应数据表：   aos_log_command 该表配置了需要通过指令采集的数据列表 、所关联解析器等信息
+Manufacturers：配置设备生产商\版本等信息 对应 aos_manufacturers 数据表配置
+ObjectType：对象类型配置对象
+OperationLog：操作日志对象，对应mes_oper_log表
+Server：服务器对象定义
+ServerCommand：服务固化操作配置，主要配置一些针对服务器固化的操作内容，如登录、退出等对应数据表   aos_server_command

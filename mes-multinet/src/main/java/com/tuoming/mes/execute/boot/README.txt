@@ -1,0 +1,10 @@
+目录功能说明：
+/configuration：系统初始化配置
+/console：调试窗台相关功能
+/models：系统调度任务的实体对象定义
+/scheduler：任务调用相关功能
+/AppContext：系统运行的公共上下文环境对象
+/Application：工具类，提供一些系统运行常用的静态方法
+/Bootstrap：系统的启动类
+/Constants：系统常量名称定义类
+/Version：获取系统版本信息的工具类

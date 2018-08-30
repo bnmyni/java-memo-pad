@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<configuration>
+    <configSections>
+        <section name="appSettings" handle="com.pyrlong.configuration.handler.NameValueFileSectionHandler"/>
+        <section name="DSLConfiguration" handle="com.pyrlong.dsl.config.DSLConfigurationSectionHandler"/>
+        <section name="properties" handle="com.pyrlong.configuration.handler.PropertyConfigurationHandler"/>
+		<section name="db-import" handle="com.tuoming.mes.collect.dpp.configuration.ConfigurationDbImportHandler"/>
+    </configSections>
+    <appSettings>
+        <add key="MaxTaskThreadCount" value="10"/>
+        <add key="QueryTimeout" value="100000"/>
+        <add key="bdbLogBufferSize" value="104857600"/>
+        <add key="bdbCacheSize" value="3048576000"/>
+    </appSettings>
+    <properties>
+        <add name="dpp" path="dpp.properties"/>
+        <add name="version" path="version.properties"/>
+    </properties>
+    <db-import>
+        <add name="TaskPlans" model="com.tuoming.mes.execute.boot.models.TaskPlan" group=""/>
+    </db-import>
+
+    <DSLConfiguration>
+        <function-classes>
+            <add name="LogFacade" prefix="" path="com.pyrlong.logging.LogFacade"/>
+            <add name="ProcessUtil" prefix="" path="com.pyrlong.util.ProcessHelper"/>
+            <add name="StringUtil" prefix="" path="com.pyrlong.util.StringUtil"/>
+            <add name="DateUtil" prefix="" path="com.pyrlong.util.DateUtil"/>
+        </function-classes>
+    </DSLConfiguration>
+</configuration>

@@ -1,0 +1,8 @@
+目录功能说明：
+/AbstractTextLineHandle：文本文件解析抽象工具类，提供文本文件读取、解析、存储的主要处理流程实现
+/FileFormateHandle：对读入文本执行格式化操作的处理
+/FormatedTextLineHandle：对带列头的数据格式的文件进行解析，可以混用正则表达式，主要用于hw这种比较规范格式文件的解析
+/JSONFileHandle：对带json的数据格式的文件进行解析，主要用于中兴部分json文件的解析
+/NormalCsvFileHandle：对csv的数据格式的文件进行解析
+/TextLineRegexHandle：对不规则的数据格式的文件进行解析，每行进行正则匹配处理，主要用于诺基亚，爱立信文件的解析
+/TextLineSplitHandle：对带列头的数据格式的文件进行解析，和FormatedTextLineHandle功能部分类似，但没有它功能强大，主要用于hw这种比较规范格式文件的解析
