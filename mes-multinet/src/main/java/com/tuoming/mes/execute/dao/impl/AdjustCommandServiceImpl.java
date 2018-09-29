@@ -174,10 +174,12 @@ public class AdjustCommandServiceImpl extends AbstractBaseService<AdjustCommand,
         //对各组命令启动独立线程进行执行
         ThreadPoolExecutor threadPool = new ThreadPoolExecutor(ConfigurationManager.getDefaultConfig().getInteger(
                 MESConstants.ADJUST_THREAD_CORE_POOL_SIZE, MESConstants.THREAD_CORE_POOL_SIZE_DEFAULT),
-                ConfigurationManager.getDefaultConfig().getInteger(MESConstants.ADJUST_THREAD_MAX_POOL_SIZE, MESConstants.THREAD_MAX_POOL_SIZE_DEFAULT),
+                ConfigurationManager.getDefaultConfig().getInteger(MESConstants.ADJUST_THREAD_MAX_POOL_SIZE,
+                        MESConstants.THREAD_MAX_POOL_SIZE_DEFAULT),
                 ConfigurationManager.getDefaultConfig().getInteger(MESConstants.ADJUST_THREAD_KEEP_ALIVE_TIME_IN_SECOND, MESConstants.THREAD_KEEP_ALIVE_TIME_IN_SECOND_DEFAULT),
                 TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         threadPool.setThreadFactory(new CustomThreadFactory(MESConstants.ADJUST_THREAD_NAME));
+
         //启动处理线程，同一个网元下同一个服务器启动一个线程下发指令
         for (ObjectType objType : commandCollection.keySet()) {
             Map<String, List<AdjustCommand>> bizCommands = commandCollection.get(objType);

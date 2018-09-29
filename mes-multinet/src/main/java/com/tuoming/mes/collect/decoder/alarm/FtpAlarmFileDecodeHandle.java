@@ -33,7 +33,7 @@ public class FtpAlarmFileDecodeHandle extends AbstractContentHandler {
 	private StringBuilder rowContent = new StringBuilder();
 	private static final String ZS = "zs";//该告警信息属于何种制式
 	private static final String DN = "dn";//通过该字段确定该告警信息属于何种制式
-	
+
 	protected void parseFiles() {
 		for (Map.Entry<String, Map<String, String>> fileName : sourceFileList.entrySet())
 			try {
@@ -50,7 +50,7 @@ public class FtpAlarmFileDecodeHandle extends AbstractContentHandler {
 				logger.error(e.getMessage(), e);
 			}
 	}
-	
+
 	@Override
 	public void startDocument() throws SAXException {
 		super.startDocument();
@@ -76,7 +76,7 @@ public class FtpAlarmFileDecodeHandle extends AbstractContentHandler {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void startElement(String namespaceURI, String localName,
 			String fullName, Attributes attributes) throws SAXException {
@@ -84,7 +84,7 @@ public class FtpAlarmFileDecodeHandle extends AbstractContentHandler {
 			rowContent.setLength(0);
 		}
 	}
-	
+
 	public void endElement(String namespaceURI, String localName, String fullName) throws SAXException {
 		if(columnFilter.contains(localName)) {
 			columnMap.put(localName, buf.toString().replaceAll("\r", "").replaceAll("\n", ""));

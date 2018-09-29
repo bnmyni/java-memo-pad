@@ -59,8 +59,7 @@ public class EnergyCellRefreshServiceImpl implements EnergyCellRefreshService {
 				groupName = Constant.AZIMUTH;
 			}
 			// 根据组名进行查询
-			List<EnergyCellRefreshSetting> settingList = energyCellRefreshDao
-					.queryRefCellSetting(bustype, groupName);
+			List<EnergyCellRefreshSetting> settingList = energyCellRefreshDao.queryRefCellSetting(bustype, groupName);
 			// 对分组后的数据进行遍历
 			refreshEnergy(bustype, settingList);
 		}
@@ -158,8 +157,10 @@ public class EnergyCellRefreshServiceImpl implements EnergyCellRefreshService {
 					rsTable = setList.get(rowsNum).getResTable();
 					energyCellRefreshDao.removeTable(rsTable);
 					energyCellRefreshDao.createResTable(rsTable, lsb);
+					// update by sunke 该方法不能放到if外面否则当
+					energyCellRefreshDao.addData(rsTable, lsb);
 				}
-				energyCellRefreshDao.addData(rsTable, lsb);
+
 				rowsNum ++;
 			}
 			/******************Neusoft********************/			

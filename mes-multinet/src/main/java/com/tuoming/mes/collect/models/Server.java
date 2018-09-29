@@ -16,6 +16,8 @@
 
 package com.tuoming.mes.collect.models;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -24,9 +26,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.pyrlong.net.RemoteServer;
 import com.pyrlong.util.StringUtil;
 import com.tuoming.mes.collect.dpp.models.AbstractModel;

@@ -1,0 +1,13 @@
+目录功能说明：
+/AbstractModel：抽象对象模型，提供模型通用操作方法
+/Appsetting：appsetting数据库表实体对象，保存的主要是系统常量信息
+/ConnectionStringSetting：connections数据库表实体对象，保存的是数据库连接信息
+/DataColumMapping：数据表列对象映射模型
+/EncodeField： 用于标识需要加密存储的实体对象属性的方法
+/PageInfo：数据表分页信息对象
+/SysStatus：status数据库表实体对象，保存的是系统状态信息
+/TableColumnInfo：columns数据库表实体对象，定义的是列信息
+/TableDic：tab_dic数据库表实体对象，定义的是字典信息
+/TableInfo：tab_info数据库表实体对象，定义的数据表相关信息
+/TextItemRule：log_parser_item数据库表实体对象，定义的是具体解析字段信息
+/TextLogParser：log_parser数据库表实体对象，定义的指令的解析器信息

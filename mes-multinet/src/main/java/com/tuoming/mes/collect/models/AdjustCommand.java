@@ -16,8 +16,12 @@
 
 package com.tuoming.mes.collect.models;
 
-import java.util.Date;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Type;
 
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,12 +33,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Index;
-import org.hibernate.annotations.Type;
-
 import com.pyrlong.util.DateUtil;
 import com.tuoming.mes.collect.dpp.models.AbstractModel;
 
@@ -125,7 +123,7 @@ public class AdjustCommand extends AbstractModel {
      * 扩展字段，用于根据需要保存扩展信息
      */
     @Lob
-    @Type(type="text")
+    @Type(type = "text")
     @Column(name = "extend4", nullable = true)
     private String extend4;
 

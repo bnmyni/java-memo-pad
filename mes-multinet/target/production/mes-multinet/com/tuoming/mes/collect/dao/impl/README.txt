@@ -1,0 +1,10 @@
+目录功能说明：
+/CommandMapDaoImpl：CommandMapDao接口的实现类，主要用于处理指令字典对象
+/CommandTemplateDaoImpl：CommandTemplateDao接口实现类，主要用于处理指令模板对象
+/DbQueryCommandDaoImpl：DbQueryCommandDao接口实现类，主要用于处理数据库查询采集任务配置对象
+/FtpLogCommandDaoImpl：FtpLogCommandDao接口实现类，主要用于处理FTP采集数据任务对象
+/FtpServerDaoImpl：FtpServerDao接口实现类，主要用于处理ftp服务器对象
+/LogCommandDaoImpl：LogCommandDao接口实现类，主要用于处理指令采集对象
+/OperationLogDaoImpl：OperationLogDao接口实现类，主要用于处理操作日志对象
+/ServerCommandDaoImpl：ServerCommandDao接口实现类，主要用于处理服务固化操作配置对象，主要配置一些针对服务器固化的操作内容，如登录、退出等
+/ServerDaoImpl：ServerDao接口实现类，主要用于处理服务器对象

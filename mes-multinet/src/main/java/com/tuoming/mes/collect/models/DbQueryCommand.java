@@ -16,6 +16,9 @@
 
 package com.tuoming.mes.collect.models;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,10 +26,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.tuoming.mes.collect.dpp.models.AbstractModel;
 
 /**
@@ -74,10 +73,10 @@ public class DbQueryCommand extends AbstractModel {
     /**
      * 目标表名
      */
-    @Column( name = "target_table", length = 500, nullable = true )
+    @Column(name = "target_table", length = 500, nullable = true)
     private String targetTableName;
 
-    @Column( name = "target_db", length = 64, nullable = true )
+    @Column(name = "target_db", length = 64, nullable = true)
     private String targetDb;
 
     public String getTargetDb() {
@@ -91,7 +90,7 @@ public class DbQueryCommand extends AbstractModel {
     /**
      * 说明
      */
-    @Column( name = "remark", length = 256 )
+    @Column(name = "remark", length = 256)
     private String remark;
 
 

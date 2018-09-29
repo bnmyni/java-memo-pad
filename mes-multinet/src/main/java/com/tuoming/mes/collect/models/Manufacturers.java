@@ -16,14 +16,13 @@
 
 package com.tuoming.mes.collect.models;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.tuoming.mes.collect.dpp.models.AbstractModel;
 
 /**
@@ -91,8 +90,8 @@ public class Manufacturers extends AbstractModel {
         this.version = version;
     }
 
-	public String toString() {
-		return name;
-	}
-    
+    public String toString() {
+        return name;
+    }
+
 }

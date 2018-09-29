@@ -1,0 +1,16 @@
+spring:
+  cache:
+    #缓存名称
+    cache-names: dicmp-parter, aspire, sunke
+    guava:
+      #缓存最大数量500条, 缓存失效时间 6个小时
+      spec: maximumSize=500, expireAfterWrite=360m
+    type: guava
+#  redis:
+#    host: 10.12.70.22
+#    port: 6379
+#    pool:
+#      max-active: 8
+#      max-wait: -1
+#      min-idle: 1
+#      max-idle: 8
