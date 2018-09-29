@@ -86,8 +86,7 @@ public class SEBizServiceImpl implements SEBizService {
      */
     public void refreshCoverRate(String groupName) {
         logger.info("重叠覆盖度计算开始......");
-        OverDegreeCalService overDegreeCalService = AppContext
-                .getBean("overDegreeCalService");
+        OverDegreeCalService overDegreeCalService = AppContext.getBean("overDegreeCalService");
         overDegreeCalService.calculate(groupName);
         logger.info("重叠覆盖度计算结束......");
     }
@@ -138,7 +137,6 @@ public class SEBizServiceImpl implements SEBizService {
         logger.info(groupName + " kpi计算结束......");
     }
 
-    //计算15minKPI指标
     @Override
     public void calMinuteKpi(Map<String, String> context) {
         KpiCalService kpiCalService = AppContext.getBean("kpiCalService");
@@ -161,43 +159,35 @@ public class SEBizServiceImpl implements SEBizService {
      */
     public Map<String, String> buildContext() {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.SECOND, 0);// 采集时间不需要秒信息
+        cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.MINUTE,
-                (cal.get(Calendar.MINUTE) / Constant.PM_COLLECT_LD)
-                        * Constant.PM_COLLECT_LD);
-        SleepAreaSelectService selService = AppContext
-                .getBean("sleepAreaSelectService");
-        /*
-         * context中busytype的值由表mes_zs_coverage中base_overlay_degree决定
-		 * base_overlay_degree:1 busytype:true 0 false
-		 */
+        // 离当前时间最近的一个15min整数时间, 0~14=0,15~29=15,30-44=30,45-59=45
+        cal.set(Calendar.MINUTE, (cal.get(Calendar.MINUTE) / Constant.PM_COLLECT_LD) * Constant.PM_COLLECT_LD);
+        SleepAreaSelectService selService = AppContext.getBean("sleepAreaSelectService");
+
         Map<String, String> context = selService.queryScene();
-        context.put(Constant.CURRENT_COLLECTTIME,
-                DateUtil.format(cal.getTime()));
-        context.put(Constant.CURRENT_BATCH_KEY,
-                String.valueOf(cal.getTimeInMillis()));
-        // 获取任务开启时间
+        // 设置当前采集时间 yyyy-MM-dd HH:mm:ss
+        context.put(Constant.CURRENT_COLLECTTIME, DateUtil.format(cal.getTime()));
+        // 设置 CURRENT_BATCH_KEY = 时间戳
+        context.put(Constant.CURRENT_BATCH_KEY, String.valueOf(cal.getTimeInMillis()));
         cal.add(Calendar.MINUTE, Constant.PM_COLLECT_DELAY);
+        // 任务延迟执行时间 = 6
         context.put(Constant.CURRENT_TIME_DELAY, DateUtil.format(cal.getTime()));
-        cal.add(Calendar.MINUTE, -Constant.PM_COLLECT_LD * 2
-                - Constant.PM_COLLECT_DELAY);
-        context.put(Constant.KPI_CAL_MINUTE_TIME,
-                DateUtil.format(cal.getTime()));
+        cal.add(Calendar.MINUTE, -Constant.PM_COLLECT_LD * 2 - Constant.PM_COLLECT_DELAY);
+        // kpi计算时间
+        context.put(Constant.KPI_CAL_MINUTE_TIME, DateUtil.format(cal.getTime()));
 
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
-        context.put(Constant.CURRENT_BATCH_MR,
-                String.valueOf(cal.getTimeInMillis()));
-        HisDataFCastService fcastService = AppContext
-                .getBean("hisDataFCastService");
+        //　当前mr的批次号
+        context.put(Constant.CURRENT_BATCH_MR, String.valueOf(cal.getTimeInMillis()));
+        HisDataFCastService fcastService = AppContext.getBean("hisDataFCastService");
         Map<String, String> multinetPeriod = fcastService.getMultinetPeriod();
-        context.put(Constant.START_PERIOD,
-                multinetPeriod.get(Constant.START_PERIOD));
-        context.put(Constant.BEGIN_PERIOD,
-                multinetPeriod.get(Constant.BEGIN_PERIOD));
+        // 设置节能开始时间　和结束时间
+        context.put(Constant.START_PERIOD, multinetPeriod.get(Constant.START_PERIOD));
+        context.put(Constant.BEGIN_PERIOD, multinetPeriod.get(Constant.BEGIN_PERIOD));
+        // TODO 这个其实是垃圾代码，可以通过mes_zs_coverage 配置即可
         context.put(Constant.T2L, "true");
-
         return context;
     }
 
@@ -313,8 +303,6 @@ public class SEBizServiceImpl implements SEBizService {
         server.queryAll(groupName, batchid);
         logger.info("FtpLogCommandServiceImpl结束......PM");
     }
-
-    /******************** 3G退网 *****************************/
 
     public void tdNetworkOffCal(Map<String, String> context) {
         logger.info("3G智能退网根据覆盖度或覆盖度及性能指标筛选开始..............");

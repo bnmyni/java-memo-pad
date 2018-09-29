@@ -429,13 +429,14 @@ public class SleepAreaSelectServiceImpl implements SleepAreaSelectService {
         businessLogDao.insertLog(14, "休眠指令下发结束", 0);
     }
 
-    @Override
+
     /**
      * 获取休眠与补偿制式对应是否用方位角计算
      * @return
      */
+    @Override
     public Map<String, String> queryScene() {
-        Map<String, String> context = new HashMap<String, String>();
+        Map<String, String> context = new HashMap<>();
         List<Map<String, Integer>> list = sleepAreaSelDao.queryScene();
         for (Map<String, Integer> ctx : list) {
             context.put(String.valueOf(ctx.get("busytype")), ctx.get("base_overlay_degree") == 0 ? "false" : "true");
