@@ -73,12 +73,10 @@ public class SEBizServiceImpl implements SEBizService {
      * 该实现方法提供给外部接口调用，用于根据历史数据预测第二天的数据
      */
     public void hisDataFcast(Map context) {
-        logger.info("历史数据预测开始......");
         String groupName = String.valueOf(context.get(Constant.KEY_GROUP_NAME));
-        HisDataFCastService hisFcastService = AppContext
-                .getBean("hisDataFCastService");
+        System.out.println("当前执行groupName=" + groupName);
+        HisDataFCastService hisFcastService = AppContext.getBean("hisDataFCastService");
         hisFcastService.fCastNextData(groupName);
-        logger.info("历史数据预测结束......");
     }
 
     /**
@@ -261,28 +259,30 @@ public class SEBizServiceImpl implements SEBizService {
 
     @Override
     public void improveMrData(String groupName) {
-        EnergyCellRefreshService energy = AppContext
-                .getBean("energyCellRefreshService");
+        EnergyCellRefreshService energy = AppContext.getBean("energyCellRefreshService");
         energy.improveMrData(groupName);
 
     }
 
+    /**
+     * mro文件处理
+     * @param dir mro文件目录
+     * @param regex mro文件命名正则表达式
+     */
     @Override
     public void l2lhwMRParser(String dir, String regex) {
         logger.info("l2lhwMRParser开始......" + regex);
-        logger.info(dir + "......");
         MroCollectService mroCollect = AppContext.getBean("MroCollectService");
         mroCollect.exeLteHwLocalAnaly(dir, regex);
         logger.info("l2lhwMRParser结束......");
 
     }
 
-    public void l2lhwMRParser(String dir, String regex, String rname) {
-        logger.info("l2lhwMRParser开始......" + rname + "....." + regex);
-        logger.info(dir + "......");
+    public void l2lhwMRParser(String dir, String regex, String tableSuffix) {
+        logger.info("开始解析mro文件,解析完成后数据保存表名称:rst_l2l_hw_hz_" + tableSuffix);
         MroCollectService mroCollect = AppContext.getBean("MroCollectService");
-        mroCollect.exeLteHwLocalAnaly(dir, regex, rname);
-        logger.info("l2lhwMRParser结束......" + rname + ".....");
+        mroCollect.exeLteHwLocalAnaly(dir, regex, tableSuffix);
+        logger.info("Mro文件解析完成");
 
     }
 

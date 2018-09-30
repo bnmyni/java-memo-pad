@@ -251,11 +251,11 @@ public class MroCollectImpl implements MroCollectService {
      * @param regex mro文件命名规则
      */
     @Override
-    public void exeLteHwLocalAnaly(String dir, String regex, String rname) {
-        String outFilePath = AppContext.CACHE_ROOT + rname + "_mr_lte_hw/";
-        String targetTable = "rst_l2l_hw_hz_" + rname;
-        String lteTargetTable = "rst_l2l_hw_nc_" + rname;
-        executeAnaly(dir, regex, rname, outFilePath, targetTable, lteTargetTable);
+    public void exeLteHwLocalAnaly(String dir, String regex, String tableSuffix) {
+        String outFilePath = AppContext.CACHE_ROOT + tableSuffix + "_mr_lte_hw/";
+        String targetTable = "rst_l2l_hw_hz_" + tableSuffix;
+        String lteTargetTable = "rst_l2l_hw_nc_" + tableSuffix;
+        executeAnaly(dir, regex, tableSuffix, outFilePath, targetTable, lteTargetTable);
     }
 
     /**

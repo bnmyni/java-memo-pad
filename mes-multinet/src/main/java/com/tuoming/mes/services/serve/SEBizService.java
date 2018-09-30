@@ -150,7 +150,7 @@ public interface SEBizService {
 
     void l2lhwMRParser(String dir, String regex);
 
-    void l2lhwMRParser(String dir, String regex, String rname);
+    void l2lhwMRParser(String dir, String regex, String tableSuffix);
 
     void query(String paramString, long paramLong);
 

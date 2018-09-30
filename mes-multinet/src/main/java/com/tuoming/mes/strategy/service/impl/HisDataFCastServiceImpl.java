@@ -49,7 +49,8 @@ public class HisDataFCastServiceImpl implements HisDataFCastService {
         List<ThreadPoolExecutor> threadPoolExecutors = new ArrayList<ThreadPoolExecutor>();
         List<HisDataFCastSetting> conList = hisFCastSettingDao.queryFCastConByGroup(groupName);
         Date nextDay = DateUtil.getNextDay();
-        for (HisDataFCastSetting setting : conList) {//循环遍历对不同的表进行预测
+        //循环遍历对不同的表进行预测
+        for (HisDataFCastSetting setting : conList) {
             ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                     ConfigurationManager.getDefaultConfig().getInteger(MESConstants.LOG_THREAD_CORE_POOL_SIZE, 2),
                     ConfigurationManager.getDefaultConfig().getInteger(MESConstants.LOG_THREAD_MAX_POOL_SIZE, MESConstants.THREAD_MAX_POOL_SIZE_DEFAULT),
