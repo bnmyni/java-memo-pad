@@ -19,7 +19,6 @@ package com.tuoming.mes.collect.decoder.ericsson.ncs;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,16 +43,6 @@ public abstract class BytesValue {
 
     private boolean template = false;
 
-    public boolean isTemplate() {
-        return template;
-    }
-
-    public void setTemplate(boolean template) {
-        this.template = template;
-    }
-
-    public abstract String getValue(byte[] bytes);
-
     protected BytesValue(int position, int length, String description) {
         this.position = position;
         this.length = length;
@@ -67,9 +56,15 @@ public abstract class BytesValue {
         this.name = name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean isTemplate() {
+        return template;
     }
+
+    public void setTemplate(boolean template) {
+        this.template = template;
+    }
+
+    public abstract String getValue(byte[] bytes);
 
     /**
      * 获取当前记录再当前输入流下对应的数值
@@ -79,24 +74,28 @@ public abstract class BytesValue {
     public String getValue(DataInputStream dataInputStream) throws IOException {
         byte[] buffer = new byte[length];
         dataInputStream.read(buffer, 0, length);
-        if(this instanceof Identifier) {
-        	List<Byte> list = new ArrayList<Byte>();
-        	for(byte b:buffer){
-        		if(b==0) {
-        			continue;
-        		}
-        		list.add(b);
-        	}
-        	buffer = new byte[list.size()];
-        	for(int i=0;i<list.size();i++){
-        		buffer[i]=list.get(i);
-        	}
+        if (this instanceof Identifier) {
+            List<Byte> list = new ArrayList<Byte>();
+            for (byte b : buffer) {
+                if (b == 0) {
+                    continue;
+                }
+                list.add(b);
+            }
+            buffer = new byte[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                buffer[i] = list.get(i);
+            }
         }
         return getValue(buffer);
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<BytesValue> getBytesValues() {

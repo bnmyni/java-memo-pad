@@ -41,54 +41,11 @@ import com.tuoming.mes.strategy.util.FileUtil;
 public class MroCollectImpl implements MroCollectService {
 
     private static final Logger logger = LogFacade.getLog4j(MroCollectImpl.class);
+    // 模块代码
+    private final int moduleType = 5;
     @Autowired
     @Qualifier("businessLogDao")
     private BusinessLogDao businessLogDao;
-    // 模块代码
-    private final int moduleType = 5;
-
-    /**
-     * 按照正则表达式(regex)取得指定路径(input)下所有层级子文件夹中的文件总个数
-     *
-     * @param input 扫描路径
-     * @param regex 文件格式（正则表达式）
-     * @return 返回符合文件格式的所有文件
-     */
-    private int getFileIndexList(String input, String regex, String rname) {
-        File ldFile = new File(rname + Constant.scanDir + "0.csv");
-        if (!ldFile.exists()) {
-            putFileNameToFile(input, regex, rname);
-        }
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(ldFile)));
-            while (br.ready()) {
-                String line = br.readLine();
-                if (StringUtils.isEmpty(line)) {
-                    continue;
-                }
-                return Integer.parseInt(line);
-            }
-        } catch (Exception e) {
-            businessLogDao.insertLog(moduleType, "采集华为LTE文件获得文件出现异常", 1);
-            e.printStackTrace();
-            logger.error(e);
-        } finally {
-            closeBrAndInsertLog(br, "采集华为LTE文件关闭流出现异常");
-        }
-        return 0;
-    }
-
-    private void closeBrAndInsertLog(BufferedReader br, String msg) {
-        if (br != null) {
-            try {
-                br.close();
-            } catch (IOException e) {
-                businessLogDao.insertLog(moduleType, "采集华为LTE文件关闭流出现异常", 1);
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * 按照正则表达式(regex)将指定路径(input)下所有层级子文件夹中的文件名记录到1~N(fileExt).csv中
@@ -152,6 +109,49 @@ public class MroCollectImpl implements MroCollectService {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    /**
+     * 按照正则表达式(regex)取得指定路径(input)下所有层级子文件夹中的文件总个数
+     *
+     * @param input 扫描路径
+     * @param regex 文件格式（正则表达式）
+     * @return 返回符合文件格式的所有文件
+     */
+    private int getFileIndexList(String input, String regex, String rname) {
+        File ldFile = new File(rname + Constant.scanDir + "0.csv");
+        if (!ldFile.exists()) {
+            putFileNameToFile(input, regex, rname);
+        }
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(ldFile)));
+            while (br.ready()) {
+                String line = br.readLine();
+                if (StringUtils.isEmpty(line)) {
+                    continue;
+                }
+                return Integer.parseInt(line);
+            }
+        } catch (Exception e) {
+            businessLogDao.insertLog(moduleType, "采集华为LTE文件获得文件出现异常", 1);
+            e.printStackTrace();
+            logger.error(e);
+        } finally {
+            closeBrAndInsertLog(br, "采集华为LTE文件关闭流出现异常");
+        }
+        return 0;
+    }
+
+    private void closeBrAndInsertLog(BufferedReader br, String msg) {
+        if (br != null) {
+            try {
+                br.close();
+            } catch (IOException e) {
+                businessLogDao.insertLog(moduleType, "采集华为LTE文件关闭流出现异常", 1);
+                e.printStackTrace();
             }
         }
     }

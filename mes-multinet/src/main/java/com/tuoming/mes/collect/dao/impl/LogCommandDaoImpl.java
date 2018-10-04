@@ -16,10 +16,9 @@
 
 package com.tuoming.mes.collect.dao.impl;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import com.tuoming.mes.collect.dao.LogCommandDao;
 import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.LogCommand;
@@ -43,9 +42,9 @@ public class LogCommandDaoImpl extends AbstractBaseDao<LogCommand, String> imple
         return list(hql, new Object[]{objectType, manufacturers, true});
     }
 
-	@Override
-	public List<LogCommand> getCommandList(String logParser) {
-		String hql = HQL_LIST_ALL + " where logParser = ? and enabled=? order by orderId";
+    @Override
+    public List<LogCommand> getCommandList(String logParser) {
+        String hql = HQL_LIST_ALL + " where logParser = ? and enabled=? order by orderId";
         return list(hql, new Object[]{logParser, true});
-	}
+    }
 }

@@ -15,6 +15,8 @@
  */
 package com.tuoming.mes.collect.dpp.handles;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,9 +24,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.logging.LogFacade;
@@ -37,20 +36,17 @@ import com.tuoming.mes.collect.dpp.datatype.DataRow;
  * @author James Cheung
  */
 public class DataRowToCsvHandle extends AbstractDataRowHandler {
+    final static String codeName = ConfigurationManager.getDefaultConfig().getString(DPPConstants.CSV_FILE_ENCODING, "utf-8");
+    static String split = ConfigurationManager.getDefaultConfig().getString(DPPConstants.CSV_FILE_SPLIT_CHAR, ",");
+    static String nullValue = "NULL";
     private static Logger logger = LogFacade.getLog4j(DataRowToCsvHandle.class);
     BufferedWriter out;
-    static String split = ConfigurationManager.getDefaultConfig().getString(DPPConstants.CSV_FILE_SPLIT_CHAR, ",");
-    final static String codeName = ConfigurationManager.getDefaultConfig().getString(DPPConstants.CSV_FILE_ENCODING, "utf-8");
     boolean includeHeader = ConfigurationManager.getDefaultConfig().getBoolean(DPPConstants.FILE_PRINT_HEADER);
     int record_count = 0;
     int fileIdx = 0;
-    static String nullValue = "NULL";
     String targetFileName;
+    StringBuilder line = new StringBuilder();
     private int maxRowPerFile = 0;
-
-    public void setMaxRowPerFile(int nm) {
-        maxRowPerFile = nm;
-    }
 
     public DataRowToCsvHandle(String targetFileName) throws UnsupportedEncodingException, FileNotFoundException {
         this.targetFileName = targetFileName;
@@ -70,7 +66,11 @@ public class DataRowToCsvHandle extends AbstractDataRowHandler {
                 this.includeHeader = false;
             }
         }
-        out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetFileName, append),Charset.defaultCharset()));
+        out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetFileName, append), Charset.defaultCharset()));
+    }
+
+    public void setMaxRowPerFile(int nm) {
+        maxRowPerFile = nm;
     }
 
     public void close() {
@@ -100,8 +100,6 @@ public class DataRowToCsvHandle extends AbstractDataRowHandler {
         out.write(line.toString().substring(0, line.length() - 1));
         out.write(Envirment.LINE_SEPARATOR);
     }
-
-    StringBuilder line = new StringBuilder();
 
     public synchronized void process(String key, DataRow row) {
         try {

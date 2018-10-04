@@ -28,14 +28,14 @@ import com.tuoming.mes.strategy.util.FormatUtil;
 @Component("l2lSleepSelHandle")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class L2lSleepSelHandle implements SleepSelHandle {
+    Map<String, Map<String, Double>> count = new HashMap<String, Map<String, Double>>();//记录补偿小区及其相对应的门限阀值
+    Map<String, Integer> sleepMap = new HashMap<String, Integer>();//记录同一休眠小区是否已经休眠;
     @Autowired
     @Qualifier("kpiCalDao")
     private KpiCalDao kpiCalDao;
     @Autowired
     @Qualifier("businessLogDao")
     private BusinessLogDao businessLogDao;
-    Map<String, Map<String, Double>> count = new HashMap<String, Map<String, Double>>();//记录补偿小区及其相对应的门限阀值
-    Map<String, Integer> sleepMap = new HashMap<String, Integer>();//记录同一休眠小区是否已经休眠;
 
     @Override
     public String handle(List<Map<String, Object>> dataList,

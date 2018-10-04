@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 package com.tuoming.mes.services.ftp.impl;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.pool.impl.GenericKeyedObjectPool;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,17 +35,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import com.tuoming.mes.collect.dao.BusinessLogDao;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.pool.impl.GenericKeyedObjectPool;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
@@ -48,6 +46,7 @@ import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.DateUtil;
 import com.pyrlong.util.StringUtil;
 import com.pyrlong.util.io.FileOper;
+import com.tuoming.mes.collect.dao.BusinessLogDao;
 import com.tuoming.mes.collect.dao.FtpLogCommandDao;
 import com.tuoming.mes.collect.dao.FtpServerDao;
 import com.tuoming.mes.collect.dao.OperationLogDao;
@@ -82,22 +81,28 @@ import com.tuoming.mes.strategy.consts.Constant;
 public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand, String> implements FtpLogCommandService {
 
     private final static Logger logger = LogFacade.getLog4j(FtpLogCommandServiceImpl.class);
-    private static int FTP_POOL_NUM_PER_SERVER = 5;
-    private static int FTP_POOL_WAIT_SECOND = 3600;
     private final static boolean deleteLocalFileBeforeDownload =
             ConfigurationManager.getDefaultConfig().getBoolean(MESConstants.FTP_DELETE_LOCAL_FILE, false);
+    private static int FTP_POOL_NUM_PER_SERVER = 5;
+    private static int FTP_POOL_WAIT_SECOND = 3600;
+    private static FtpConnectionFactory ftpFactory;
+    private static GenericKeyedObjectPool pool = null;
+    public int module_type = 0;
     FtpLogCommandDao ftpLogCommandDao;
     private Map<String, List<String>> loadFileMapList = Maps.newHashMap();
     private OperationLogDao operationLogDao;
     private FtpServerDao ftpServerDao;
-    private static FtpConnectionFactory ftpFactory;
     private BusinessLogDao businessLogDao;
-    
-    public int module_type = 0;
+
+    public FtpLogCommandServiceImpl() {
+        FTP_POOL_NUM_PER_SERVER = ConfigurationManager.getDefaultConfig().getInteger("aos.ftp_pool_num", Integer.valueOf(5)).intValue();
+        FTP_POOL_WAIT_SECOND = ConfigurationManager.getDefaultConfig().getInteger("aos.ftp_pool_wait_second", Integer.valueOf(3600)).intValue();
+    }
+
     @Autowired
     @Qualifier("businessLogDao")
-    public void setBusinessLogDao(BusinessLogDao businessLogDao){
-    	this.businessLogDao = businessLogDao;
+    public void setBusinessLogDao(BusinessLogDao businessLogDao) {
+        this.businessLogDao = businessLogDao;
     }
 
     @Autowired
@@ -113,14 +118,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
         initFtpFactory();
     }
 
-    public FtpLogCommandServiceImpl() {
-    	FTP_POOL_NUM_PER_SERVER = ConfigurationManager.getDefaultConfig().getInteger("aos.ftp_pool_num", Integer.valueOf(5)).intValue();
-        FTP_POOL_WAIT_SECOND = ConfigurationManager.getDefaultConfig().getInteger("aos.ftp_pool_wait_second", Integer.valueOf(3600)).intValue();
-    }
-
-    private static GenericKeyedObjectPool pool = null;
-
-    private synchronized  void initFtpFactory() {
+    private synchronized void initFtpFactory() {
         if (ftpFactory == null) {
             logger.info("Init ftp connect factory");
             ftpFactory = new FtpConnectionFactory();
@@ -145,7 +143,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
 
     public FtpConnection getFtpConnection(String name) {
         try {
-        	logger.info("136 row pool---------"+pool);
+            logger.info("136 row pool---------" + pool);
             return (FtpConnection) pool.borrowObject(name);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -176,20 +174,20 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
 
     @Override
     public void queryAll(String groupName, long batch) {
-        List<FtpLogCommand> logCommandList = ftpLogCommandDao.getByGroup(groupName);       
-        if(groupName.equalsIgnoreCase(Constant.PM)){
-        	module_type = 1;
-        }else if(groupName.startsWith(Constant.MRO)){
-        	module_type = 5;
-        }else if(groupName.trim().equalsIgnoreCase(Constant.ALARM)){
-        	module_type = 16;
-        }else{//CM采集
-        	module_type = 3;
+        List<FtpLogCommand> logCommandList = ftpLogCommandDao.getByGroup(groupName);
+        if (groupName.equalsIgnoreCase(Constant.PM)) {
+            module_type = 1;
+        } else if (groupName.startsWith(Constant.MRO)) {
+            module_type = 5;
+        } else if (groupName.trim().equalsIgnoreCase(Constant.ALARM)) {
+            module_type = 16;
+        } else {//CM采集
+            module_type = 3;
         }
         try {
             downloadAndParser(logCommandList, batch);
         } catch (InterruptedException e) {
-        	businessLogDao.insertLog(module_type, "采集及解析出现异常", 1);
+            businessLogDao.insertLog(module_type, "采集及解析出现异常", 1);
             logger.fatal(e.getMessage(), e);
         }
         businessLogDao.insertLog(module_type, "采集及解析完成", 0);
@@ -272,12 +270,12 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                                 targetFileSize = 0;
                                 fileCount++;
                             } catch (Exception e) {
-                            	businessLogDao.insertLog(module_type, "采集及解析入库异常", 1);
+                                businessLogDao.insertLog(module_type, "采集及解析入库异常", 1);
                                 logger.error(e.getMessage(), e);
                             }
                         }
                     } catch (Exception e) {
-                    	businessLogDao.insertLog(module_type, "采集及解析复制文件异常", 1);
+                        businessLogDao.insertLog(module_type, "采集及解析复制文件异常", 1);
                         logger.error(e.getMessage(), e);
                     }
                 }
@@ -285,7 +283,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                     try {
                         DataAdapterPool.getDataAdapterPool(target[0]).getDataAdapter().loadfile(targetFile + fileCount, target[1]);
                     } catch (Exception e) {
-                    	businessLogDao.insertLog(module_type, "采集及解析入库异常", 1);
+                        businessLogDao.insertLog(module_type, "采集及解析入库异常", 1);
                         logger.error(e.getMessage(), e);
                     }
                 }
@@ -317,9 +315,9 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
      */
     class FtpParser implements Runnable {
 
+        private final Logger logger = LogFacade.getLog4j(FtpParser.class);
         FtpLogCommand logCommand;
         Map<String, String> currentEnv;
-        private final Logger logger = LogFacade.getLog4j(FtpParser.class);
         BlockingDeque<String> remoteFileList = Queues.newLinkedBlockingDeque();
 
         /**
@@ -333,6 +331,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
             updateEnv(logCommand, currentEnv);
             currentEnv.put(MESConstants.BATCH_KEY, batchId + "");
         }
+
         @Override
         public void run() {
             final FtpServer ftpServer = logCommand.getFtpServer();
@@ -343,89 +342,89 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                     String localPath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getLocalPath(), currentEnv));
                     final String remotePath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath().split("#")[0], currentEnv));
                     if (!logCommand.getLocalPath().startsWith("/") && logCommand.getLocalPath().indexOf(":") < 0)
-                    if (StringUtil.isNotEmpty(logCommand.getIterator())) {
-                        String queryCmd = DSLUtil.getDefaultInstance().relpaceVariable(logCommand.getIterator(), currentEnv);
-                        DataTable table = (DataTable) DSLUtil.getDefaultInstance().compute(queryCmd, currentEnv);
-                        if (table.getRows().size() == 0)
-                        logger.error(String.format("%s table is empty!!", logCommand.getCommandName()));
-                        List<String> fileNeedToGet = new ArrayList<String>();
-                        if(remotePath.endsWith("/")){
-                        	 for (DataRow row : table.getRows()) {
-								 Map envs = mergerMap(row.getItemMap(), currentEnv);//mergerMap(map1,map2)将map2合并到map1
-                        		 //替换正则后的本地路径
-                        		 String localFilePath = AppContext.getCacheFileName("FtpLog" + Envirment.PATH_SEPARATOR 
-                        						 + FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getLocalPath(), envs)));
-                        		 //替换正则后的远程路径
-                        		 final String remoPath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(), envs));
-                        		 //获取文件名称
-                        		 final String fileFilter = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), envs);
-                                 try {
-                                     //尝试连接Ftp服务器,记录连接状态并获取需要下载的文件列表
-                                     FtpConnection ftpClientExt = getFtpConnection(ftpServer.getName());
-                                     if (ftpClientExt != null && !ftpClientExt.isOpened()) {
-                                         ftpServer.setStatus(100);
-                                         ftpServerDao.update(ftpServer);
-                                         return;
-                                     } else if (ftpServer.getStatus() > 0) {
-                                         ftpServer.setStatus(0);
-                                         ftpServerDao.update(ftpServer);
-                                     }
-                                     ftpClientExt.getFileNames(remoPath, fileFilter, logCommand.getGetSubDir(), remoteFileList);
-                                     remoteFileList.put("END");
-                                     pool.returnObject(ftpServer.getName(), ftpClientExt);
-                                 } catch (Exception ex) {
-                                	 businessLogDao.insertLog(module_type, "FTP采集数据异常", 1);
-                                     logger.warn(ex.getMessage(), ex);
-                                 }
-                                 final String lastlocalPath = FileOper.formatePath(localFilePath);
-                                 FileOper.checkAndCreateForder(lastlocalPath);
-                                 downloadFiles(ftpServer, lastlocalPath, currentEnv);
-                             }
-                        	 return;
-                        }else{
-	                        for (DataRow row : table.getRows()) {
-	                            Map envs = mergerMap(row.getItemMap(), currentEnv);
-	                            String remoteFile = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), envs);
-	                            String remoteFilePath =  FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(remotePath, envs));
-	                            //避免下载重复数据
-	                            if (!fileNeedToGet.contains(remoteFile)) {
-	                                fileNeedToGet.add(remoteFile);
-	                                remoteFileList.add(remoteFilePath);
-	                            }
-	                        }
-                        }
-                    } else {
-                        final String fileFilter = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), currentEnv);
-                        logger.info("File filter = " + fileFilter);
-                        Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    //尝试连接Ftp服务器,记录连接状态并获取需要下载的文件列表
-                                    FtpConnection ftpClientExt = getFtpConnection(ftpServer.getName());
-                                    if (ftpClientExt != null && !ftpClientExt.isOpened()) {
-                                        ftpServer.setStatus(100);
-                                        ftpServerDao.update(ftpServer);
-                                        return;
-                                    } else if (ftpServer.getStatus() > 0) {
-                                        ftpServer.setStatus(0);
-                                        ftpServerDao.update(ftpServer);
+                        if (StringUtil.isNotEmpty(logCommand.getIterator())) {
+                            String queryCmd = DSLUtil.getDefaultInstance().relpaceVariable(logCommand.getIterator(), currentEnv);
+                            DataTable table = (DataTable) DSLUtil.getDefaultInstance().compute(queryCmd, currentEnv);
+                            if (table.getRows().size() == 0)
+                                logger.error(String.format("%s table is empty!!", logCommand.getCommandName()));
+                            List<String> fileNeedToGet = new ArrayList<String>();
+                            if (remotePath.endsWith("/")) {
+                                for (DataRow row : table.getRows()) {
+                                    Map envs = mergerMap(row.getItemMap(), currentEnv);//mergerMap(map1,map2)将map2合并到map1
+                                    //替换正则后的本地路径
+                                    String localFilePath = AppContext.getCacheFileName("FtpLog" + Envirment.PATH_SEPARATOR
+                                            + FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getLocalPath(), envs)));
+                                    //替换正则后的远程路径
+                                    final String remoPath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(), envs));
+                                    //获取文件名称
+                                    final String fileFilter = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), envs);
+                                    try {
+                                        //尝试连接Ftp服务器,记录连接状态并获取需要下载的文件列表
+                                        FtpConnection ftpClientExt = getFtpConnection(ftpServer.getName());
+                                        if (ftpClientExt != null && !ftpClientExt.isOpened()) {
+                                            ftpServer.setStatus(100);
+                                            ftpServerDao.update(ftpServer);
+                                            return;
+                                        } else if (ftpServer.getStatus() > 0) {
+                                            ftpServer.setStatus(0);
+                                            ftpServerDao.update(ftpServer);
+                                        }
+                                        ftpClientExt.getFileNames(remoPath, fileFilter, logCommand.getGetSubDir(), remoteFileList);
+                                        remoteFileList.put("END");
+                                        pool.returnObject(ftpServer.getName(), ftpClientExt);
+                                    } catch (Exception ex) {
+                                        businessLogDao.insertLog(module_type, "FTP采集数据异常", 1);
+                                        logger.warn(ex.getMessage(), ex);
                                     }
-                                    logger.info("logCommand===>"+logCommand);
-                                    logger.info("RemotePath===>"+FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(),currentEnv)));
-                                    logger.info("logCommand.getGetSubDir()===>"+logCommand.getGetSubDir());
-                                    logger.info("remoteFileList===>"+remoteFileList);
-                                    ftpClientExt.getFileNames(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(),currentEnv), fileFilter, logCommand.getGetSubDir(), remoteFileList);
-                                    remoteFileList.put("END");
-                                    pool.returnObject(ftpServer.getName(), ftpClientExt);
-                                } catch (Exception ex) {
-                                	businessLogDao.insertLog(module_type, "FTP采集数据异常", 1);
-                                    logger.warn(ex.getMessage(), ex);
+                                    final String lastlocalPath = FileOper.formatePath(localFilePath);
+                                    FileOper.checkAndCreateForder(lastlocalPath);
+                                    downloadFiles(ftpServer, lastlocalPath, currentEnv);
+                                }
+                                return;
+                            } else {
+                                for (DataRow row : table.getRows()) {
+                                    Map envs = mergerMap(row.getItemMap(), currentEnv);
+                                    String remoteFile = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), envs);
+                                    String remoteFilePath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(remotePath, envs));
+                                    //避免下载重复数据
+                                    if (!fileNeedToGet.contains(remoteFile)) {
+                                        fileNeedToGet.add(remoteFile);
+                                        remoteFileList.add(remoteFilePath);
+                                    }
                                 }
                             }
-                        });
-                        thread.start();
-                    }
+                        } else {
+                            final String fileFilter = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), currentEnv);
+                            logger.info("File filter = " + fileFilter);
+                            Thread thread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        //尝试连接Ftp服务器,记录连接状态并获取需要下载的文件列表
+                                        FtpConnection ftpClientExt = getFtpConnection(ftpServer.getName());
+                                        if (ftpClientExt != null && !ftpClientExt.isOpened()) {
+                                            ftpServer.setStatus(100);
+                                            ftpServerDao.update(ftpServer);
+                                            return;
+                                        } else if (ftpServer.getStatus() > 0) {
+                                            ftpServer.setStatus(0);
+                                            ftpServerDao.update(ftpServer);
+                                        }
+                                        logger.info("logCommand===>" + logCommand);
+                                        logger.info("RemotePath===>" + FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(), currentEnv)));
+                                        logger.info("logCommand.getGetSubDir()===>" + logCommand.getGetSubDir());
+                                        logger.info("remoteFileList===>" + remoteFileList);
+                                        ftpClientExt.getFileNames(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(), currentEnv), fileFilter, logCommand.getGetSubDir(), remoteFileList);
+                                        remoteFileList.put("END");
+                                        pool.returnObject(ftpServer.getName(), ftpClientExt);
+                                    } catch (Exception ex) {
+                                        businessLogDao.insertLog(module_type, "FTP采集数据异常", 1);
+                                        logger.warn(ex.getMessage(), ex);
+                                    }
+                                }
+                            });
+                            thread.start();
+                        }
                     //文件下载
                     final String lastlocalPath = FileOper.formatePath(AppContext.getCacheFileName("FtpLog" + Envirment.PATH_SEPARATOR + localPath));
                     FileOper.checkAndCreateForder(lastlocalPath);
@@ -446,14 +445,14 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                 //为了避免数据冲突，输出目录需要为空
                 if (deleteLocalFileBeforeDownload)
                     FileOper.delAllFile(localPath);
-                FileParserWorker parserWorker = new FileParserWorker(logCommand.getLogParser()+"Ftp", currentEnv, lastlocalPath);
+                FileParserWorker parserWorker = new FileParserWorker(logCommand.getLogParser() + "Ftp", currentEnv, lastlocalPath);
                 parserWorker.start();
                 parserWorker.addFiles(fileDownloaded);
                 parserWorker.addFile("END");
                 try {
                     parserWorker.waitAllFileProcessed();
                 } catch (InterruptedException e) {
-                	businessLogDao.insertLog(module_type, "处理本地文件异常", 1);
+                    businessLogDao.insertLog(module_type, "处理本地文件异常", 1);
                     logger.error(e.getMessage(), e);
                 }
 
@@ -479,7 +478,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                             parserWorker = new FileParserWorker(logCommand.getLogParser(), newEnvs, localPath);
                             parserWorker.start();
                         }
-                        logger.info("#################11111111111111111#################"+ftpServer.getName());
+                        logger.info("#################11111111111111111#################" + ftpServer.getName());
                         FtpConnection connection = null;
                         try {
                             connection = (FtpConnection) pool.borrowObject(ftpServer.getName());
@@ -490,12 +489,12 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                                 if (FileOper.isFileExist(localFileName) && parserWorker != null) {
                                     parserWorker.addFile(localFileName);
                                 } else if (connection.getFile(fileName, localFileName)) {
-                                	logger.info("##################################"+StringUtils.substringBeforeLast(fileName, "/")+"/*");
-                                	if(logCommand.getDeleteFileAfterGet()){
-                                		connection.deleteFile(StringUtils.substringBeforeLast(fileName, "/")+"/*");
-                                		connection.deleteDirectory(StringUtils.substringBeforeLast(fileName, "/"));
-                                		logger.info("FtpServer deleteDirectory " + StringUtils.substringBeforeLast(fileName, "/"));
-                                	}
+                                    logger.info("##################################" + StringUtils.substringBeforeLast(fileName, "/") + "/*");
+                                    if (logCommand.getDeleteFileAfterGet()) {
+                                        connection.deleteFile(StringUtils.substringBeforeLast(fileName, "/") + "/*");
+                                        connection.deleteDirectory(StringUtils.substringBeforeLast(fileName, "/"));
+                                        logger.info("FtpServer deleteDirectory " + StringUtils.substringBeforeLast(fileName, "/"));
+                                    }
                                     if (parserWorker != null)
                                         parserWorker.addFile(localFileName);
                                 } else {
@@ -503,11 +502,11 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                                     logger.warn("Retry get file " + fileName);
                                     connection.reconnect();
                                     if (connection.getFile(fileName, localFileName)) {
-                                    	if(logCommand.getDeleteFileAfterGet()){
-                                    		connection.deleteFile(StringUtils.substringBeforeLast(fileName, "/")+"/*");
-                                    		connection.deleteDirectory(StringUtils.substringBeforeLast(fileName, "/"));
-                                    		logger.info("FtpServer deleteDirectory " + StringUtils.substringBeforeLast(fileName, "/"));
-                                    	}
+                                        if (logCommand.getDeleteFileAfterGet()) {
+                                            connection.deleteFile(StringUtils.substringBeforeLast(fileName, "/") + "/*");
+                                            connection.deleteDirectory(StringUtils.substringBeforeLast(fileName, "/"));
+                                            logger.info("FtpServer deleteDirectory " + StringUtils.substringBeforeLast(fileName, "/"));
+                                        }
                                         if (parserWorker != null) parserWorker.addFile(localFileName);
                                     }
                                 }
@@ -520,12 +519,12 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                                 Collection<String> resultFiles = parserWorker.getResultFiles();
                                 List<String> fileParsed = Lists.newArrayList();
                                 for (String fil : resultFiles) {
-                                    fileParsed.add(lastlocalPath +Envirment.PATH_SEPARATOR +"out"+ Envirment.PATH_SEPARATOR +fil);
+                                    fileParsed.add(lastlocalPath + Envirment.PATH_SEPARATOR + "out" + Envirment.PATH_SEPARATOR + fil);
                                 }
                                 saveFiles(fileParsed);//文件入库
                             }
                         } catch (Exception e) {
-                        	businessLogDao.insertLog(module_type, "FTP下载数据文件异常", 1);
+                            businessLogDao.insertLog(module_type, "FTP下载数据文件异常", 1);
                             logger.error(e.getMessage(), e);
                         } finally {
                             try {

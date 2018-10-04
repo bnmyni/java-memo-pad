@@ -16,15 +16,14 @@
 
 package com.tuoming.mes.collect.dpp.file.handles;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.StringUtil;

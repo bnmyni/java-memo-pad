@@ -16,10 +16,9 @@
 
 package com.tuoming.mes.collect.dao.impl;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import com.tuoming.mes.collect.dao.ServerDao;
 import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.Manufacturers;
@@ -36,9 +35,10 @@ public class ServerDaoImpl extends AbstractBaseDao<Server, String> implements Se
         String hql = HQL_LIST_ALL + " where objectType=? and enabled=?  and manufacturers=?";
         return list(hql, new Object[]{objectType, true, manufacturers});
     }
+
     @Override
     public List<Server> getEnabledServers() {
-    	String hql = HQL_LIST_ALL + " where enabled=?";
-    	return list(hql, new Object[]{true});
+        String hql = HQL_LIST_ALL + " where enabled=?";
+        return list(hql, new Object[]{true});
     }
 }

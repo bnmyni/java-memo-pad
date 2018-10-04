@@ -16,6 +16,10 @@
 
 package com.tuoming.mes.collect.decoder.zte;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,11 +30,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.util.io.CompressionUtils;
@@ -52,7 +51,7 @@ import com.tuoming.mes.services.serve.MESConstants;
 public class MROFileHandler extends AbstractFileProcessor {
 
     private static Logger logger = Logger.getLogger(MROFileHandler.class);
-    private  String  sepapartor ="";
+    private String sepapartor = "";
 
     public void convertToCSVFiles() {
         sepapartor = Envirment.CSV_SEPARATOR;
@@ -75,21 +74,16 @@ public class MROFileHandler extends AbstractFileProcessor {
                 String exp = fileSet.getValue().get(MESConstants.FTP_COMMAND_RESULT_FILTER);
                 objectTypes = (List<String>) DSLUtil.getDefaultInstance().compute(exp);
 
-                 for (String type :objectTypes) {
-                     if (type.equalsIgnoreCase("intra"))
-                     {
-                         saveIntraToCsv(mdc, srcFileName,type);
-                     }
-                    else if(type.equalsIgnoreCase("inter"))
-                     {
-                         saveInterToCsv(mdc, srcFileName,type);
-                     }
-                     else if(type.equalsIgnoreCase("gsmneighbour"))
-                     {
-                         saveGsmNbToCsv(mdc, srcFileName,type);
-                     }
-                 }
-                 //将文件后缀更改为.done，即标识文件为已解析文件
+                for (String type : objectTypes) {
+                    if (type.equalsIgnoreCase("intra")) {
+                        saveIntraToCsv(mdc, srcFileName, type);
+                    } else if (type.equalsIgnoreCase("inter")) {
+                        saveInterToCsv(mdc, srcFileName, type);
+                    } else if (type.equalsIgnoreCase("gsmneighbour")) {
+                        saveGsmNbToCsv(mdc, srcFileName, type);
+                    }
+                }
+                //将文件后缀更改为.done，即标识文件为已解析文件
                 markFileDone(fileName);
                 markFileDone(targetFile);
             } catch (Exception e) {
@@ -113,31 +107,30 @@ public class MROFileHandler extends AbstractFileProcessor {
         return builder;
     }
 
-    private void saveIntraToCsv(ResultDataCollection mdc, String fileName,String type) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        
-        String csvFileName = String.format("%s_%s.csv", fileName,type);
+    private void saveIntraToCsv(ResultDataCollection mdc, String fileName, String type) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+
+        String csvFileName = String.format("%s_%s.csv", fileName, type);
         if (!resultFiles.contains(csvFileName)) {
             resultFiles.add(csvFileName);
         }
-        String fullCsvFileName =  String.format("%s%s", targetPath,csvFileName);
+        String fullCsvFileName = String.format("%s%s", targetPath, csvFileName);
         OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(new File(fullCsvFileName)), csvEncoding);
         BufferedWriter bw = new BufferedWriter(out);
         FileHeader header = mdc.getFileHeader();
         MeasResultMRO mro = mdc.getMeasResultMRO();
         List<IntraFreqData> intrafreqList = mdc.getIntraFreqList();
-        boolean hastCaption=false;
+        boolean hastCaption = false;
         if (printHeander) {
             StringBuffer captionBuilder = getCaptionBuilder();
             captionBuilder.append(sepapartor).append("timestamp").append(sepapartor).append("Uarfcn").append(sepapartor).append("InterCellParameterID").append(sepapartor).append("PccpchRscp");
             bw.write(captionBuilder.toString());
-            hastCaption=true;
+            hastCaption = true;
         }
         for (IntraFreqData interFreqData : intrafreqList) {
-            if(hastCaption)
-            {
+            if (hastCaption) {
                 bw.newLine();
             }
-            hastCaption=true;
+            hastCaption = true;
             StringBuffer valueBuilder = getValueBuilder(header, mro);
             valueBuilder.append(sepapartor).append(interFreqData.getRelativetimestamp()).append(sepapartor).append(interFreqData.getUarfcn()).append(sepapartor).append(interFreqData.getCellParamID()).append(sepapartor).append(interFreqData.getPccpchRscp());
             bw.write(valueBuilder.toString());
@@ -145,31 +138,30 @@ public class MROFileHandler extends AbstractFileProcessor {
         bw.close();
     }
 
-    private void saveGsmNbToCsv(ResultDataCollection mdc, String fileName,String type) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        String csvFileName = String.format("%s_%s.csv", fileName,type);
+    private void saveGsmNbToCsv(ResultDataCollection mdc, String fileName, String type) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+        String csvFileName = String.format("%s_%s.csv", fileName, type);
         if (!resultFiles.contains(csvFileName)) {
             resultFiles.add(csvFileName);
         }
-        String fullCsvFileName =  String.format("%s%s", targetPath,csvFileName);
+        String fullCsvFileName = String.format("%s%s", targetPath, csvFileName);
         OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(new File(fullCsvFileName)), csvEncoding);
 
         BufferedWriter bw = new BufferedWriter(out);
         FileHeader header = mdc.getFileHeader();
         MeasResultMRO mro = mdc.getMeasResultMRO();
         List<GsmNeighbourData> gsmNeighbourList = mdc.getGsmNeighbourList();
-        boolean hastCaption=false;
+        boolean hastCaption = false;
         if (printHeander) {
             StringBuffer captionBuilder = getCaptionBuilder();
             captionBuilder.append(sepapartor).append("timestamp").append(sepapartor).append("BCCH").append(sepapartor).append("NCC").append(sepapartor).append("BCC").append(sepapartor).append("RSSI");
             bw.write(captionBuilder.toString());
-            hastCaption=true;
+            hastCaption = true;
         }
         for (GsmNeighbourData gsmNeighbourData : gsmNeighbourList) {
-            if(hastCaption)
-            {
+            if (hastCaption) {
                 bw.newLine();
             }
-            hastCaption=true;
+            hastCaption = true;
             StringBuffer valueBuilder = getValueBuilder(header, mro);
             valueBuilder.append(sepapartor).append(gsmNeighbourData.getRelativetimestamp()).append(sepapartor).append(gsmNeighbourData.getBcch()).append(sepapartor).append(gsmNeighbourData.getNcc()).append(sepapartor).append(gsmNeighbourData.getBcc()).append(sepapartor)
                     .append(gsmNeighbourData.getRssi());
@@ -178,30 +170,29 @@ public class MROFileHandler extends AbstractFileProcessor {
         bw.close();
     }
 
-    private void saveInterToCsv(ResultDataCollection mdc, String fileName,String type) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-      String csvFileName = String.format("%s_%s.csv", fileName,type);
+    private void saveInterToCsv(ResultDataCollection mdc, String fileName, String type) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+        String csvFileName = String.format("%s_%s.csv", fileName, type);
         if (!resultFiles.contains(csvFileName)) {
             resultFiles.add(csvFileName);
         }
-        String fullCsvFileName =  String.format("%s%s", targetPath,csvFileName);
+        String fullCsvFileName = String.format("%s%s", targetPath, csvFileName);
         OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(new File(fullCsvFileName)), csvEncoding);
         BufferedWriter bw = new BufferedWriter(out);
         FileHeader header = mdc.getFileHeader();
         MeasResultMRO mro = mdc.getMeasResultMRO();
         List<InterFreqData> interfreqList = mdc.getInterFreqList();
-        boolean hastCaption=false;
+        boolean hastCaption = false;
         if (printHeander) {
             StringBuffer captionBuilder = getCaptionBuilder();
             captionBuilder.append(sepapartor).append("timestamp").append(sepapartor).append("Uarfcn").append(sepapartor).append("InterCellParameterID").append(sepapartor).append("PccpchRscp");
             bw.write(captionBuilder.toString());
-            hastCaption=true;
+            hastCaption = true;
         }
         for (InterFreqData interFreqData : interfreqList) {
-            if(hastCaption)
-            {
+            if (hastCaption) {
                 bw.newLine();
             }
-            hastCaption=true;
+            hastCaption = true;
             StringBuffer valueBuilder = getValueBuilder(header, mro);
             valueBuilder.append(sepapartor).append(interFreqData.getRelativetimestamp()).append(sepapartor).append(interFreqData.getUarfcn()).append(sepapartor).append(interFreqData.getCellParamID()).append(sepapartor).append(interFreqData.getPccpchRscp());
             bw.write(valueBuilder.toString());
@@ -211,6 +202,6 @@ public class MROFileHandler extends AbstractFileProcessor {
 
     @Override
     public void run() {
-            convertToCSVFiles();
+        convertToCSVFiles();
     }
 }

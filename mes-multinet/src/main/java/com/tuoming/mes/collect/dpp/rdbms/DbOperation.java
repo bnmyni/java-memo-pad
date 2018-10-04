@@ -16,7 +16,6 @@
 package com.tuoming.mes.collect.dpp.rdbms;
 
 import java.util.Map;
-
 import com.google.common.collect.Maps;
 import com.pyrlong.Envirment;
 import com.tuoming.mes.collect.dpp.configuration.ConnectionStringSettingsCollection;

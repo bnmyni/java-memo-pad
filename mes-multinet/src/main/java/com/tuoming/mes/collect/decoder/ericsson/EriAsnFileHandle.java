@@ -16,6 +16,10 @@
 
 package com.tuoming.mes.collect.decoder.ericsson;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,11 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Maps;
 import com.pyrlong.Constants;
 import com.pyrlong.Envirment;
@@ -98,7 +97,7 @@ public class EriAsnFileHandle extends AbstractFileProcessor {
                 String timestamp = file.getName();
                 timestamp = timestamp.substring(1, 5) + "-" + timestamp.substring(5, 7) + "-" + timestamp.substring(7, 9) + " " + timestamp.substring(10, 12) + ":"
                         + timestamp.substring(12, 14) + ":00";
-                timestamp = DateUtil.format(DateUtil.addHours(DateUtil.getDate(timestamp), ConfigurationManager.getDefaultConfig().getInteger( Constants.TIMEZONE, 8)), "yyyy-MM-dd HH:mm:ss");
+                timestamp = DateUtil.format(DateUtil.addHours(DateUtil.getDate(timestamp), ConfigurationManager.getDefaultConfig().getInteger(Constants.TIMEZONE, 8)), "yyyy-MM-dd HH:mm:ss");
                 //
                 esd = new EricssonStsDecoder(file, mdc);
                 esd.decode();//解码操作

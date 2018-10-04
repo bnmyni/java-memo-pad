@@ -20,42 +20,42 @@ import java.util.List;
 
 public class MeasValue {
 
-	private String measObjInstId = null;
-	private List<Long> measResults = null;
-	private boolean suspectFlag = false;
-	private String mo = null;
+    private String measObjInstId = null;
+    private List<Long> measResults = null;
+    private boolean suspectFlag = false;
+    private String mo = null;
 
 
-	public String getMo() {
-		return mo;
-	}
+    public String getMo() {
+        return mo;
+    }
 
-	public void setMo(String mo) {
-		this.mo = mo;
-	}
+    public void setMo(String mo) {
+        this.mo = mo;
+    }
 
-	public String getMeasObjInstId() {
-		return this.measObjInstId;
-	}
+    public String getMeasObjInstId() {
+        return this.measObjInstId;
+    }
 
-	public void setMeasObjInstId(String value) {
-		this.measObjInstId = value;
-	}
+    public void setMeasObjInstId(String value) {
+        this.measObjInstId = value;
+    }
 
-	public List<Long> getMeasResults() {
-		return this.measResults;
-	}
+    public List<Long> getMeasResults() {
+        return this.measResults;
+    }
 
-	public void setMeasResults(List<Long> value) {
-		this.measResults = value;
-	}
+    public void setMeasResults(List<Long> value) {
+        this.measResults = value;
+    }
 
-	public boolean getSuspectFlag() {
-		return this.suspectFlag;
-	}
+    public boolean getSuspectFlag() {
+        return this.suspectFlag;
+    }
 
-	public void setSuspectFlag(boolean value) {
-		this.suspectFlag = value;
-	}
+    public void setSuspectFlag(boolean value) {
+        this.suspectFlag = value;
+    }
 
 }

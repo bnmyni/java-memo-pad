@@ -8,14 +8,14 @@ import com.tuoming.mes.strategy.dao.TdOffKpiDao;
 import com.tuoming.mes.strategy.model.TdOffKpiModel;
 
 @Repository("tdOffKpiDao")
-public class TdOffKpiDaoImpl extends 
-AbstractBaseDao<TdOffKpiModel, Integer> implements TdOffKpiDao{
+public class TdOffKpiDaoImpl extends
+        AbstractBaseDao<TdOffKpiModel, Integer> implements TdOffKpiDao {
 
-	@Override
-	public TdOffKpiModel querySleepAreaKpiSet(String groupName) {
-		String hql = HQL_LIST_ALL + " where groupname = '"
-				+ groupName + "'";
-		Query query = this.getSession().createQuery(hql);
-		return (TdOffKpiModel) query.list().get(0);
-	}
+    @Override
+    public TdOffKpiModel querySleepAreaKpiSet(String groupName) {
+        String hql = HQL_LIST_ALL + " where groupname = '"
+                + groupName + "'";
+        Query query = this.getSession().createQuery(hql);
+        return (TdOffKpiModel) query.list().get(0);
+    }
 }

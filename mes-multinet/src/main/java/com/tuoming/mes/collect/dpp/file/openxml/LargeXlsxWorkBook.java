@@ -16,11 +16,6 @@
 
 package com.tuoming.mes.collect.dpp.file.openxml;
 
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Queue;
-
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.SharedStringsTable;
@@ -32,6 +27,10 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Queue;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 import com.pyrlong.util.StringUtil;

@@ -36,6 +36,27 @@ public class KpiCalServiceImpl implements KpiCalService {
     @Qualifier("businessLogDao")
     private BusinessLogDao businessLogDao;
 
+    public static void main(String[] aa) {
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(new Date());
+        begin.add(Calendar.DAY_OF_MONTH, -30);
+        begin.set(Calendar.HOUR_OF_DAY, 0);
+        begin.set(Calendar.MINUTE, 0);
+        begin.set(Calendar.SECOND, 0);
+        begin.set(Calendar.MILLISECOND, 0);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(new Date());
+        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.MINUTE, 0);
+        end.set(Calendar.SECOND, 0);
+        end.set(Calendar.MILLISECOND, 0);
+        List<Date> timeList = DateUtil.getMinInterval(begin, end, Constant.PM_COLLECT_LD);
+
+        for (Date d : timeList) {
+            System.out.println(DateUtil.format(d));
+        }
+    }
 
     public void calKpi(String groupName, String time) {
         businessLogDao.insertLog(9, "计算KPI开始", 0);
@@ -149,28 +170,6 @@ public class KpiCalServiceImpl implements KpiCalService {
         end.set(Calendar.MILLISECOND, 0);
         List<Date> timeList = DateUtil.getMinInterval(begin, end, Constant.PM_COLLECT_LD);
         return FormatUtil.tranferArrayToStr(timeList);
-    }
-
-    public static void main(String[] aa) {
-        Calendar begin = Calendar.getInstance();
-        begin.setTime(new Date());
-        begin.add(Calendar.DAY_OF_MONTH, -30);
-        begin.set(Calendar.HOUR_OF_DAY, 0);
-        begin.set(Calendar.MINUTE, 0);
-        begin.set(Calendar.SECOND, 0);
-        begin.set(Calendar.MILLISECOND, 0);
-
-        Calendar end = Calendar.getInstance();
-        end.setTime(new Date());
-        end.set(Calendar.HOUR_OF_DAY, 0);
-        end.set(Calendar.MINUTE, 0);
-        end.set(Calendar.SECOND, 0);
-        end.set(Calendar.MILLISECOND, 0);
-        List<Date> timeList = DateUtil.getMinInterval(begin, end, Constant.PM_COLLECT_LD);
-
-        for (Date d : timeList) {
-            System.out.println(DateUtil.format(d));
-        }
     }
 
 }

@@ -16,11 +16,10 @@
 
 package com.tuoming.mes.execute.boot.configuration;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import java.util.List;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.configuration.ConfigurationSection;
 import com.pyrlong.configuration.handler.ConfigurationSectionHandlerBase;

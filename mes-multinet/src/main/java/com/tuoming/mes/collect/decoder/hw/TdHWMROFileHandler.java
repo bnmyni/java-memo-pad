@@ -1,16 +1,15 @@
 package com.tuoming.mes.collect.decoder.hw;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.util.io.CompressionUtils;
 import com.tuoming.mes.collect.dpp.datatype.DPPConstants;
@@ -25,18 +24,18 @@ import com.tuoming.mes.strategy.service.handle.himpl.TdHWCellCollectOutPutHandle
 @Component("TdHWMROFileHandler")
 public class TdHWMROFileHandler extends AbstractFileProcessor {
 
-    private static Logger logger = Logger.getLogger(TdHWMROFileHandler.class);
     //解析器路径配置
-    private static final String overDag = ConfigurationManager.getDefaultConfig().getString("HW_TD_MRO_PROCESSOR","NOT FOUND");
+    private static final String overDag = ConfigurationManager.getDefaultConfig().getString("HW_TD_MRO_PROCESSOR", "NOT FOUND");
+    private static Logger logger = Logger.getLogger(TdHWMROFileHandler.class);
 
     @Override
     /**
      * 运行主方法
      */
     public void run() {
-            convertToCSVFiles();
+        convertToCSVFiles();
     }
-    
+
     /**
      * 解析TD华为MRO文件至xml文件。
      * 将xml解析并进行统计，计算出总采样点数、单个邻区总采样点数、单个邻区满足信号强度的采样点数。
@@ -44,11 +43,11 @@ public class TdHWMROFileHandler extends AbstractFileProcessor {
      */
     public void convertToCSVFiles() {
 //        DataOutPutHandle outHandle = AppContext.getBean("TdHWCellCollectOutPutHandle");
-    	TdHWCellCollectOutPutHandle outHandle = new TdHWCellCollectOutPutHandle();
+        TdHWCellCollectOutPutHandle outHandle = new TdHWCellCollectOutPutHandle();
         //遍历文件集合
         for (Map.Entry<String, Map<String, String>> fileSet : sourceFileList.entrySet()) {
             try {
-            	//取得完成路径文件名
+                //取得完成路径文件名
                 String fileName = fileSet.getKey();
                 //判断是否有.done结尾的文件，有代表已处理过。
                 if (isFileDone(fileName))
@@ -59,16 +58,16 @@ public class TdHWMROFileHandler extends AbstractFileProcessor {
                 //取得文件所在路径
                 String parsFilePath = targetFile.substring(0, targetFile.lastIndexOf("/"));
                 //取得文件名
-                String parsFileName = targetFile.substring(targetFile.lastIndexOf("/") + 1,targetFile.length());
-                
+                String parsFileName = targetFile.substring(targetFile.lastIndexOf("/") + 1, targetFile.length());
+
                 //解析二进制文件
-                if(!parsTdHWMROFile(parsFilePath,parsFileName)){
-                	//不成功的场合
-                	renameErrorDone(fileName);
-                	renameErrorDone(targetFile);
-                	renameErrorDone(targetFile + ".xml");
-                }else {
-                	//解析XML文件
+                if (!parsTdHWMROFile(parsFilePath, parsFileName)) {
+                    //不成功的场合
+                    renameErrorDone(fileName);
+                    renameErrorDone(targetFile);
+                    renameErrorDone(targetFile + ".xml");
+                } else {
+                    //解析XML文件
                     TdHWMROFileDecode fileDecode = new TdHWMROFileParser();
                     List<String[]> dataList = fileDecode.parse(targetFile + ".xml");
                     //对解析结果做统计计算
@@ -92,73 +91,77 @@ public class TdHWMROFileHandler extends AbstractFileProcessor {
 
     /**
      * 解析TD华为MRO文件，将二进制MRO文件解析成xml文件
+     *
      * @param filePath
      * @param fileName
      */
-    private boolean parsTdHWMROFile(String filePath, String fileName){
-    	//解析器是否存在
-    	if("NOT FOUND".equals(overDag)){
-    		logger.warn("HW_TD_MRO_PROCESSOR not found");
-    		return false;
-    	}
-    	//文件及路径是否存在
-    	if(filePath == null || fileName == null || filePath.length() < 1 || fileName.length() < 1){
-    		logger.warn("解析路径或文件名为空");
-    		return false;
-    	}
-    	//返回与当前 Java 应用程序相关的运行时对象
-    	Runtime run = Runtime.getRuntime();
-		boolean successFlag = false;
-		try {
-			// 启动另一个进程来执行命令   
-			Process p = run.exec(overDag +" "+filePath+" "+fileName);
-            BufferedInputStream in = new BufferedInputStream(p.getInputStream());   
-            BufferedReader inBr = new BufferedReader(new InputStreamReader(in));   
-            String lineStr;   
-            while ((lineStr = inBr.readLine()) != null){   
+    private boolean parsTdHWMROFile(String filePath, String fileName) {
+        //解析器是否存在
+        if ("NOT FOUND".equals(overDag)) {
+            logger.warn("HW_TD_MRO_PROCESSOR not found");
+            return false;
+        }
+        //文件及路径是否存在
+        if (filePath == null || fileName == null || filePath.length() < 1 || fileName.length() < 1) {
+            logger.warn("解析路径或文件名为空");
+            return false;
+        }
+        //返回与当前 Java 应用程序相关的运行时对象
+        Runtime run = Runtime.getRuntime();
+        boolean successFlag = false;
+        try {
+            // 启动另一个进程来执行命令
+            Process p = run.exec(overDag + " " + filePath + " " + fileName);
+            BufferedInputStream in = new BufferedInputStream(p.getInputStream());
+            BufferedReader inBr = new BufferedReader(new InputStreamReader(in));
+            String lineStr;
+            while ((lineStr = inBr.readLine()) != null) {
                 //获得命令执行后在控制台的输出信息   
-            	//根据输出信息判断文件是否解析成功
-               if(lineStr.indexOf("PARSE FILE SUCCESS") >= 0){
-            	   successFlag = true;
-               }
+                //根据输出信息判断文件是否解析成功
+                if (lineStr.indexOf("PARSE FILE SUCCESS") >= 0) {
+                    successFlag = true;
+                }
             }
             //检查命令是否执行失败。   
             if (p.waitFor() != 0) {
-            	if (p.exitValue() == 1)//p.exitValue()==0表示正常结束，1：非正常结束
-            		logger.warn("命令执行失败!");
-            }else {
-            	if(successFlag){
-            		logger.info("解析成功："+filePath + "/" + fileName);
-            	}else{
-            		logger.info("解析失败："+filePath + "/" + fileName);
-        		}
-           }
-			
-           return successFlag;
-		}catch (Exception ex) {   
-			logger.warn(ex.getMessage(), ex);
+                if (p.exitValue() == 1)//p.exitValue()==0表示正常结束，1：非正常结束
+                    logger.warn("命令执行失败!");
+            } else {
+                if (successFlag) {
+                    logger.info("解析成功：" + filePath + "/" + fileName);
+                } else {
+                    logger.info("解析失败：" + filePath + "/" + fileName);
+                }
+            }
+
+            return successFlag;
+        } catch (Exception ex) {
+            logger.warn(ex.getMessage(), ex);
             return false;
-       }
+        }
     }
-    
+
     /**
      * 将文件更名*.done，标识出已处理文件
+     *
      * @param file
      * @return
      */
-    private boolean renameDone(String file){
-    	 String path = file + DPPConstants.FILE_PARSED_EXTENSION;
-         File donefile = new File(path);
-         return new File(file).renameTo(donefile);
+    private boolean renameDone(String file) {
+        String path = file + DPPConstants.FILE_PARSED_EXTENSION;
+        File donefile = new File(path);
+        return new File(file).renameTo(donefile);
     }
+
     /**
      * 将文件更名*.error.done，标识出解析二进制失败文件
+     *
      * @param file
      * @return
      */
-    private boolean renameErrorDone(String file){
-    	 String path = file +".error"+ DPPConstants.FILE_PARSED_EXTENSION;
-         File donefile = new File(path);
-         return new File(file).renameTo(donefile);
+    private boolean renameErrorDone(String file) {
+        String path = file + ".error" + DPPConstants.FILE_PARSED_EXTENSION;
+        File donefile = new File(path);
+        return new File(file).renameTo(donefile);
     }
 }

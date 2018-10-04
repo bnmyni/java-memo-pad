@@ -22,35 +22,35 @@ import java.util.Map;
 
 public class ObjectType {
 
-	private String name;
-	private List<String> colNames = new ArrayList<String>();
-	private Map<String,List<Object>> colValues;
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String objectTypeName) {
-		this.name = objectTypeName;
-	}
-	
-	public List<String> getColNames() {
-		return colNames;
-	}
-	
-	public Map<String, List<Object>> getColValues() {
-		return colValues;
-	}
-	
-	public void setColValues(Map<String, List<Object>> colValues) {
-		this.colValues = colValues;
-	}
-	
-	public void addColName(String name){
-		this.colNames.add(name);
-	}
-	
-	public void addColValues(String key, List<Object> value){
-		colValues.put(key, value);
-	}
+    private String name;
+    private List<String> colNames = new ArrayList<String>();
+    private Map<String, List<Object>> colValues;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String objectTypeName) {
+        this.name = objectTypeName;
+    }
+
+    public List<String> getColNames() {
+        return colNames;
+    }
+
+    public Map<String, List<Object>> getColValues() {
+        return colValues;
+    }
+
+    public void setColValues(Map<String, List<Object>> colValues) {
+        this.colValues = colValues;
+    }
+
+    public void addColName(String name) {
+        this.colNames.add(name);
+    }
+
+    public void addColValues(String key, List<Object> value) {
+        colValues.put(key, value);
+    }
 }

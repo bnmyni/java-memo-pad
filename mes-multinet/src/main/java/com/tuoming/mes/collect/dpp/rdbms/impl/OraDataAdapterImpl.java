@@ -16,13 +16,12 @@
 
 package com.tuoming.mes.collect.dpp.rdbms.impl;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.DateUtil;
 import com.pyrlong.util.ProcessHelper;

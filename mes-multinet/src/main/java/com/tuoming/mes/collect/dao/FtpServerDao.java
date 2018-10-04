@@ -18,7 +18,6 @@
 package com.tuoming.mes.collect.dao;
 
 import java.util.List;
-
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.models.FtpServer;
 
@@ -30,6 +29,6 @@ import com.tuoming.mes.collect.models.FtpServer;
  */
 
 public interface FtpServerDao extends BaseDao<FtpServer, String> {
-	
-	public List<FtpServer> queryEnabledFtpServer();
+
+    public List<FtpServer> queryEnabledFtpServer();
 }

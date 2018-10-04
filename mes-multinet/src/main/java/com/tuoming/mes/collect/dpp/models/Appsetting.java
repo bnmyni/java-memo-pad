@@ -16,6 +16,10 @@
 
 package com.tuoming.mes.collect.dpp.models;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,10 +27,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Created with IntelliJ IDEA. User: james Date: 6/11/13 Time: 9:30 PM
@@ -41,8 +41,8 @@ public class Appsetting extends AbstractModel implements Comparable {
 
     @NotEmpty(message = "{object.notempty.illegal}")
     @Lob
-    @Basic( fetch = FetchType.LAZY )
-    @Column( name = "value", nullable = true )
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "value", nullable = true)
     public String value;
 
     @Column(name = "remark", length = 255, nullable = false)

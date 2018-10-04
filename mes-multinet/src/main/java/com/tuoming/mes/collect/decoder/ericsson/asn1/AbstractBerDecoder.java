@@ -27,7 +27,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import com.pyrlong.util.ConvertBinaryUtil;
 import com.tuoming.mes.collect.decoder.ericsson.Decoder;
 
@@ -41,7 +40,7 @@ public abstract class AbstractBerDecoder implements Decoder {
             // the buffer size = 4MB
             inputStream = new BufferedInputStream(steam, 1048576 * 4);
         } catch (FileNotFoundException e) {
-        	  e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -64,7 +63,8 @@ public abstract class AbstractBerDecoder implements Decoder {
 
     /**
      * 跳过下一组固定TLV值
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     protected void skipNextFixedTLV() throws Exception {
         int length = getNextFixedLength();
@@ -72,7 +72,7 @@ public abstract class AbstractBerDecoder implements Decoder {
             // 跳过执行的Length长度(Value对应的长度)
             getBytes(length);
         } else if (length < 0) {
-            throw new Exception( "TLV Length < 0!");
+            throw new Exception("TLV Length < 0!");
         }
     }
 
@@ -110,7 +110,8 @@ public abstract class AbstractBerDecoder implements Decoder {
 
     /**
      * 取得下一组固定TLV中的Value转换为int
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     protected int getNextFixedValueToInt() throws Exception {
 
@@ -118,7 +119,7 @@ public abstract class AbstractBerDecoder implements Decoder {
 
         // long length的情况暂不处理
         if (length > 127) {
-            throw new Exception( "TLV的Length大于127!");
+            throw new Exception("TLV的Length大于127!");
         }
 
         // 取得Value的字节
@@ -131,7 +132,8 @@ public abstract class AbstractBerDecoder implements Decoder {
 
     /**
      * 取得下一组固定TLV中的Value转换为Long
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     protected long getNextFixedValueToLong() throws Exception {
 
@@ -139,7 +141,7 @@ public abstract class AbstractBerDecoder implements Decoder {
 
         // long length的情况暂不处理
         if (length > 127) {
-            throw new  Exception( "TLV的Length大于127!");
+            throw new Exception("TLV的Length大于127!");
         }
 
         // 取得Value的字节
@@ -150,9 +152,10 @@ public abstract class AbstractBerDecoder implements Decoder {
 
     /**
      * 取得下一组固定TLV中的Value转换为Timestamp
-     * @throws IOException 
+     *
+     * @throws IOException
      */
-    protected Timestamp getNextFixedValueToTimeStamp() throws IOException   {
+    protected Timestamp getNextFixedValueToTimeStamp() throws IOException {
 
         int length = getNextFixedLength();
         // 取得Value的字节
@@ -168,7 +171,7 @@ public abstract class AbstractBerDecoder implements Decoder {
             System.out.print(e.getMessage());
             e.printStackTrace();
         }
-		return null;
+        return null;
     }
 
     /**

@@ -25,7 +25,7 @@ public class DataColumMapping {
     // 采集数据计算表达式
     private String gatherFormula;
     // 标识本列是否可见，通过设置本列可以控制生成的目标表是否包括本列数据，针对用于临时数据标识的列一般通过设置本属性达到在目标表隐藏指定列的目的！
-    private Boolean hide=false;
+    private Boolean hide = false;
     // 该字段默认值
     private String defaultValue;
     // 发生错误时该字段需要填入的值

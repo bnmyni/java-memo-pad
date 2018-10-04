@@ -17,11 +17,10 @@
 // Created On: 13-7-24 上午10:54
 package com.tuoming.mes.collect.dao.impl;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import com.pyrlong.logging.LogFacade;
 import com.tuoming.mes.collect.dao.FtpServerDao;
 import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
@@ -38,12 +37,11 @@ public class FtpServerDaoImpl extends AbstractBaseDao<FtpServer, String> impleme
 
     private static Logger logger = LogFacade.getLog4j(FtpServerDaoImpl.class);
 
-	public List<FtpServer> queryEnabledFtpServer() {
-		StringBuilder hql = new StringBuilder();
-		hql.append(HQL_LIST_ALL).append(" join WHERE enabled = 1");
-		return this.getSession().createQuery(hql.toString()).list();
-	}
-    
-    
+    public List<FtpServer> queryEnabledFtpServer() {
+        StringBuilder hql = new StringBuilder();
+        hql.append(HQL_LIST_ALL).append(" join WHERE enabled = 1");
+        return this.getSession().createQuery(hql.toString()).list();
+    }
+
 
 }

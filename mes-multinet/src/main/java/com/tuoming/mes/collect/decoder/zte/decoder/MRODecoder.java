@@ -15,12 +15,12 @@
  */
 
 package com.tuoming.mes.collect.decoder.zte.decoder;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.tuoming.mes.collect.decoder.zte.model.mro.FileHeader;
 import com.tuoming.mes.collect.decoder.zte.model.mro.GsmNeighbourData;
 import com.tuoming.mes.collect.decoder.zte.model.mro.InterFreqData;
@@ -28,6 +28,7 @@ import com.tuoming.mes.collect.decoder.zte.model.mro.IntraFreqData;
 import com.tuoming.mes.collect.decoder.zte.model.mro.MeasResultList;
 import com.tuoming.mes.collect.decoder.zte.model.mro.MeasResultMRO;
 import com.tuoming.mes.collect.decoder.zte.model.mro.ResultDataCollection;
+
 /**
  * Created by shenhaitao on 2014/7/22 0022.
  */
@@ -42,15 +43,14 @@ public class MRODecoder extends Decoder {
 
     public void decode() throws IOException {
 
-       try {
-           mroDataCollection.setFileHeader(readFileHeader());
-           mroDataCollection.setMeasResultMROList(readMeasResultMROList());
-           mroDataCollection.setMeasResultMRO(readMeasResultMRO());
-           mroDataCollection.setOtherData(readOtherData());
-       }
-       finally {
-           close();
-       }
+        try {
+            mroDataCollection.setFileHeader(readFileHeader());
+            mroDataCollection.setMeasResultMROList(readMeasResultMROList());
+            mroDataCollection.setMeasResultMRO(readMeasResultMRO());
+            mroDataCollection.setOtherData(readOtherData());
+        } finally {
+            close();
+        }
     }
 
     private FileHeader readFileHeader() throws IOException {

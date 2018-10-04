@@ -42,6 +42,7 @@ import com.tuoming.mes.strategy.util.FormatUtil;
  */
 @Service("sleepAreaSelectService")
 public class SleepAreaSelectServiceImpl implements SleepAreaSelectService {
+    private static Map<String, Map<String, Double>> dic = new HashMap<String, Map<String, Double>>();
     @Autowired
     @Qualifier("sleepAreaSelDao")
     private SleepAreaSelDao sleepAreaSelDao;
@@ -55,7 +56,25 @@ public class SleepAreaSelectServiceImpl implements SleepAreaSelectService {
     @Qualifier("businessLogDao")
     private BusinessLogDao businessLogDao;
 
-    private static Map<String, Map<String, Double>> dic = new HashMap<String, Map<String, Double>>();
+    public static Map<String, Double> getSleepNotifyDic() {
+        Calendar cal = Calendar.getInstance();
+        String dateBs = DateUtil.format(cal.getTime(), "yyyy-MM-dd");
+        synchronized (dic) {
+            if (dic.get(dateBs) == null) {
+                dic.clear();
+                SleepAreaSelDao dao = AppContext.getBean("sleepAreaSelDao");
+                Map<String, Double> sleepNotifyDic = dao.querySleepNotifyDic();
+                dic.put(dateBs, sleepNotifyDic);
+            }
+        }
+        return dic.get(dateBs);
+    }
+
+    public static int getERLangBTCHN(double dest_hwl) {
+        SleepAreaSelDao dao = AppContext.getBean("sleepAreaSelDao");
+        int tchn = dao.queryERLangB(dest_hwl);
+        return tchn;
+    }
 
     /**
      * 休眠小区筛选之前，首先预测PM表下一时刻关键性指标
@@ -84,6 +103,48 @@ public class SleepAreaSelectServiceImpl implements SleepAreaSelectService {
         }
         businessLogDao.insertLog(8, "预测完成", 0);
     }
+
+/*	public void conflictDeal(Map<String, String> context) {
+        boolean l2lAzimuth = Boolean.parseBoolean(context.get(Constant.L2L));
+		boolean g2gAzimuth = Boolean.parseBoolean(context.get(Constant.G2G));
+		boolean t2gAzimuth = Boolean.parseBoolean(context.get(Constant.T2G));
+		sleepAreaSelDao.deleteConflictsForLte(l2lAzimuth);//删除lte小区可能存在的休眠小区不唯一冲突
+		List<String> priorityList = sleepAreaSelDao.queryPriorities();
+		//判断同一gsm补偿小区，是否能满足同时补偿gsm和td制式小区
+		this.filterT2gOrG2gByGsm(priorityList.indexOf(Constant.TD), priorityList.indexOf(Constant.GSM), l2lAzimuth, g2gAzimuth,t2gAzimuth);
+		
+		sleepAreaSelDao.deleteMakeUpBySleepForG2g(g2gAzimuth);
+		sleepAreaSelDao.deleteMakeUpBySleepForL2l(l2lAzimuth);
+		
+		String first = priorityList.get(0);//第一优先级
+		String second = priorityList.get(1);// 第二优先级
+		// TD是第一优先级的情况下，无论其他两致式那个是第二优先级方法都相同
+		if (Constant.TD.equalsIgnoreCase(first)) {
+			// 如果T2G优先级比较高，则先将其他表中的补偿小区存在于T2G中的小区剔除
+			sleepAreaSelDao.delMakeUpConflictInL2TByT2G(t2gAzimuth);
+			// G2G优先级高的情况下，则将比其优先级底的其他表中的包含该表的休眠小区的剔除
+			sleepAreaSelDao.delSleepConflictInG2GByT2G(g2gAzimuth, t2gAzimuth);
+			sleepAreaSelDao.delSleepConflictInL2TByL2L(l2lAzimuth);
+		} else if (Constant.GSM.equalsIgnoreCase(first)) {
+			sleepAreaSelDao.delMakeUpConflictInT2GByG2G(g2gAzimuth, t2gAzimuth);
+			sleepAreaSelDao.delSleepConflictInL2TByL2L(l2lAzimuth);
+			if (Constant.TD.equalsIgnoreCase(second)) {
+				sleepAreaSelDao.delMakeUpConflictInL2TByT2G(t2gAzimuth);
+			} else {
+				sleepAreaSelDao
+						.delSleepConflictInT2GByL2T(t2gAzimuth);
+			}
+		} else if (Constant.LTE.equalsIgnoreCase(first)) {
+			sleepAreaSelDao.delSleepConflictInL2TByL2L(l2lAzimuth);
+			sleepAreaSelDao.delSleepConflictInT2GByL2T(t2gAzimuth);
+			if (Constant.GSM.equalsIgnoreCase(second)) {
+				sleepAreaSelDao.delMakeUpConflictInT2GByG2G(g2gAzimuth, t2gAzimuth);
+			} else {
+				sleepAreaSelDao
+						.delSleepConflictInG2GByT2G(g2gAzimuth, t2gAzimuth);
+			}
+		}*/
+    /** T2L Neusoft end */
 
     /**
      * 指定时间的数据采集完成之后，开始进行15分钟之后的休眠小区筛选
@@ -190,48 +251,6 @@ public class SleepAreaSelectServiceImpl implements SleepAreaSelectService {
 
         businessLogDao.insertLog(12, "小区冲突处理完成", 0);
     }
-
-/*	public void conflictDeal(Map<String, String> context) {
-        boolean l2lAzimuth = Boolean.parseBoolean(context.get(Constant.L2L));
-		boolean g2gAzimuth = Boolean.parseBoolean(context.get(Constant.G2G));
-		boolean t2gAzimuth = Boolean.parseBoolean(context.get(Constant.T2G));
-		sleepAreaSelDao.deleteConflictsForLte(l2lAzimuth);//删除lte小区可能存在的休眠小区不唯一冲突
-		List<String> priorityList = sleepAreaSelDao.queryPriorities();
-		//判断同一gsm补偿小区，是否能满足同时补偿gsm和td制式小区
-		this.filterT2gOrG2gByGsm(priorityList.indexOf(Constant.TD), priorityList.indexOf(Constant.GSM), l2lAzimuth, g2gAzimuth,t2gAzimuth);
-		
-		sleepAreaSelDao.deleteMakeUpBySleepForG2g(g2gAzimuth);
-		sleepAreaSelDao.deleteMakeUpBySleepForL2l(l2lAzimuth);
-		
-		String first = priorityList.get(0);//第一优先级
-		String second = priorityList.get(1);// 第二优先级
-		// TD是第一优先级的情况下，无论其他两致式那个是第二优先级方法都相同
-		if (Constant.TD.equalsIgnoreCase(first)) {
-			// 如果T2G优先级比较高，则先将其他表中的补偿小区存在于T2G中的小区剔除
-			sleepAreaSelDao.delMakeUpConflictInL2TByT2G(t2gAzimuth);
-			// G2G优先级高的情况下，则将比其优先级底的其他表中的包含该表的休眠小区的剔除
-			sleepAreaSelDao.delSleepConflictInG2GByT2G(g2gAzimuth, t2gAzimuth);
-			sleepAreaSelDao.delSleepConflictInL2TByL2L(l2lAzimuth);
-		} else if (Constant.GSM.equalsIgnoreCase(first)) {
-			sleepAreaSelDao.delMakeUpConflictInT2GByG2G(g2gAzimuth, t2gAzimuth);
-			sleepAreaSelDao.delSleepConflictInL2TByL2L(l2lAzimuth);
-			if (Constant.TD.equalsIgnoreCase(second)) {
-				sleepAreaSelDao.delMakeUpConflictInL2TByT2G(t2gAzimuth);
-			} else {
-				sleepAreaSelDao
-						.delSleepConflictInT2GByL2T(t2gAzimuth);
-			}
-		} else if (Constant.LTE.equalsIgnoreCase(first)) {
-			sleepAreaSelDao.delSleepConflictInL2TByL2L(l2lAzimuth);
-			sleepAreaSelDao.delSleepConflictInT2GByL2T(t2gAzimuth);
-			if (Constant.GSM.equalsIgnoreCase(second)) {
-				sleepAreaSelDao.delMakeUpConflictInT2GByG2G(g2gAzimuth, t2gAzimuth);
-			} else {
-				sleepAreaSelDao
-						.delSleepConflictInG2GByT2G(g2gAzimuth, t2gAzimuth);
-			}
-		}*/
-    /** T2L Neusoft end */
 
     /**
      * 过滤掉Gsm小区的每线话务量不同时满足T2g和G2g的小区
@@ -429,9 +448,9 @@ public class SleepAreaSelectServiceImpl implements SleepAreaSelectService {
         businessLogDao.insertLog(14, "休眠指令下发结束", 0);
     }
 
-
     /**
      * 获取休眠与补偿制式对应是否用方位角计算
+     *
      * @return
      */
     @Override
@@ -442,26 +461,6 @@ public class SleepAreaSelectServiceImpl implements SleepAreaSelectService {
             context.put(String.valueOf(ctx.get("busytype")), ctx.get("base_overlay_degree") == 0 ? "false" : "true");
         }
         return context;
-    }
-
-    public static Map<String, Double> getSleepNotifyDic() {
-        Calendar cal = Calendar.getInstance();
-        String dateBs = DateUtil.format(cal.getTime(), "yyyy-MM-dd");
-        synchronized (dic) {
-            if (dic.get(dateBs) == null) {
-                dic.clear();
-                SleepAreaSelDao dao = AppContext.getBean("sleepAreaSelDao");
-                Map<String, Double> sleepNotifyDic = dao.querySleepNotifyDic();
-                dic.put(dateBs, sleepNotifyDic);
-            }
-        }
-        return dic.get(dateBs);
-    }
-
-    public static int getERLangBTCHN(double dest_hwl) {
-        SleepAreaSelDao dao = AppContext.getBean("sleepAreaSelDao");
-        int tchn = dao.queryERLangB(dest_hwl);
-        return tchn;
     }
 
 }

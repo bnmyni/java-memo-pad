@@ -16,6 +16,8 @@
 
 package com.tuoming.mes.collect.dpp.rdbms.impl;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -28,9 +30,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.collection.FixSizeMap;
 import com.pyrlong.configuration.ConfigurationManager;
@@ -62,28 +61,29 @@ import com.tuoming.mes.collect.dpp.rdbms.ExecuteResult;
  */
 public abstract class AbstractDataAdapter implements DataAdapter {
 
-    private static FixSizeMap<String, Object> synchronizedHandle = new FixSizeMap<String, Object>();
     protected static final Logger logger = LogFacade.getLog4j(AbstractDataAdapter.class);
+    protected static final String split = ConfigurationManager.getDefaultConfig().getString(DPPConstants.CSV_FILE_SPLIT_CHAR, ",");
+    protected static final String enclosed = ConfigurationManager.getDefaultConfig().getString(DPPConstants.LOAD_DATA_ENCLOSED, "~");
+    private final static long queryLongTime = 10000;
+    private final static long queryVeryLongTime = 60000;
+    protected static String csvFileEncoding = "utf8";
+    private static FixSizeMap<String, Object> synchronizedHandle = new FixSizeMap<String, Object>();
     private static Boolean ExcuteSqlFileBreakOnError = true;
     protected Connection connection = null;
     int connCheckTime = ConfigurationManager.getDefaultConfig().getInteger(DPPConstants.DB_CONNECTION_CHECK, 120000);
     private DbType dbType = null;
     private DbStat dbStat = DbStat.Closed;
     private DataAdapterPool dataAdapterPool = null;
-    protected static final String split = ConfigurationManager.getDefaultConfig().getString(DPPConstants.CSV_FILE_SPLIT_CHAR, ",");
-    protected static final String enclosed = ConfigurationManager.getDefaultConfig().getString(DPPConstants.LOAD_DATA_ENCLOSED, "~");
     private long lastVisited = DateUtil.getTimeinteger();
-    protected static String csvFileEncoding = "utf8";
-    private final static long queryLongTime = 10000;
-    private final static long queryVeryLongTime = 60000;
-
-    public static int getDataTypeFromJdbcType(int JDBC_TPYE) {
-        return JDBC_TPYE;
-    }
+    private ConnectionStringSetting connectionStringSetting;
 
     public AbstractDataAdapter() {
         csvFileEncoding = ConfigurationManager.getDefaultConfig().getString(DPPConstants.CSV_FILE_ENCODING, "utf8");
         synchronizedHandle.setMaxSize(100);
+    }
+
+    public static int getDataTypeFromJdbcType(int JDBC_TPYE) {
+        return JDBC_TPYE;
     }
 
     protected Object getSynchronizedHandle(String tableName) {
@@ -416,16 +416,13 @@ public abstract class AbstractDataAdapter implements DataAdapter {
         return table;
     }
 
-    private ConnectionStringSetting connectionStringSetting;
-
-    public void setConnectionStringSetting(ConnectionStringSetting connectionStringSetting) {
-        this.connectionStringSetting = connectionStringSetting;
-    }
-
     public ConnectionStringSetting getConnectionStringSetting() {
         return connectionStringSetting;
     }
 
+    public void setConnectionStringSetting(ConnectionStringSetting connectionStringSetting) {
+        this.connectionStringSetting = connectionStringSetting;
+    }
 
     public Connection getConnection() {
         try {

@@ -15,8 +15,10 @@
  */
 
 package com.tuoming.mes.collect.decoder.zte.model.mrs;
+
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Created by shenhaitao on 2014/7/22 0022.
  */
@@ -33,24 +35,31 @@ public class MeasResultMRS {
     public int getPeriod() {
         return period;
     }
+
     public void setPeriod(int period) {
         this.period = period;
     }
+
     public String getmRSItemType() {
         return mRSItemType;
     }
+
     public void setmRSItemType(String mRSItemType) {
         this.mRSItemType = mRSItemType;
     }
+
     public String getObjectType() {
         return objectType;
     }
+
     public void setObjectType(String objectType) {
         this.objectType = objectType;
     }
+
     public List<NeData> getNeDataList() {
         return neDataList;
     }
+
     public void setNeDataList(List<NeData> neDataList) {
         this.neDataList = neDataList;
     }

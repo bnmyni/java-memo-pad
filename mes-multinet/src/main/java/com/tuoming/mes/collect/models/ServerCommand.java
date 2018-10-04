@@ -58,6 +58,21 @@ public class ServerCommand extends AbstractModel {
      */
     @Column(name = "order_id", length = 128, nullable = false)
     private Integer orderId;
+    /**
+     * 指令关联的服务器
+     */
+    @Column(name = "server_group", length = 128, nullable = false)
+    private String neServer;
+    /**
+     * 标识指令对应的操作类型  ，其中 login\logout是每个服务器必须具有的配置
+     */
+    @Column(name = "action", length = 16, nullable = false)
+    private String action;
+    /**
+     * 指令提示符，当出现这个提示符是发送本条指令
+     */
+    @Column(name = "prompt", length = 128, nullable = true)
+    private String prompt;
 
     public String getNeServer() {
         return neServer;
@@ -74,24 +89,6 @@ public class ServerCommand extends AbstractModel {
     public void setAction(String action) {
         this.action = action;
     }
-
-    /**
-     * 指令关联的服务器
-     */
-    @Column(name = "server_group", length = 128, nullable = false)
-    private String neServer;
-
-    /**
-     * 标识指令对应的操作类型  ，其中 login\logout是每个服务器必须具有的配置
-     */
-    @Column(name = "action", length = 16, nullable = false)
-    private String action;
-
-    /**
-     * 指令提示符，当出现这个提示符是发送本条指令
-     */
-    @Column(name = "prompt", length = 128, nullable = true)
-    private String prompt;
 
     public Integer getOrderId() {
         return orderId;

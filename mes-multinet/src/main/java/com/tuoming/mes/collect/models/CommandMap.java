@@ -16,6 +16,8 @@
 
 package com.tuoming.mes.collect.models;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,9 +28,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.tuoming.mes.collect.dpp.models.AbstractModel;
 
 /**
@@ -61,15 +60,6 @@ public class CommandMap extends AbstractModel {
      */
     @Column(name = "command_filter", length = 500, nullable = true)
     private String commandFilter;
-
-    public String getDoneMark() {
-        return doneMark;
-    }
-
-    public void setDoneMark(String doneMark) {
-        this.doneMark = doneMark;
-    }
-
     /**
      * 命令结束标识
      */
@@ -81,26 +71,22 @@ public class CommandMap extends AbstractModel {
     @ManyToOne
     @JoinColumn(name = "manufacturers", nullable = false, insertable = true, updatable = true)
     private Manufacturers manufacturers;
-
     /**
      * 指令对象类型
      */
     @Column(name = "object_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private ObjectType objectType;
-
     /**
      * 判断指令是否执行成功的标识
      */
     @Column(name = "sucess_mark", length = 500, nullable = true)
     private String sucessfullMark;
-
     /**
      * 判断指令是否执行失败的标识
      */
     @Column(name = "fail_mark", length = 500, nullable = true)
     private String failMark;
-
     /**
      * 指令发出前可以执行的统一操作
      */
@@ -111,7 +97,6 @@ public class CommandMap extends AbstractModel {
      */
     @Column(name = "after_action", length = 500, nullable = true)
     private String afterAction;
-
     /**
      * 指令执行失败需要执行的操作
      */
@@ -122,12 +107,28 @@ public class CommandMap extends AbstractModel {
      */
     @Column(name = "sucess_action", length = 500, nullable = true)
     private String sucessAction;
-
     /**
      * 指令的全局开关，如果这里设置成false,则整个系统内符合本指令匹配条件的指令都不执行
      */
     @Column(name = "enabled", nullable = true)
     private Boolean enabled = true;
+    @Column(name = "resent", nullable = true)
+    private Boolean resent = false;
+    /**
+     * 互动指令，处理指令发送过程需要交互操作的，如按任意键继续、确认等
+     */
+    @Column(name = "interactive_cmd", length = 500, nullable = true)
+    private String interactiveCmd;
+    @Column(name = "time_out", nullable = true)
+    private int timeOut = 0;
+
+    public String getDoneMark() {
+        return doneMark;
+    }
+
+    public void setDoneMark(String doneMark) {
+        this.doneMark = doneMark;
+    }
 
     public Boolean getResent() {
         if (resent == null) return true;
@@ -139,9 +140,6 @@ public class CommandMap extends AbstractModel {
             this.resent = resent;
     }
 
-    @Column(name = "resent", nullable = true)
-    private Boolean resent = false;
-
     public String getInteractiveCmd() {
         return interactiveCmd;
     }
@@ -150,12 +148,6 @@ public class CommandMap extends AbstractModel {
         this.interactiveCmd = interactiveCmd;
     }
 
-    /**
-     * 互动指令，处理指令发送过程需要交互操作的，如按任意键继续、确认等
-     */
-    @Column(name = "interactive_cmd", length = 500, nullable = true)
-    private String interactiveCmd;
-
     public int getTimeOut() {
         return timeOut;
     }
@@ -163,9 +155,6 @@ public class CommandMap extends AbstractModel {
     public void setTimeOut(int timeOut) {
         this.timeOut = timeOut;
     }
-
-    @Column(name = "time_out", nullable = true)
-    private int timeOut = 0;
 
     public Long getId() {
         return id;

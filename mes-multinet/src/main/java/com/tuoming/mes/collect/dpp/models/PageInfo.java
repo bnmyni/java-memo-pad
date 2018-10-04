@@ -20,7 +20,6 @@ package com.tuoming.mes.collect.dpp.models;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pyrlong.json.JSONObject;
@@ -36,6 +35,8 @@ import com.tuoming.mes.collect.dpp.datatype.DataTable;
  */
 
 public class PageInfo {
+    List<Map> colMaps;
+    List<Map> buttons;
     private int pageIndex;
     private int pageSize;
     private int recordCount;
@@ -45,16 +46,11 @@ public class PageInfo {
     private boolean canEdit = false;
     private boolean canSearch = false;
     private boolean canImport = false;
-
     private String caption;
     private String reportName;
     private String filterString;
     private DataTable table;
     private TableInfo tableInfo;
-    List<Map> colMaps;
-
-    List<Map> buttons;
-
 
     public List<Map> getButtons() {
         return buttons;

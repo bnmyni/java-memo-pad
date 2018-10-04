@@ -14,8 +14,8 @@ public class DateUtil {
      * 获取指定时间间隔的时刻表
      *
      * @param nextDay
-     * @param beginHour    开始时间
-     * @param endHour      结束时间
+     * @param beginHour      开始时间
+     * @param endHour        结束时间
      * @param minuteInterval 时间间隔
      * @return
      */

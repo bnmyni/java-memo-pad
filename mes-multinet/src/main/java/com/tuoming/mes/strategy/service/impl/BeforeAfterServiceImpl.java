@@ -1,5 +1,21 @@
 package com.tuoming.mes.strategy.service.impl;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import com.pyrlong.Envirment;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.dsl.tools.DSLUtil;
@@ -15,17 +31,6 @@ import com.tuoming.mes.strategy.dao.BeforeAfterDao;
 import com.tuoming.mes.strategy.model.BeforeAndAfterSetting;
 import com.tuoming.mes.strategy.service.BeforeAfterService;
 import com.tuoming.mes.strategy.util.DateUtil;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Map.Entry;
 
 @SuppressWarnings("unchecked")
 @Service("beforeAfterService")
@@ -34,6 +39,36 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
     @Autowired
     @Qualifier(value = "beforeAfterDao")
     private BeforeAfterDao beforeAfterDao;
+
+    private static boolean deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        // 目录此时为空，可以删除
+        return dir.delete();
+    }
+
+    public static boolean existFile(File f) {
+        if (f.exists()) {
+            File[] filelist = f.listFiles();
+            if (filelist != null) {
+                for (File cf : filelist) {
+                    if (cf.isFile()) {
+                        return true;
+                    } else if (cf.isDirectory()) {
+                        return existFile(cf);
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     public void executeBeforeOrAfter(String groupName) {
@@ -45,7 +80,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
                 updateCarrierAfterPm(set);
             } else if (Constant.BEFORE_COLLECT_DATA_CLEAN_PM.equalsIgnoreCase(groupName)) {
                 cleanDataBeforePm(set);
-            }  else if (Constant.BEFORE_COLLECT_DATA_CLEAN_CARRIER.equalsIgnoreCase(groupName)) {
+            } else if (Constant.BEFORE_COLLECT_DATA_CLEAN_CARRIER.equalsIgnoreCase(groupName)) {
                 cleanCarrierBeforeCollect(set);
             } else if (Constant.BEFORE_COLLECT_DATA_ADD_BATCHID.equalsIgnoreCase(groupName)) {
                 addBatchidBeforeCollect(set);
@@ -96,6 +131,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
 
     /**
      * 清除性能统计结果表中的大于一个月的数据
+     *
      * @param set groupName 对应的配置
      */
     private void cleanDataBeforePerf(BeforeAndAfterSetting set) {
@@ -110,6 +146,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
 
     /**
      * 清除mes_alarm中的数据
+     *
      * @param set groupName 对应的配置
      */
     private void cleanDataBeforeAlarm(BeforeAndAfterSetting set) {
@@ -121,6 +158,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
 
     /**
      * 将pm中的历史数据导入历史表中
+     *
      * @param set groupName 对应的配置
      */
     private void addBatchidBeforeCollect(BeforeAndAfterSetting set) {
@@ -132,6 +170,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
 
     /**
      * 清除载频级别PM表中的数据
+     *
      * @param set groupName 对应的配置
      */
     private void cleanCarrierBeforeCollect(BeforeAndAfterSetting set) {
@@ -140,6 +179,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
 
     /**
      * 清除CM表中的数据
+     *
      * @param set groupName 对应的配置
      */
     private void cleanDataBeforeCm(BeforeAndAfterSetting set) {
@@ -148,6 +188,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
 
     /**
      * 清除PM表中六个月前的数据(不包含MR的数据)
+     *
      * @param set groupName 对应的配置
      */
     private void cleanDataBeforePm(BeforeAndAfterSetting set) {
@@ -167,6 +208,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
 
     /**
      * 将载频级别的表改为小区级别的表(PM)
+     *
      * @param set groupName 对应的配置
      */
     private void updateCarrierAfterPm(BeforeAndAfterSetting set) {
@@ -186,10 +228,7 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
     private boolean enableImport(String table, int num) {
         int sourceCount = beforeAfterDao.queryDataCount(table);
         int bakCount = beforeAfterDao.queryDataCount(table + "_bak");
-        if (bakCount - sourceCount >= num) {
-            return true;
-        }
-        return false;
+        return bakCount - sourceCount >= num;
     }
 
     @Override
@@ -202,20 +241,6 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
             }
         }
 
-    }
-
-    private static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        // 目录此时为空，可以删除
-        return dir.delete();
     }
 
     private boolean enableDel(String dateStr, int day) {
@@ -407,22 +432,6 @@ public class BeforeAfterServiceImpl implements BeforeAfterService {
             return false;
         }
 
-    }
-
-    public static boolean existFile(File f) {
-        if (f.exists()) {
-            File[] filelist = f.listFiles();
-            if (filelist != null) {
-                for (File cf : filelist) {
-                    if (cf.isFile()) {
-                        return true;
-                    } else if (cf.isDirectory()) {
-                        return existFile(cf);
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     @Override

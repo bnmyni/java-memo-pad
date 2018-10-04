@@ -18,15 +18,14 @@ package com.tuoming.mes.collect.dpp.datatype;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.pyrlong.exception.PyrlongException;
 
 public final class DataKey {
+    List<DataColumn> keyColumns = new ArrayList<DataColumn>();
     /**
      * 主键或外键名称
      */
     private String keyName;
-    List<DataColumn> keyColumns = new ArrayList<DataColumn>();
 
     public DataKey() {
         keyColumns = new ArrayList<DataColumn>();

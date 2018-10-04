@@ -22,13 +22,11 @@ import com.tuoming.mes.strategy.util.FormatUtil;
  */
 public class ManyOverDegCalHandler implements OverDegreeCalHandle {
 
-    private Map<String, ManyOverDegCalModel> manyMap = new HashMap<String, ManyOverDegCalModel>();
-
     //多补一TD重叠覆盖度门限值(0-100,默认80)
     public int overDag = 80;
     //多补一TD单个邻区采样点占总采样点比例(0-100,默认30)
     public int singleNcRate = 30;
-
+    private Map<String, ManyOverDegCalModel> manyMap = new HashMap<String, ManyOverDegCalModel>();
 
     @Override
     public void handle(List<Map<String, Object>> dataList, OverlayDegreeSetting setting, PrintStream ps) {

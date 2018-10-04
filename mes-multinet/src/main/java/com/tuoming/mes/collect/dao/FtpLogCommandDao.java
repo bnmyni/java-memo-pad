@@ -18,7 +18,6 @@
 package com.tuoming.mes.collect.dao;
 
 import java.util.List;
-
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.models.FtpLogCommand;
 
@@ -34,9 +33,7 @@ public interface FtpLogCommandDao extends BaseDao<FtpLogCommand, String> {
     /**
      * 获取指定分组配置的任务列表
      *
-     * @param groupName
-     *         分组名称
-     *
+     * @param groupName 分组名称
      * @return 符合条件的对象列表
      */
     List<FtpLogCommand> getByGroup(String groupName);

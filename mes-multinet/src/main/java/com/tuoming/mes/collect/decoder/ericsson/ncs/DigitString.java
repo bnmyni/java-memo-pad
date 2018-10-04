@@ -25,7 +25,7 @@ public class DigitString extends Numeral {
         super(position, length, description);
     }
 
-    protected DigitString(String name,int position, int length, String description) {
-        super(name,position, length, description);
+    protected DigitString(String name, int position, int length, String description) {
+        super(name, position, length, description);
     }
 }

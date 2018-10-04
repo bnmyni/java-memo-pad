@@ -19,59 +19,59 @@ package com.tuoming.mes.collect.decoder.ericsson.asn1.entity;
 import java.sql.Timestamp;
 
 public class MeasFileHeader {
-	private Integer fileFormatVersion = null;
-	private String senderName = null;
-	private String senderType = null;
-	private String vendorName = null;
-	private Timestamp collectionBeginTime = null;
-	private String bscName = null;
+    private Integer fileFormatVersion = null;
+    private String senderName = null;
+    private String senderType = null;
+    private String vendorName = null;
+    private Timestamp collectionBeginTime = null;
+    private String bscName = null;
 
-	public String getBscName() {
-		return bscName;
-	}
+    public String getBscName() {
+        return bscName;
+    }
 
-	public void setBscName(String bscName) {
-		this.bscName = bscName;
-	}
+    public void setBscName(String bscName) {
+        this.bscName = bscName;
+    }
 
-	public Integer getFileFormatVersion() {
-		return this.fileFormatVersion;
-	}
+    public Integer getFileFormatVersion() {
+        return this.fileFormatVersion;
+    }
 
-	public void setFileFormatVersion(Integer value) {
-		this.fileFormatVersion = value;
-	}
+    public void setFileFormatVersion(Integer value) {
+        this.fileFormatVersion = value;
+    }
 
-	public String getSenderName() {
-		return this.senderName;
-	}
+    public String getSenderName() {
+        return this.senderName;
+    }
 
-	public void setSenderName(String value) {
-		this.senderName = value;
-	}
+    public void setSenderName(String value) {
+        this.senderName = value;
+    }
 
-	public String getSenderType() {
-		return this.senderType;
-	}
+    public String getSenderType() {
+        return this.senderType;
+    }
 
-	public void setSenderType(String value) {
-		this.senderType = value;
-	}
+    public void setSenderType(String value) {
+        this.senderType = value;
+    }
 
-	public String getVendorName() {
-		return this.vendorName;
-	}
+    public String getVendorName() {
+        return this.vendorName;
+    }
 
-	public void setVendorName(String value) {
-		this.vendorName = value;
-	}
+    public void setVendorName(String value) {
+        this.vendorName = value;
+    }
 
-	public Timestamp getCollectionBeginTime() {
-		return this.collectionBeginTime;
-	}
+    public Timestamp getCollectionBeginTime() {
+        return this.collectionBeginTime;
+    }
 
-	public void setCollectionBeginTime(Timestamp value) {
-		this.collectionBeginTime = value;
-	}
+    public void setCollectionBeginTime(Timestamp value) {
+        this.collectionBeginTime = value;
+    }
 
 }

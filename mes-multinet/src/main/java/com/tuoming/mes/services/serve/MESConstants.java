@@ -70,15 +70,14 @@ public class MESConstants {
     public final static String SERVER_SLEEP_BEFORE_RECONNECT_IN_MS = "aos.server.sleep_before_reconnect_in_ms";
 
 
-    public static final String FTP_COMMAND_RESULT_FILTER="ftp_command_result_filter";
+    public static final String FTP_COMMAND_RESULT_FILTER = "ftp_command_result_filter";
 
 
     //服务器连接池配置项
-    public static final String SERVER_POOL_MAX_ACTIVE="aos.server_pool_max_active";
-    public static final String SERVER_POOL_MAX_IDLE="aos.server_pool_max_idle";
-    public static final String SERVER_POOL_MAX_WAIT="aos.server_pool_max_wait";
-    public static final String SERVER_POOL_ACTIVATED="aos.server_pool_activated";
-
+    public static final String SERVER_POOL_MAX_ACTIVE = "aos.server_pool_max_active";
+    public static final String SERVER_POOL_MAX_IDLE = "aos.server_pool_max_idle";
+    public static final String SERVER_POOL_MAX_WAIT = "aos.server_pool_max_wait";
+    public static final String SERVER_POOL_ACTIVATED = "aos.server_pool_activated";
 
 
 }

@@ -21,7 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.tuoming.mes.collect.decoder.zte.model.mro.FileHeader;
 import com.tuoming.mes.collect.decoder.zte.model.mro.MeasResultList;
 import com.tuoming.mes.collect.decoder.zte.model.mro.ResultDataCollection;
@@ -33,28 +32,23 @@ import com.tuoming.mes.collect.decoder.zte.model.mrs.NeData;
  */
 public class MRSDecoder extends Decoder {
 
-    private enum PmType {
-        PccpchRscp, UlRscp, UtranTxPower, UtranCodePower, UtranUppts, UeTsIscp, UtranTsIscp, UeTxPower, ReceivedTotalWideBandPower, AoaAngle, TimingAdvance, RxTimeDev, UtranSir, UeSir, UtranSirt, AmrUlBlerLog, Cs64UlBlerLog, PsUlBlerLog, AmrDlBlerLog, Cs64DlBlerLog, PsDlBlerLog, T2SfnSfnTime, TadvPccpchRscp, TadvAoa
-    };
-
-    private enum NeType {
-        Cell, Carrier, TimeSlot, TDNeighbourCell
-    };
-
     private ResultDataCollection mroDataCollection = null;
+
+    ;
 
     public MRSDecoder(File file, ResultDataCollection collection) throws FileNotFoundException {
         super(file);
         this.mroDataCollection = collection;
     }
 
+    ;
+
     public void decode() throws IOException {
         try {
             mroDataCollection.setFileHeader(readFileHeader());
             mroDataCollection.setMeasResultMROList(readMeasResultList());
             mroDataCollection.setMrsList(setOtherData());
-        }
-      finally {
+        } finally {
             close();
         }
     }
@@ -218,5 +212,13 @@ public class MRSDecoder extends Decoder {
             list.add(carrier);
         }
         return list;
+    }
+
+    private enum PmType {
+        PccpchRscp, UlRscp, UtranTxPower, UtranCodePower, UtranUppts, UeTsIscp, UtranTsIscp, UeTxPower, ReceivedTotalWideBandPower, AoaAngle, TimingAdvance, RxTimeDev, UtranSir, UeSir, UtranSirt, AmrUlBlerLog, Cs64UlBlerLog, PsUlBlerLog, AmrDlBlerLog, Cs64DlBlerLog, PsDlBlerLog, T2SfnSfnTime, TadvPccpchRscp, TadvAoa
+    }
+
+    private enum NeType {
+        Cell, Carrier, TimeSlot, TDNeighbourCell
     }
 }

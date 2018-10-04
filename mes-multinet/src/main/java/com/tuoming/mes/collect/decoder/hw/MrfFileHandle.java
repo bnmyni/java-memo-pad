@@ -16,6 +16,10 @@
 
 package com.tuoming.mes.collect.decoder.hw;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
@@ -27,11 +31,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.logging.LogFacade;
@@ -51,8 +50,8 @@ public class MrfFileHandle extends AbstractFileProcessor {
     private static Logger logger = LogFacade.getLog4j(MrfFileHandle.class);
     List<CounterGroup> counterGroups = new ArrayList<CounterGroup>();
     Map<String, Map<String, String>> groupCountersMaps = new HashMap<String, Map<String, String>>();
-    private String batchId = "-1";
     String nullValue;
+    private String batchId = "-1";
 
     /**
      * 构造函数，传入一个要解析的数据文件初始化本解析器
@@ -62,11 +61,11 @@ public class MrfFileHandle extends AbstractFileProcessor {
     }
 
     private void updateFilter(String filterString) {
-    	counterGroups.clear();
-    	groupCountersMaps.clear();
+        counterGroups.clear();
+        groupCountersMaps.clear();
         //初始化要解析的列表
         if (StringUtil.isNotBlank(filterString)) {//假如过滤字符串不为空
-        	
+
             Map<String, List<String>> counterMaps = (Map<String, List<String>>) DSLUtil.getDefaultInstance().compute(filterString);//将字符串解析为Map集合
             for (Map.Entry<String, List<String>> entry : counterMaps.entrySet()) {
                 CounterGroup counterGroup = new CounterGroup(entry.getKey());//创建计数器分组
@@ -85,21 +84,21 @@ public class MrfFileHandle extends AbstractFileProcessor {
 
     private void parseFiles() {
         for (Map.Entry<String, Map<String, String>> fileName : sourceFileList.entrySet()) {//循环解析文件
-        	try {
-        		String targetFile = fileName.getKey().substring(0, fileName.getKey().length() - 3);//获取文件名
-        		if (super.isFileDone(fileName.getKey()))//假如文件已经被解析，则进入下一循环
-        			continue;
-        		if (!fileName.getKey().endsWith("mrf"))// 假如文件不以mrf结尾, 则解压缩文件
-        			CompressionUtils.decompress(fileName.getKey(), targetFile);
-        		else
-        			targetFile = fileName.getKey();
-        		updateFilter(fileName.getValue().get(MESConstants.FTP_COMMAND_RESULT_FILTER));
-        		parse(targetFile, fileName.getValue());//解析文件
-        		markFileDone(fileName.getKey());//标识文件是否处理过
-        		markFileDone(targetFile);//删除解压后的文件
-        	} catch (Exception e) {
-        		logger.error(e.getMessage(), e);
-        	}
+            try {
+                String targetFile = fileName.getKey().substring(0, fileName.getKey().length() - 3);//获取文件名
+                if (super.isFileDone(fileName.getKey()))//假如文件已经被解析，则进入下一循环
+                    continue;
+                if (!fileName.getKey().endsWith("mrf"))// 假如文件不以mrf结尾, 则解压缩文件
+                    CompressionUtils.decompress(fileName.getKey(), targetFile);
+                else
+                    targetFile = fileName.getKey();
+                updateFilter(fileName.getValue().get(MESConstants.FTP_COMMAND_RESULT_FILTER));
+                parse(targetFile, fileName.getValue());//解析文件
+                markFileDone(fileName.getKey());//标识文件是否处理过
+                markFileDone(targetFile);//删除解压后的文件
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
         }
     }
 
@@ -173,7 +172,7 @@ public class MrfFileHandle extends AbstractFileProcessor {
                                     buffer = new byte[c.getSize()];
                                     if (c.getTypeId() == 0) {
                                         dis.read(buffer, 0, c.getSize());
-                                        value = new String(buffer, 0, c.getSize(),"UTF-8").trim();
+                                        value = new String(buffer, 0, c.getSize(), "UTF-8").trim();
                                     } else if (c.getTypeId() == 103 || c.getTypeId() == 3) {
                                         value = dis.readDouble() + "";
                                     } else if (c.getSize() == 8) {

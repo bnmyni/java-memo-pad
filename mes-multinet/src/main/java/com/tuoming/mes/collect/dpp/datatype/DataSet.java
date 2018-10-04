@@ -34,18 +34,6 @@ public final class DataSet implements Collection<DataTable> {
     private List<DataTable> tables; //数据集合集
 
     /**
-     * 功能描述：  获取当前Dataset对象内包括的数据表集合
-     *
-     * @param
-     * @return: List<DataTable>
-     * @author: James Cheung
-     * @version: 2.0
-     */
-    public List<DataTable> getDataTables() {
-        return this.tables;
-    }
-
-    /**
      * 创建一个新的实例 DataSet.
      */
     public DataSet() {
@@ -62,6 +50,18 @@ public final class DataSet implements Collection<DataTable> {
     public DataSet(String name) {
         this();
         this.name = name;
+    }
+
+    /**
+     * 功能描述：  获取当前Dataset对象内包括的数据表集合
+     *
+     * @param
+     * @return: List<DataTable>
+     * @author: James Cheung
+     * @version: 2.0
+     */
+    public List<DataTable> getDataTables() {
+        return this.tables;
     }
 
     /**

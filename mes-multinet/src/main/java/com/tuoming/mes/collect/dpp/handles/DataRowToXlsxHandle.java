@@ -17,14 +17,6 @@
 //Created On: 13-9-13 下午2:07
 package com.tuoming.mes.collect.dpp.handles;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -41,6 +33,13 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.Convert;
 import com.pyrlong.util.DateUtil;
@@ -62,19 +61,19 @@ import com.tuoming.mes.collect.dpp.datatype.DataTypes;
 public class DataRowToXlsxHandle extends AbstractDataRowHandler {
 
     private static Logger logger = LogFacade.getLog4j(DataRowToXlsxHandle.class);
-    private Map<String, DataTable> tableLoaded = new HashMap<String, DataTable>();
-
-    private SXSSFWorkbook currentBook;
-    private Sheet currentSheet;
     int sheetCount = 0;
     CellStyle cellStyle;
     CellStyle headerStyle;
     int rowCount = 0;
-    private String fileName;
     OutputStream out;
     CellStyle dateStyle;
     CellStyle doubuleStyle;
     CellStyle intStyle;
+    String sheetName = "newSheet";
+    private Map<String, DataTable> tableLoaded = new HashMap<String, DataTable>();
+    private SXSSFWorkbook currentBook;
+    private Sheet currentSheet;
+    private String fileName;
 
     public DataRowToXlsxHandle(String fileName) {
         this.fileName = fileName;
@@ -157,8 +156,6 @@ public class DataRowToXlsxHandle extends AbstractDataRowHandler {
         intStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("0"));
     }
 
-    String sheetName = "newSheet";
-
     public void setSheetName(String name) {
         sheetName = name;
     }
@@ -211,7 +208,7 @@ public class DataRowToXlsxHandle extends AbstractDataRowHandler {
             } else if (DataTypes.isDate(col.getDataType())) {
                 // cell.setCellValue((Date) val);
                 //cell.setCellStyle(dateStyle);
-                cell.setCellValue( DateUtil.getYmdhisStr((Date) val));
+                cell.setCellValue(DateUtil.getYmdhisStr((Date) val));
                 cell.setCellStyle(cellStyle);
             } else if (DataTypes.isDouble(col.getDataType())) {
                 cell.setCellValue(Convert.toDouble(val));

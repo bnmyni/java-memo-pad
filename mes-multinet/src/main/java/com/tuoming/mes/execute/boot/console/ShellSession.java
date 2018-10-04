@@ -16,13 +16,6 @@
 
 package com.tuoming.mes.execute.boot.console;
 
-import static com.pyrlong.dsl.util.PropertyTools.contains;
-import static java.lang.Boolean.parseBoolean;
-import static java.lang.Runtime.getRuntime;
-import static java.lang.System.arraycopy;
-import static java.lang.System.getProperty;
-import static java.util.ResourceBundle.getBundle;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.dsl.ParserContext;
 import com.pyrlong.dsl.integration.VariableResolverFactory;
@@ -48,6 +40,13 @@ import com.pyrlong.util.StringUtil;
 import com.tuoming.mes.execute.boot.Application;
 import com.tuoming.mes.execute.boot.Constants;
 import com.tuoming.mes.execute.boot.console.command.BasicCommandSet;
+
+import static com.pyrlong.dsl.util.PropertyTools.contains;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.Runtime.getRuntime;
+import static java.lang.System.arraycopy;
+import static java.lang.System.getProperty;
+import static java.util.ResourceBundle.getBundle;
 
 /**
  * A shell session.
@@ -73,14 +72,6 @@ public class ShellSession {
     private Long cmdStarted = DateUtil.getTimeinteger();
     private boolean cmdIsRunning = false;
 
-
-    public Long getCmdStarted() {
-        return cmdStarted;
-    }
-
-    public boolean isCmdIsRunning() {
-        return cmdIsRunning;
-    }
 
     public ShellSession(Map<String, String> env) {
         variables = new HashMap<String, Object>();
@@ -122,6 +113,14 @@ public class ShellSession {
     public ShellSession(String init) {
         this(new HashMap<String, String>());
         exec(init);
+    }
+
+    public Long getCmdStarted() {
+        return cmdStarted;
+    }
+
+    public boolean isCmdIsRunning() {
+        return cmdIsRunning;
     }
 
     private void _exec() {

@@ -17,11 +17,10 @@
 package com.tuoming.mes.collect.dpp.configuration;
 
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import java.util.List;
 import com.pyrlong.collection.CollectionsBase;
 import com.pyrlong.collection.NameValueCollection;
 import com.pyrlong.configuration.AdvanceObjectCollection;

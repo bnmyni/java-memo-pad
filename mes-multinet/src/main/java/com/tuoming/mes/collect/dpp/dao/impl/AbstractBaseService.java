@@ -17,13 +17,11 @@
 package com.tuoming.mes.collect.dpp.dao.impl;
 
 
-import java.util.List;
-import java.util.Map;
-
-import javax.script.ScriptException;
-
 import org.apache.log4j.Logger;
 
+import java.util.List;
+import java.util.Map;
+import javax.script.ScriptException;
 import com.google.common.collect.Maps;
 import com.pyrlong.Envirment;
 import com.pyrlong.dsl.tools.DSLUtil;
@@ -33,12 +31,19 @@ import com.pyrlong.util.scripts.AbstractEngine;
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.dpp.dao.BaseService;
 
-public abstract class AbstractBaseService<M extends java.io.Serializable, PK extends java.io.Serializable> implements  BaseService<M, PK> {
+public abstract class AbstractBaseService<M extends java.io.Serializable, PK extends java.io.Serializable> implements BaseService<M, PK> {
 
+    private static Logger logger = LogFacade.getLog4j(AbstractBaseService.class);
     protected BaseDao<M, PK> baseDao;
     Map<String, String> envs = Envirment.getEnvs();
-    private static Logger logger = LogFacade.getLog4j(AbstractBaseService.class);
 
+    public static Map<String, String> mergerMap(Map map1, Map<String, String> map2) {
+        return Envirment.mergerMap(map1, map2);
+    }
+
+    public static void updateEnv(Object o, Map<String, String> newMap) {
+        Envirment.updateEnv(o, newMap);
+    }
 
     public Map<String, String> getEnvCopy() {
         return Maps.newHashMap(envs);
@@ -50,19 +55,10 @@ public abstract class AbstractBaseService<M extends java.io.Serializable, PK ext
                 return;
             Map<String, String> result = (Map<String, String>) DSLUtil.getDefaultInstance().compute(customEnv);
             newMap = Envirment.mergerMap(result, newMap);
-            logger.info("updateEnv to count:"+newMap.size());
+            logger.info("updateEnv to count:" + newMap.size());
         } catch (Exception ex) {
             logger.warn("CustomEnv must config like : \"['Bob' : 'BobValue', 'Michael' : 'MichaelValue']\"");
         }
-    }
-
-
-    public static Map<String, String> mergerMap(Map map1, Map<String, String> map2) {
-        return Envirment.mergerMap(map1, map2);
-    }
-
-    public static void updateEnv(Object o, Map<String, String> newMap) {
-        Envirment.updateEnv(o, newMap);
     }
 
     public void doAction(String action, Map<String, String> newMap) {

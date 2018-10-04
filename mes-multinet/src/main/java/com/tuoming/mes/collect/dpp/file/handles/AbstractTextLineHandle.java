@@ -16,14 +16,13 @@
 
 package com.tuoming.mes.collect.dpp.file.handles;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.Convert;
@@ -46,6 +45,8 @@ import com.tuoming.mes.collect.dpp.models.TextLogParser;
  */
 public abstract class AbstractTextLineHandle implements TextLineHandle {
 
+    static String MAX_INT_STRING = Convert.toString(Integer.MAX_VALUE);
+    static String MAX_DOUBLE_STRING = Convert.toString(Double.MAX_VALUE);
     private static Logger logger = LogFacade.getLog4j(AbstractTextLineHandle.class);
     protected Map<String, String> _itemAdded = new LinkedHashMap<String, String>();
     protected TextLine CurrentLine;
@@ -53,10 +54,10 @@ public abstract class AbstractTextLineHandle implements TextLineHandle {
     protected DataTable CurrentTable;
     protected DataRowHandler dataRowHandler;
     protected TextLogParser logParser;
-    private List<String> headerRowRegex;
-    private List<String> ignoreRegex;
     protected Map<String, String> envs;
     protected String firstColumnName = "";
+    private List<String> headerRowRegex;
+    private List<String> ignoreRegex;
 
     public AbstractTextLineHandle() {
 
@@ -148,9 +149,6 @@ public abstract class AbstractTextLineHandle implements TextLineHandle {
         this.dataRowHandler.close();
         CurrentTable.clearup();
     }
-
-    static String MAX_INT_STRING = Convert.toString(Integer.MAX_VALUE);
-    static String MAX_DOUBLE_STRING = Convert.toString(Double.MAX_VALUE);
 
     public boolean isValid(Object val) {
         if (val == null)

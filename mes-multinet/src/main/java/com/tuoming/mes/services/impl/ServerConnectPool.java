@@ -16,12 +16,11 @@
 
 package com.tuoming.mes.services.impl;
 
-import java.util.Map;
-
 import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.log4j.Logger;
 
+import java.util.Map;
 import com.google.common.collect.Maps;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.logging.LogFacade;
@@ -36,13 +35,19 @@ import com.tuoming.mes.services.serve.ServerService;
  */
 public class ServerConnectPool implements PoolableObjectFactory {
 
-    private static Map<String, GenericObjectPool> serverConnectPoolMap = Maps.newHashMap();
     private final static Logger logger = LogFacade.getLog4j(ServerConnectPool.class);
+    private static Map<String, GenericObjectPool> serverConnectPoolMap = Maps.newHashMap();
     private static boolean useServerPool = false;
 
     static {
         //读取当前是否启用了连接池，默认未启用
         useServerPool = ConfigurationManager.getDefaultConfig().getBoolean(MESConstants.SERVER_POOL_ACTIVATED, false);
+    }
+
+    private String serverName;
+
+    public ServerConnectPool(String name) {
+        serverName = name;
     }
 
     public static ServerService getServerServiceFromPool(String name, String logfile) throws Exception {
@@ -66,10 +71,10 @@ public class ServerConnectPool implements PoolableObjectFactory {
     public static ServerService newServiceInstance(String name, String logfile) throws Exception {
         ServerService serverService = AppContext.getBean(ServerService.class);
         if (StringUtil.isEmpty(logfile))
-            logfile =  AppContext.CACHE_ROOT + DateUtil.currentDateString("yyyyMMdd") + "/" + name + "_" + DateUtil.getTimeinteger() + ".log";
+            logfile = AppContext.CACHE_ROOT + DateUtil.currentDateString("yyyyMMdd") + "/" + name + "_" + DateUtil.getTimeinteger() + ".log";
         if (!serverService.init(name))
             logger.warn("Server " + name + " init failed!!");
-        serverService.setOutputFile(logfile,true);
+        serverService.setOutputFile(logfile, true);
         serverService.login();
         return serverService;
     }
@@ -108,10 +113,14 @@ public class ServerConnectPool implements PoolableObjectFactory {
         }
     }
 
-    private String serverName;
-
-    public ServerConnectPool(String name) {
-        serverName = name;
+    public static ServerService reconnect(String serverName2, String logFileName, ServerService serverService) throws Exception {
+        try {
+            releaseServer(serverService);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.info(e.getMessage(), e);
+        }
+        return getServerServiceFromPool(serverName2, logFileName);
     }
 
     @Override
@@ -141,14 +150,4 @@ public class ServerConnectPool implements PoolableObjectFactory {
     public void passivateObject(Object obj) throws Exception {
         ((ServerService) obj).reset();
     }
-
-	public static ServerService reconnect(String serverName2, String logFileName, ServerService serverService) throws Exception {
-		try {
-			releaseServer(serverService);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.info(e.getMessage(),e);
-		}
-		return getServerServiceFromPool(serverName2, logFileName);
-	}
 }

@@ -17,28 +17,26 @@
 package com.tuoming.mes.collect.dpp.file;
 
 import java.io.IOException;
-
 import com.pyrlong.util.StringUtil;
 
 public class TextLine {
     private String _line;
     private TextFileProcessor processor;
 
-    public String toString() {
-        return _line;
-    }
-
     public TextLine(String line, TextFileProcessor processor) {
         _line = line;
         this.processor = processor;
     }
 
-    public void setLine(String line) {
+    public TextLine(String line) {
         _line = line;
     }
 
+    public String toString() {
+        return _line;
+    }
 
-    public TextLine(String line) {
+    public void setLine(String line) {
         _line = line;
     }
 

@@ -32,16 +32,14 @@ public interface FtpLogCommandService extends BaseService<FtpLogCommand, String>
     /**
      * 执行特定名称配置的采集任务
      *
-     * @param name
-     *         要采集的任务名称，对应FtpLogCommand中的配置
+     * @param name 要采集的任务名称，对应FtpLogCommand中的配置
      */
     public void query(String name, long batch);
 
     /**
      * 采集指定分组的任务
      *
-     * @param groupName
-     *         要采集的分组
+     * @param groupName 要采集的分组
      */
     public void queryAll(String groupName, long batch);
 
@@ -53,16 +51,14 @@ public interface FtpLogCommandService extends BaseService<FtpLogCommand, String>
     /**
      * 执行特定名称配置的采集任务
      *
-     * @param name
-     *         要采集的任务名称，对应FtpLogCommand中的配置
+     * @param name 要采集的任务名称，对应FtpLogCommand中的配置
      */
     public void query(String name);
 
     /**
      * 采集指定分组的任务
      *
-     * @param groupName
-     *         要采集的分组
+     * @param groupName 要采集的分组
      */
     public void queryAll(String groupName);
 
@@ -70,5 +66,5 @@ public interface FtpLogCommandService extends BaseService<FtpLogCommand, String>
      * 采集当前配置的所有采集任务
      */
     public void queryAll();
-    
+
 }

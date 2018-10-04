@@ -18,7 +18,6 @@ package com.tuoming.mes.collect.dao;
 
 
 import java.util.List;
-
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.models.Manufacturers;
 import com.tuoming.mes.collect.models.ObjectType;
@@ -34,16 +33,15 @@ public interface ServerDao extends BaseDao<Server, String> {
     /**
      * 获取特定类型的服务器对象列表
      *
-     * @param objectType
-     *         服务器类型对象
-     *
+     * @param objectType 服务器类型对象
      * @return 符合给定对象类型的服务器对象列表
      */
     List<Server> getNeServers(ObjectType objectType, Manufacturers manufacturers);
 
     /**
      * 查询可用的采集命令服务器
+     *
      * @return
      */
-	List<Server> getEnabledServers();
+    List<Server> getEnabledServers();
 }

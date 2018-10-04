@@ -15,10 +15,11 @@
  */
 
 package com.tuoming.mes.collect.decoder.ericsson;
+
 import java.io.IOException;
 
 
 public interface Decoder {
 
-	void decode() throws IOException;
+    void decode() throws IOException;
 }

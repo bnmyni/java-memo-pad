@@ -129,6 +129,41 @@ public class AdjustCommand extends AbstractModel {
 
     @Column(name = "batch_id", nullable = true)
     private Long batchId;
+    /**
+     * 扩展字段，用于根据需要保存扩展信息
+     */
+    @Column(name = "extend5", length = 100, nullable = true)
+    private String extend5;
+    /**
+     * 指令下发状态，0：未下发，1：已下发  ,2:需要确认后手动下发
+     */
+    @Column(name = "applied", nullable = true)
+    private int applied;
+    /**
+     * 命令是否成功执行
+     */
+    @Column(name = "sucessfull", nullable = true)
+    private boolean sucessfull = false;
+    /**
+     * 命令下发时间
+     */
+    @Column(name = "sent_time", nullable = true)
+    private Date sentTime;
+    /**
+     * 命令下发日志文件路径
+     */
+    @Column(name = "cmd_log", length = 300, nullable = true)
+    private String cmdLog;
+    /**
+     * 指令排序标识，当需要在生成指令后调整执行顺序时可以通过这个字段调整
+     */
+    @Column(name = "order_id", nullable = true)
+    private int orderId;
+    /**
+     * 指令对应说明文字
+     */
+    @Column(name = "remark", nullable = true)
+    private String remark;
 
     public Long getBatchId() {
         return batchId;
@@ -185,43 +220,6 @@ public class AdjustCommand extends AbstractModel {
     public void setExtend4(String extend4) {
         this.extend4 = extend4;
     }
-
-    /**
-     * 扩展字段，用于根据需要保存扩展信息
-     */
-    @Column(name = "extend5", length = 100, nullable = true)
-    private String extend5;
-
-    /**
-     * 指令下发状态，0：未下发，1：已下发  ,2:需要确认后手动下发
-     */
-    @Column(name = "applied", nullable = true)
-    private int applied;
-    /**
-     * 命令是否成功执行
-     */
-    @Column(name = "sucessfull", nullable = true)
-    private boolean sucessfull = false;
-    /**
-     * 命令下发时间
-     */
-    @Column(name = "sent_time", nullable = true)
-    private Date sentTime;
-    /**
-     * 命令下发日志文件路径
-     */
-    @Column(name = "cmd_log", length = 300, nullable = true)
-    private String cmdLog;
-    /**
-     * 指令排序标识，当需要在生成指令后调整执行顺序时可以通过这个字段调整
-     */
-    @Column(name = "order_id", nullable = true)
-    private int orderId;
-    /**
-     * 指令对应说明文字
-     */
-    @Column(name = "remark", nullable = true)
-    private String remark;
 
     public int getApplied() {
         return applied;

@@ -36,12 +36,12 @@ public class DataRowToTableHandle extends AbstractDataRowHandler {
     private static Logger logger = LogFacade.getLog4j(DataRowToTableHandle.class);
     DataTable resultTable = null;
 
-    public DataTable getTable() {
-        return resultTable;
-    }
-
     public DataRowToTableHandle() {
 
+    }
+
+    public DataTable getTable() {
+        return resultTable;
     }
 
     @Override

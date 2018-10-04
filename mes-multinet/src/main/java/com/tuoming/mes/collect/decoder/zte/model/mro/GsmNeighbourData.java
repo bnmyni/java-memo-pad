@@ -20,6 +20,11 @@ package com.tuoming.mes.collect.decoder.zte.model.mro;
  * Created by shenhaitao on 2014/7/22 0022.
  */
 public class GsmNeighbourData {
+    private int bcch;
+    private int ncc;
+    private int bcc;
+    private int rssi;
+    private int relativetimestamp;
     public GsmNeighbourData(int relativetimestamp, int bcch, int ncc, int bcc, int rssi) {
         this.relativetimestamp = relativetimestamp;
         this.bcch = bcch;
@@ -27,12 +32,6 @@ public class GsmNeighbourData {
         this.bcc = bcc;
         this.rssi = rssi;
     }
-
-    private int bcch;
-    private int ncc;
-    private int bcc;
-    private int rssi;
-    private int relativetimestamp;
 
     public int getRelativetimestamp() {
         return relativetimestamp;

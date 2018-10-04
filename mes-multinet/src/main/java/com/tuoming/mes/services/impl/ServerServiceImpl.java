@@ -16,17 +16,16 @@
 
 package com.tuoming.mes.services.impl;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.logging.LogFacade;
@@ -55,6 +54,7 @@ import com.tuoming.mes.services.serve.ServerService;
 @Scope("prototype")
 @Component("ServerService")
 public class ServerServiceImpl extends AbstractBaseService<Server, String> implements ServerService {
+    private final static Logger logger = LogFacade.getLog4j(ServerServiceImpl.class);
     CommandClient remoteWrapper;
     private String outputFile;
     private boolean echo = false;
@@ -65,18 +65,11 @@ public class ServerServiceImpl extends AbstractBaseService<Server, String> imple
     private RemoteServer remoteServer;
     private ServerDao serverDao;
     private ServerCommandDao serverCommandDao;
-    private   OperationLogDao operationLogDao;
+    private OperationLogDao operationLogDao;
     private boolean inited = false;
     private boolean logined = false;
     private Map<String, String> envs;
-    private final static Logger logger = LogFacade.getLog4j(ServerServiceImpl.class);
 
-
-    @Autowired
-    @Qualifier("OperationLogDao")
-    public void setServerDao(OperationLogDao operationLogDao) {
-        this.operationLogDao = operationLogDao;
-    }
 
     public ServerServiceImpl() {
 
@@ -88,6 +81,12 @@ public class ServerServiceImpl extends AbstractBaseService<Server, String> imple
 
     public ServerServiceImpl(Server server) throws IOException {
         init(server);
+    }
+
+    @Autowired
+    @Qualifier("OperationLogDao")
+    public void setServerDao(OperationLogDao operationLogDao) {
+        this.operationLogDao = operationLogDao;
     }
 
     @Autowired
@@ -147,25 +146,25 @@ public class ServerServiceImpl extends AbstractBaseService<Server, String> imple
      */
     @Override
     public synchronized boolean login() throws Exception {
-    	logger.info("logined :"+logined);
+        logger.info("logined :" + logined);
         //避免重复登录
         if (logined)
             return true;
         try {
-        	logined = sendConfigCmd(MESConstants.LOGIN_COMMAND_NAME);
-        	if (!logined) {
-        		currentServer.setStatus(101);//登陆失败
-        	} else {
-        		currentServer.setStatus(0);//正常
-        	}
-        	serverDao.update(currentServer);
-        	return logined;
-		} catch (Exception e) {
-			currentServer.setStatus(101);//登陆失败
-			serverDao.update(currentServer);
-			e.printStackTrace();
-			throw e;
-		}
+            logined = sendConfigCmd(MESConstants.LOGIN_COMMAND_NAME);
+            if (!logined) {
+                currentServer.setStatus(101);//登陆失败
+            } else {
+                currentServer.setStatus(0);//正常
+            }
+            serverDao.update(currentServer);
+            return logined;
+        } catch (Exception e) {
+            currentServer.setStatus(101);//登陆失败
+            serverDao.update(currentServer);
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public boolean isEnabled() {
@@ -181,9 +180,9 @@ public class ServerServiceImpl extends AbstractBaseService<Server, String> imple
 
     @Override
     public synchronized boolean init(String serverName) throws IOException {
-    	
-		currentServer = serverDao.get(serverName);
-		return init(currentServer);
+
+        currentServer = serverDao.get(serverName);
+        return init(currentServer);
     }
 
     public void setTimeout(int value) {
@@ -257,11 +256,11 @@ public class ServerServiceImpl extends AbstractBaseService<Server, String> imple
 
     public synchronized boolean sendConfigCmd(String action) throws IOException, InterruptedException {
         List<ServerCommand> cmds = serverCommandDao.getNamedCommands(currentServer.getServerGroup(), action);
-        logger.info("server command group "+currentServer.getServerGroup()+" ,action :"+action+",login cmd "+cmds.size());
+        logger.info("server command group " + currentServer.getServerGroup() + " ,action :" + action + ",login cmd " + cmds.size());
         if (cmds != null) {
             for (ServerCommand c : cmds) {
                 if (c != null) {
-                	LogFacade.info("Start Send cmd: " + c.getCommand() +" and prompt: "+c.getPrompt());
+                    LogFacade.info("Start Send cmd: " + c.getCommand() + " and prompt: " + c.getPrompt());
                     remoteWrapper.waitfor(c.getPrompt());
                     remoteWrapper.write(DSLUtil.getDefaultInstance().buildString(c.getCommand(), envs) + "\r\n");
                     LogFacade.info("End Send : " + c.getCommand());
@@ -288,7 +287,7 @@ public class ServerServiceImpl extends AbstractBaseService<Server, String> imple
             sendConfigCmd(MESConstants.LOGOUT_COMMAND_NAME);
             remoteWrapper.close();
         } catch (Exception ex) {
-        	ex.printStackTrace();
+            ex.printStackTrace();
             LogFacade.error(ex.getMessage());
         }
     }
@@ -304,9 +303,9 @@ public class ServerServiceImpl extends AbstractBaseService<Server, String> imple
     public synchronized void sendCommand(String cmd) {
         try {
             remoteWrapper.write(cmd + "\r\n", prompt);
-        }catch(InterruptFoundException e){
-        	throw e;
-        }catch (Exception ex) {
+        } catch (InterruptFoundException e) {
+            throw e;
+        } catch (Exception ex) {
             //遇到异常则尝试重连再发送
             try {
                 logger.info("reconnect to " + this.getServer());
@@ -353,7 +352,7 @@ public class ServerServiceImpl extends AbstractBaseService<Server, String> imple
 
     @Override
     public synchronized void reconnect() throws Exception {
-    	
+
         logout();
         remoteWrapper.open();
         logger.info("remoteWrapper open success ");

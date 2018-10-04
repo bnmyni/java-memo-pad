@@ -18,7 +18,6 @@ package com.tuoming.mes.collect.dpp.rdbms;
 
 import java.sql.Connection;
 import java.util.Map;
-
 import com.tuoming.mes.collect.dpp.datatype.DataRow;
 import com.tuoming.mes.collect.dpp.datatype.DataRowHandler;
 import com.tuoming.mes.collect.dpp.datatype.DataTable;
@@ -156,10 +155,6 @@ public interface DataAdapter {
      */
     public Connection getConnection();
 
-    public void setConnectionStringSetting(ConnectionStringSetting connectionStringSetting);
-
-    public ConnectionStringSetting getConnectionStringSetting();
-
     /**
      * 功能描述： 设置当前数据适配器的连接
      *
@@ -169,6 +164,10 @@ public interface DataAdapter {
      * @version: 2.0
      */
     public void setConnection(Connection conn);
+
+    public ConnectionStringSetting getConnectionStringSetting();
+
+    public void setConnectionStringSetting(ConnectionStringSetting connectionStringSetting);
 
     /**
      * 功能描述： 获取当前适配器所在的连接池
@@ -181,6 +180,13 @@ public interface DataAdapter {
     public DataAdapterPool getDataAdapterPool();
 
     /**
+     * 设置当前适配器所在的连接池
+     *
+     * @return
+     */
+    public void setDataAdapterPool(DataAdapterPool dataAdapterPool);
+
+    /**
      * 获取指定行数据对应的insert语句
      *
      * @param targetTable 目标表名
@@ -190,13 +196,6 @@ public interface DataAdapter {
     public String genSqlInsert(String targetTable, DataRow row);
 
     public String genUpdate(String targetTable, DataRow row);
-
-    /**
-     * 设置当前适配器所在的连接池
-     *
-     * @return
-     */
-    public void setDataAdapterPool(DataAdapterPool dataAdapterPool);
 
     /**
      * 测试连接是否可用

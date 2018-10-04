@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public interface FileDecode {
-	
-	public List<String[]> parse(byte[] b);
+
+    public List<String[]> parse(byte[] b);
 
 }

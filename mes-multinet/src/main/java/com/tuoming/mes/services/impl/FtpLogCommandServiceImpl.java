@@ -15,6 +15,13 @@
  */
 package com.tuoming.mes.services.impl;
 
+import net.sf.json.JSONSerializer;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,15 +29,6 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import net.sf.json.JSONSerializer;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pyrlong.Envirment;
@@ -76,14 +74,17 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
     private final static Logger logger = LogFacade.getLog4j(FtpLogCommandServiceImpl.class);
     private final static boolean deleteLocalFileBeforeDownload =
             ConfigurationManager.getDefaultConfig().getBoolean(MESConstants.FTP_DELETE_LOCAL_FILE, false);
+    public int module_type = 0;
     FtpLogCommandDao ftpLogCommandDao;
     List<ThreadPoolExecutor> threadPoolExecutors = new ArrayList<ThreadPoolExecutor>();
     private Map<String, List<String>> loadFileMapList = Maps.newHashMap();
     private OperationLogDao operationLogDao;
-
     private FtpServerDao ftpServerDao;
-    
     private BusinessLogDao businessLogDao;
+
+    public FtpLogCommandServiceImpl() {
+
+    }
 
     @Autowired
     @Qualifier("OperationLogDao")
@@ -96,16 +97,12 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
     public void setFtpServerDao(FtpServerDao ftpServerDao) {
         this.ftpServerDao = ftpServerDao;
     }
-    public int module_type = 0;
+
     @Autowired
     @Qualifier("businessLogDao")
-    public void setBusinessLogDao(BusinessLogDao businessLogDao){
-    	this.businessLogDao = businessLogDao;
+    public void setBusinessLogDao(BusinessLogDao businessLogDao) {
+        this.businessLogDao = businessLogDao;
     }
-    public FtpLogCommandServiceImpl() {
-
-    }
-
 
     @Autowired
     @Qualifier("FtpLogCommandDao")
@@ -131,18 +128,18 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
     @Override
     public void queryAll(String groupName, long batch) {
         List<FtpLogCommand> logCommandList = ftpLogCommandDao.getByGroup(groupName);
-        if(groupName.equalsIgnoreCase(Constant.PM)){
-        	module_type = 1;
-        }else if(groupName.startsWith(Constant.MRO)){
-        	module_type = 5;
-        }else if(groupName.trim().equalsIgnoreCase(Constant.ALARM)){
-        	module_type = 16;
-        }else{//CM采集
-        	module_type = 3;
+        if (groupName.equalsIgnoreCase(Constant.PM)) {
+            module_type = 1;
+        } else if (groupName.startsWith(Constant.MRO)) {
+            module_type = 5;
+        } else if (groupName.trim().equalsIgnoreCase(Constant.ALARM)) {
+            module_type = 16;
+        } else {//CM采集
+            module_type = 3;
         }
         businessLogDao.insertLog(module_type, "采集及解析开始", 0);
         try {
-            downloadAndParser(logCommandList, batch);                        
+            downloadAndParser(logCommandList, batch);
         } catch (InterruptedException e) {
             logger.fatal(e.getMessage(), e);
             businessLogDao.insertLog(module_type, "采集及解析出现异常", 1);
@@ -185,7 +182,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                 try {
                     Thread.currentThread().sleep(10);
                 } catch (InterruptedException e) {
-                	businessLogDao.insertLog(module_type, "采集及解析线程池异常", 1);
+                    businessLogDao.insertLog(module_type, "采集及解析线程池异常", 1);
                     e.printStackTrace();
                 }
             }
@@ -196,17 +193,17 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
     }
 
     private void loadfile() {
-    	//这里loadFileMapList包含Map的key：mes_ftp_command表中target_db + "-" + target_table_map
-    	//value：XXXXXX/out/XXXXXX.csv
+        //这里loadFileMapList包含Map的key：mes_ftp_command表中target_db + "-" + target_table_map
+        //value：XXXXXX/out/XXXXXX.csv
         for (Map.Entry<String, List<String>> entry : loadFileMapList.entrySet()) {
-        	//此次在FtpLog目录下生成output/mes_ftp_command表中target_db + "-" + target_table_map + "_" + 当前时间毫秒值+ .data
+            //此次在FtpLog目录下生成output/mes_ftp_command表中target_db + "-" + target_table_map + "_" + 当前时间毫秒值+ .data
             String targetFile = AppContext.getCacheFileName("FtpLog" + Envirment.PATH_SEPARATOR + "output" + Envirment.PATH_SEPARATOR + entry.getKey() + "_" + DateUtil.getTimeinteger() + ".data");
             for (String file : entry.getValue()) {
                 try {
-                	//将解析后的csv文件copy份更名存至output
+                    //将解析后的csv文件copy份更名存至output
                     FileOper.copyFile(file, targetFile, true);
                 } catch (Exception e) {
-                	businessLogDao.insertLog(module_type, "采集及解析复制文件异常", 1);
+                    businessLogDao.insertLog(module_type, "采集及解析复制文件异常", 1);
                     logger.error(e.getMessage(), e);
                 }
             }
@@ -215,7 +212,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                 logger.info("load files to " + entry.getKey());
                 DataAdapterPool.getDataAdapterPool(target[0]).getDataAdapter().loadfile(targetFile, target[1]);
             } catch (Exception e) {
-            	businessLogDao.insertLog(module_type, "采集及解析入库异常", 1);
+                businessLogDao.insertLog(module_type, "采集及解析入库异常", 1);
                 logger.error(e.getMessage(), e);
             }
         }
@@ -264,9 +261,9 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
      */
     class FtpParser implements Runnable {
 
+        private final Logger logger = LogFacade.getLog4j(FtpParser.class);
         FtpLogCommand logCommand;
         Map<String, String> currentEnv;
-        private final Logger logger = LogFacade.getLog4j(FtpParser.class);
 
         /**
          * 构造函数
@@ -282,7 +279,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
 
         @Override
         public void run() {
-        	submitCollectState(Constant.FTP_COLLECT_BEGIN_LOGIN);
+            submitCollectState(Constant.FTP_COLLECT_BEGIN_LOGIN);
             FTPClientExt ftpClientExt = new FTPClientExt();
             ftpClientExt.setUrl(logCommand.getFtpServer().getUrl());
             ftpClientExt.setName(logCommand.getFtpServer().getName());
@@ -299,100 +296,100 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                 submitCollectState(Constant.FTP_COLLECT_LOGIN_FAIL);
                 return;
             } else if (logCommand.getFtpServer().getStatus() > 0) {
-            	//ftp连接成功，如果数据库中ftp状态为不成功，更改状态为成功
+                //ftp连接成功，如果数据库中ftp状态为不成功，更改状态为成功
                 logCommand.getFtpServer().setStatus(0);
                 ftpServerDao.update(logCommand.getFtpServer());
             }
             //TODO  FTP采集数据状态维护
             submitCollectState(Constant.FTP_COLLECT_LOGIN_SUCCESS);
             try {
-            	/* 对ftp指令进行过滤
-            	 * 表mes_ftp_command中当group_name="MRO_TD_HW"时，key:ftp_command_result_filter  value:"gsmneighbour","inter","intra"
+                /* 对ftp指令进行过滤
+                 * 表mes_ftp_command中当group_name="MRO_TD_HW"时，key:ftp_command_result_filter  value:"gsmneighbour","inter","intra"
             	 */
                 currentEnv.put(MESConstants.FTP_COMMAND_RESULT_FILTER, logCommand.getResultFilter());
                 //下载并解析文件
                 downloadAndParseFiles(ftpClientExt, currentEnv);
             } catch (Exception ex) {
-            	businessLogDao.insertLog(module_type, "采集及解析下载文件异常", 1);
+                businessLogDao.insertLog(module_type, "采集及解析下载文件异常", 1);
                 logger.fatal(ex.getMessage(), ex);
             }
         }
 
         private void submitCollectState(int state) {
-        	boolean enableMontior = ConfigurationManager.getDefaultConfig().getBoolean(Constant.ENABLE_MONTIOR, true);
-        	if(!enableMontior) {
-        		return;
-        	}
-        	List<Map<String, String>> paramList = new ArrayList<Map<String,String>>();
+            boolean enableMontior = ConfigurationManager.getDefaultConfig().getBoolean(Constant.ENABLE_MONTIOR, true);
+            if (!enableMontior) {
+                return;
+            }
+            List<Map<String, String>> paramList = new ArrayList<Map<String, String>>();
             Map<String, String> paramMap = new HashMap<String, String>();
             String[] infoArr = logCommand.getCommandName().split("_");
-        	paramMap.put("commandname", logCommand.getCommandName());
-        	paramMap.put("servername", logCommand.getFtpServer().getName());
+            paramMap.put("commandname", logCommand.getCommandName());
+            paramMap.put("servername", logCommand.getFtpServer().getName());
             paramMap.put("username", logCommand.getFtpServer().getUid());
             paramMap.put("ip", logCommand.getFtpServer().getUrl());
-            paramMap.put("port", logCommand.getFtpServer().getPort()+"");
-            paramMap.put("datatype", logCommand.getGroupName().startsWith(Constant.MRO)?Constant.MRO:logCommand.getGroupName());
+            paramMap.put("port", logCommand.getFtpServer().getPort() + "");
+            paramMap.put("datatype", logCommand.getGroupName().startsWith(Constant.MRO) ? Constant.MRO : logCommand.getGroupName());
             paramMap.put("zs", infoArr[0]);
             paramMap.put("factory", infoArr[1]);
             paramMap.put("status", String.valueOf(state));
             paramMap.put("grading", Constant.DAYUNIT);
             paramMap.put("type", Constant.MONTIOR_TYPE_COLLECT);
             paramMap.put("dlfs", Constant.FTP);
-            if(Constant.PM.equals(logCommand.getGroupName())) {
-            	paramMap.put("grading", Constant.MINUTEUNIT);
-            }else if(Constant.CM.equals(logCommand.getGroupName())) {
-            	paramMap.put("grading", Constant.DAYUNIT);
-            }else {
-            	paramMap.put("grading", Constant.MROUNIT);
+            if (Constant.PM.equals(logCommand.getGroupName())) {
+                paramMap.put("grading", Constant.MINUTEUNIT);
+            } else if (Constant.CM.equals(logCommand.getGroupName())) {
+                paramMap.put("grading", Constant.DAYUNIT);
+            } else {
+                paramMap.put("grading", Constant.MROUNIT);
             }
             paramList.add(paramMap);
             //将服务器信息及采集状态信息以json形式进行展示
-            HttpUtil.post(ConfigurationManager.getDefaultConfig().getString(Constant.MONTIOR_COLLECT_STATE_URL, null), "collectstate="+JSONSerializer.toJSON(paramList));
-		}
+            HttpUtil.post(ConfigurationManager.getDefaultConfig().getString(Constant.MONTIOR_COLLECT_STATE_URL, null), "collectstate=" + JSONSerializer.toJSON(paramList));
+        }
 
-		private void downloadAndParseFiles(FTPClientExt ftpClientExt, Map<String, String> newEnvs) {
+        private void downloadAndParseFiles(FTPClientExt ftpClientExt, Map<String, String> newEnvs) {
             List<String> files = Lists.newArrayList();
             /**************************ftp download start****************************************/
-          //本地缓存目录
-        	String localPath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getLocalPath(), currentEnv));
-        	if (!logCommand.getLocalPath().startsWith("/") && logCommand.getLocalPath().indexOf(":") < 0) {
-        		if(localPath.indexOf(Constant.MRO)>=0) {
-        			localPath = AppContext.getCacheFileName("mr" + Envirment.PATH_SEPARATOR + localPath, true);
-        		}else {
-        			localPath = AppContext.getCacheFileName("FtpLog" + Envirment.PATH_SEPARATOR + localPath, false);
-        		}
-        	}
+            //本地缓存目录
+            String localPath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getLocalPath(), currentEnv));
+            if (!logCommand.getLocalPath().startsWith("/") && logCommand.getLocalPath().indexOf(":") < 0) {
+                if (localPath.indexOf(Constant.MRO) >= 0) {
+                    localPath = AppContext.getCacheFileName("mr" + Envirment.PATH_SEPARATOR + localPath, true);
+                } else {
+                    localPath = AppContext.getCacheFileName("FtpLog" + Envirment.PATH_SEPARATOR + localPath, false);
+                }
+            }
             if (StringUtil.isNotEmpty(logCommand.getIterator())) {
-            	//通过替换命令中变量字符获得执行指令
+                //通过替换命令中变量字符获得执行指令
                 String queryCmd = DSLUtil.getDefaultInstance().relpaceVariable(logCommand.getIterator(), currentEnv);
                 DataTable table = (DataTable) DSLUtil.getDefaultInstance().compute(queryCmd, currentEnv);
-                if (table==null||table.getRows().size() == 0) {
-                	logger.info(String.format("%s table is empty!!", logCommand.getCommandName()));
-                }else {
-                	for (DataRow row : table.getRows()) {
-                		Map envs = mergerMap(row.getItemMap(), currentEnv);
-                		//获取下载文件过滤器
-                		String fileFilter = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), newEnvs);
-                		//获取下载文件远程路径
-                		String remotePath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(), envs));
-                		String childLocaPath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(localPath, envs));
-                		//下载文件
-                		if (!ftpClientExt.downloadDir(remotePath, childLocaPath, fileFilter, logCommand.getGetSubDir(), logCommand.getDeleteFileAfterGet())) {
-                			logger.info("下载文件失败:" + ftpClientExt.getName());
-                		}
-                		//完成文件下载
-                		if(fileFilter.contains("getFileByCreateDate")) {
-                			fileFilter = fileFilter.split("getFileByCreateDate")[0];
-                		}
-                		files.addAll(FileOper.getSubFiles(childLocaPath, fileFilter, true));
+                if (table == null || table.getRows().size() == 0) {
+                    logger.info(String.format("%s table is empty!!", logCommand.getCommandName()));
+                } else {
+                    for (DataRow row : table.getRows()) {
+                        Map envs = mergerMap(row.getItemMap(), currentEnv);
+                        //获取下载文件过滤器
+                        String fileFilter = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), newEnvs);
+                        //获取下载文件远程路径
+                        String remotePath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(), envs));
+                        String childLocaPath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(localPath, envs));
+                        //下载文件
+                        if (!ftpClientExt.downloadDir(remotePath, childLocaPath, fileFilter, logCommand.getGetSubDir(), logCommand.getDeleteFileAfterGet())) {
+                            logger.info("下载文件失败:" + ftpClientExt.getName());
+                        }
+                        //完成文件下载
+                        if (fileFilter.contains("getFileByCreateDate")) {
+                            fileFilter = fileFilter.split("getFileByCreateDate")[0];
+                        }
+                        files.addAll(FileOper.getSubFiles(childLocaPath, fileFilter, true));
                     }
-                	ftpClientExt.disconnect();
+                    ftpClientExt.disconnect();
                 }
-                if(localPath.indexOf("/dynaic_dir/$")>0) {
-                	localPath = localPath.substring(0,localPath.indexOf("/dynaic_dir/")+12);
-            	}
+                if (localPath.indexOf("/dynaic_dir/$") > 0) {
+                    localPath = localPath.substring(0, localPath.indexOf("/dynaic_dir/") + 12);
+                }
             } else {
-            	String remotePath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(), currentEnv));
+                String remotePath = FileOper.formatePath(DSLUtil.getDefaultInstance().buildString(logCommand.getRemotePath(), currentEnv));
                 String fileFilter = DSLUtil.getDefaultInstance().buildString(logCommand.getFilter(), newEnvs);
                 logger.info("Ftp filter = " + fileFilter);
                 try {
@@ -401,23 +398,23 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                         logger.info("下载文件失败:" + ftpClientExt.getName());
                     }
                 } catch (Exception ex) {
-                	businessLogDao.insertLog(module_type, "采集及解析下载文件异常", 1);
+                    businessLogDao.insertLog(module_type, "采集及解析下载文件异常", 1);
                     logger.warn(ex.getMessage(), ex);
-                }finally {
-                	ftpClientExt.disconnect();
+                } finally {
+                    ftpClientExt.disconnect();
                 }
                 //完成文件下载
                 localPath = FileOper.formatePath(localPath);
                 FileOper.checkAndCreateForder(localPath);
-                if(fileFilter.contains("getFileByCreateDate")) {
-        			fileFilter = fileFilter.split("getFileByCreateDate")[0];
-        		}
+                if (fileFilter.contains("getFileByCreateDate")) {
+                    fileFilter = fileFilter.split("getFileByCreateDate")[0];
+                }
                 //基于localPath路径查看以下所有路径中是否包含fileFilter，包含的路径全部返回。
                 files = FileOper.getSubFiles(localPath, fileFilter, true);
             }
-            
+
             /**************************ftp download end****************************************/
-            
+
             /**************************ftp parse start****************************************/
             List<String> finalFiles = Lists.newArrayList();
             for (String f : files) {
@@ -429,14 +426,14 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                     logger.warn(f + " not found");
                 }
             }
-            
-            List<Map<String, String>> paramList = new ArrayList<Map<String,String>>();
+
+            List<Map<String, String>> paramList = new ArrayList<Map<String, String>>();
             submitCollectState(Constant.FTP_COLLECT_DOWNLOAD_END);
-            
+
             //logCommand.getLogParser()从数据库获得解析文件处理器名称
-            if (StringUtil.isEmpty(logCommand.getLogParser())){
-            	businessLogDao.insertLog(module_type, "采集及解析解析文件失败，解析器：["+logCommand.getLogParser()+"]", 1);
-            	logger.info("解析文件失败-parser:" + logCommand.getLogParser());
+            if (StringUtil.isEmpty(logCommand.getLogParser())) {
+                businessLogDao.insertLog(module_type, "采集及解析解析文件失败，解析器：[" + logCommand.getLogParser() + "]", 1);
+                logger.info("解析文件失败-parser:" + logCommand.getLogParser());
                 return;
             }
             //加载mes_ftp_command表中log_parser配置的解析器
@@ -451,10 +448,10 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
             fileProcessor.setFiles(finalFiles, newEnvs);
             //不同厂商调用不同的处理器解析文件
             fileProcessor.run();
-            
+
             submitCollectState(Constant.FTP_COLLECT_PARSE_END);
             /**************************ftp parse end****************************************/
-            
+
             /**************************ftp load database start****************************************/
             //文件入库
             //判断mes_ftp_command表中target_db和target_table_map不为空时处理
@@ -477,7 +474,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
                         }
                     }
                 } catch (Exception e) {
-                	businessLogDao.insertLog(module_type, "采集及解析入库异常", 1);
+                    businessLogDao.insertLog(module_type, "采集及解析入库异常", 1);
                     logger.fatal(e.getMessage(), e);
                 }
             }

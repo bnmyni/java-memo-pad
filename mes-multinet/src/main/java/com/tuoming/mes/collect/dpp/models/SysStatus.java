@@ -16,14 +16,13 @@
 
 package com.tuoming.mes.collect.dpp.models;
 
-import java.util.Date;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * 记录系统状态信息

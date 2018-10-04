@@ -16,21 +16,20 @@
 
 package com.tuoming.mes.collect.decoder.ericsson.ncs;
 
-import com.google.common.collect.Lists;
-
 import java.util.List;
+import com.google.common.collect.Lists;
 
 /**
  * Created by James on 14/11/13.
  */
 public class BytesValueTemplate extends BytesValue {
 
+    List<BytesValue> bytesValues = Lists.newLinkedList();
+
     protected BytesValueTemplate(int position, int length, String description) {
         super(position, length, description);
         setTemplate(true);
     }
-
-    List<BytesValue> bytesValues = Lists.newLinkedList();
 
     public void addByteValue(BytesValue value) {
         bytesValues.add(value);

@@ -17,7 +17,6 @@
 package com.tuoming.mes.collect.dao;
 
 import java.util.List;
-
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.models.DbQueryCommand;
 
@@ -31,9 +30,7 @@ public interface DbQueryCommandDao extends BaseDao<DbQueryCommand, String> {
     /**
      * 获取指定分组的采集配置
      *
-     * @param groupName
-     *         分组名称
-     *
+     * @param groupName 分组名称
      * @return 符合条件的DbQueryCommand对象列表
      */
     List<DbQueryCommand> listGroup(String groupName);

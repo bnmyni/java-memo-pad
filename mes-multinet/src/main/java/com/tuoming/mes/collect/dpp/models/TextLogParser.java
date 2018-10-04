@@ -16,8 +16,10 @@
 
 package com.tuoming.mes.collect.dpp.models;
 
-import java.util.List;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,9 +29,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Created with IntelliJ IDEA. User: james Date: 7/2/13 Time: 3:07 PM 负责处理分割文件方式解析的解析器配置对象
@@ -78,6 +77,16 @@ public class TextLogParser extends AbstractModel {
     @JoinColumn(name = "parser_name")
     @OrderBy(value = "orderId ASC")
     private List<TextItemRule> itemRuleList;
+    @Column(name = "target_db", length = 64, nullable = true)
+    private String targetDb;
+    @Column(name = "target_table", length = 250, nullable = true)
+    private String targetTable;
+    @Column(name = "parse_handle", length = 80, nullable = false)
+    private String parseHandle;
+    @Column(name = "line_formater", length = 200, nullable = true)
+    private String lineFormater;
+    @Column(name = "have_unicode", nullable = false)
+    private boolean haveUnicode = true;
 
     public String getTargetDb() {
         return targetDb;
@@ -87,12 +96,6 @@ public class TextLogParser extends AbstractModel {
         this.targetDb = targetDb;
     }
 
-    @Column(name = "target_db", length = 64, nullable = true)
-    private String targetDb;
-
-    @Column(name = "target_table", length = 250, nullable = true)
-    private String targetTable;
-
     public String getLineFormater() {
         return lineFormater;
     }
@@ -100,15 +103,6 @@ public class TextLogParser extends AbstractModel {
     public void setLineFormater(String lineFormater) {
         this.lineFormater = lineFormater;
     }
-
-    @Column(name = "parse_handle", length = 80, nullable = false)
-    private String parseHandle;
-
-    @Column(name = "line_formater", length = 200, nullable = true)
-    private String lineFormater;
-
-    @Column(name = "have_unicode", nullable = false)
-    private boolean haveUnicode = true;
 
     public String getParseHandle() {
         return parseHandle;

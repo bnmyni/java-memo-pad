@@ -16,6 +16,11 @@
 
 package com.tuoming.mes.collect.dpp.datatype;
 
+import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -25,14 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
 import com.pyrlong.collection.CollectionsBase;
 import com.pyrlong.dsl.tools.Context;
 import com.pyrlong.logging.LogFacade;
@@ -43,9 +41,10 @@ import com.pyrlong.xml.XmlCreater;
 import com.pyrlong.xml.XmlOper;
 import com.tuoming.mes.collect.dpp.models.DataColumMapping;
 
-public final class DataTable implements  Context {
+public final class DataTable implements Context {
 
     private static String SCAN_TIME = "SCAN_TIME";
+    private static Logger logger = LogFacade.getLog4j(DataTable.class);
     private DataRowCollection rows; // 用于保存DataRow的集合对象
     private DataColumnCollection columns; // 用于保存DataColumn的对象
     private String tableName; // 表名
@@ -54,23 +53,6 @@ public final class DataTable implements  Context {
     private DataKey primaryKey = new DataKey();// 主键
     private List<DataKey> dataIndexs = new ArrayList<DataKey>();// 数据索引列表
     private Map<String, Object> tag = new HashMap<String, Object>(); // 做扩展用，（比如TOPN那边如果分页的话是用来作为分页使用的）
-    private static Logger logger = LogFacade.getLog4j(DataTable.class);
-
-    public DataKey getPrimaryKey() {
-        return primaryKey;
-    }
-
-    public void setPrimaryKey(DataKey primaryKey) {
-        this.primaryKey = primaryKey;
-    }
-
-    public List<DataKey> getDataIndexs() {
-        return dataIndexs;
-    }
-
-    public void setDataIndexs(List<DataKey> dataIndexs) {
-        this.dataIndexs = dataIndexs;
-    }
 
     public DataTable() {
         this.columns = new DataColumnCollection();
@@ -81,293 +63,6 @@ public final class DataTable implements  Context {
     public DataTable(String dataTableName) {
         this();
         this.tableName = dataTableName;
-    }
-
-    public int getTotalCount() {
-        return rows.size();
-    }
-
-    /**
-     * 功能描述： 返回表名
-     *
-     * @param
-     * @return: String
-     * @author: guojiyong
-     * @version: 2.0
-     */
-    public String getTableName() {
-        return this.tableName;
-    }
-
-    /**
-     * 功能描述： 设置表名
-     *
-     * @param
-     * @return: void
-     * @author: guojiyong
-     * @version: 2.0
-     */
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
-    /**
-     * 功能描述： 返回该表引用的封装类
-     *
-     * @param
-     * @return: DataRowCollection
-     * @author: guojiyong
-     * @version: 2.0
-     */
-    public DataRowCollection getRows() {
-        return this.rows;
-    }
-
-    public DataColumnCollection getColumns() {
-        return this.columns;
-    }
-
-    /**
-     * 功能描述： 获取指定行指定列的数据
-     *
-     * @param
-     * @return: Object
-     * @author: James Cheung
-     * @version: 2.0
-     */
-
-    public Object getValue(int row, String colName) {
-        return this.rows.get(row).getValue(colName);
-    }
-
-    public Object getValue(int row, int col) {
-        return this.rows.get(row).getValue(col);
-    }
-
-    /**
-     * 功能描述： 为该表数据新建一行
-     *
-     * @param
-     * @return: DataRow
-     * @author: guojiyong
-     * @version: 2.0
-     */
-    public DataRow newRow() throws Exception {
-        DataRow tempRow = new DataRow(this);
-        // nextRowIndex = nextRowIndex < this.rows.size() ? this.rows.size()
-        // : nextRowIndex;
-        int lastRowIndex = 0;
-        if (this.rows.size() > 0) {
-            lastRowIndex = this.rows.get(this.rows.size() - 1).getRowIndex();
-        } else {
-            lastRowIndex = 0;
-        }
-        tempRow.setColumns(this.columns);
-        tempRow.setRowIndex(++lastRowIndex);
-        return tempRow;
-    }
-
-    public void setValue(int row, int col, Object value) {
-        this.rows.get(row).setValue(col, value);
-    }
-
-    public void setValue(int row, String colName, Object value) {
-        this.rows.get(row).setValue(colName, value);
-    }
-
-    /**
-     * @param name
-     * @param value
-     */
-    public void setTag(String name, Object value) {
-        this.tag.put(name, value);
-    }
-
-    /**
-     * @return the tag
-     */
-    public Object getTag(String name) {
-        return tag.get(name);
-    }
-
-    public DataColumn addColumn(String columnName, int dataType) throws Exception {
-        return this.columns.addColumn(columnName, dataType);
-    }
-
-    public DataColumn addColumnIndex(int index, String columnName, int dataType) throws Exception {
-        return this.columns.addColumn(index, columnName, dataType);
-    }
-
-    public boolean addRow(DataRow row) throws Exception {
-        // if (row.getRowIndex() > this.rows.size())
-        // row.setRowIndex(this.rows.size());
-        // return this.rows.add(row);
-
-        if (this.rows.size() > 0) {
-            // if (row.getRowIndex() >
-            // this.rows.get(this.rows.size()-1).getRowIndex() + 1) {
-            row.setRowIndex(this.rows.get(this.rows.size() - 1).getRowIndex() + 1);
-            // }
-        } else {
-            row.setRowIndex(1);
-        }
-        return this.rows.add(row);
-
-    }
-
-    // 以下为数据表扩展方法实现集合
-
-    /**
-     * 功能描述： 返回符合过滤条件的数据行集合，并返回
-     *
-     * @param
-     * @return: DataTable
-     * @author: James Cheung
-     * @version: 2.0
-     */
-    public DataTable select(String filterString) {
-        List<DataRow> rows = new ArrayList<DataRow>();
-        if (StringUtil.isNotEmpty(filterString)) {
-            Object o;
-            for (Object row : this.rows) {
-                DataRow currentRow = (DataRow) row;
-                try {
-                    o = DataExpression.executeContext.compute(filterString, currentRow.getItemMap());
-                } catch (Exception e) {
-                    System.out.println("DataTable select 执行错误，跳过执行");
-                    continue;
-                }
-                if ((Boolean) o) {
-                    rows.add(currentRow);
-                }
-            }
-            DataTable tb = this.cloneTable();
-            tb.getRows().addAll(rows);
-            return tb;
-        } else {
-            return this;
-        }
-    }
-
-    /**
-     * 功能描述： 选择符合指定过滤条件的数据，并按照排序规则排序输出
-     *
-     * @param orderBy lac,ci
-     * @return: List<DataRow>
-     * @author: James Cheung
-     * @version: 2.0
-     */
-    public DataTable select(String filterString, String orderBy) {
-        String[] orderFields = orderBy.split(",");
-        List<SortedDataColumn> sortColumns = new ArrayList<SortedDataColumn>();
-        for (String s : orderFields) {
-            SortedDataColumn sort = new SortedDataColumn();
-            if (s.trim().toLowerCase().endsWith("desc")) {
-                sort.setSortType(SortType.DESC);
-            } else {
-                sort.setSortType(SortType.ASC);
-            }
-            s = s.replace("desc", "").replace("asc", "").trim();
-            sort.setColumn(this.getColumns().get(s));
-            sortColumns.add(sort);
-        }
-        // 首先过滤
-        DataTable result = cloneTable();
-        List<DataRow> dataRows = select(filterString).getRows();
-        for (DataRow row : dataRows) {
-            sort(result, row, sortColumns);
-        }
-        return result;
-    }
-
-    /**
-     * 功能描述：
-     *
-     * @param sort
-     * @return: DataTable
-     * @author: James Cheung
-     * @version: 2.0
-     */
-    public DataTable sort(DataTable table, DataRow row, List<SortedDataColumn> sort) {
-        if (table == null)
-            return null;
-        int tagetIndex = 0;
-        for (DataRow r : table.rows) {
-            // 循环现有行，针对个排序字段进行判断，判断规则为：当找到第一个返回TURE的记录的索引
-            int compareResult = 0; // 默认按相等处理
-            tagetIndex++;
-            for (SortedDataColumn st : sort) {
-                // 如果倒序
-                int temp = 0;
-                if (st.getSortType() == SortType.DESC) {
-                    temp = compare(row.getValue(st.getColumn().getColumnName()), r.getValue(st.getColumn().getColumnName()));
-                } else {
-                    // 构造按正序
-                    temp = compare(r.getValue(st.getColumn().getColumnName()), row.getValue(st.getColumn().getColumnName()));
-                }
-                if (temp < 0) {
-                    compareResult = 0;
-                    break;// 出现不满足条件记录，继续对比下一条
-                } else {
-                    compareResult = compareResult + temp;
-                }
-                if (compareResult > 0) // 如果找到了，则直接跳出
-                {
-                    tagetIndex--;
-                    break;
-                }
-            }
-            if (compareResult > 0)
-                break;
-        }
-        table.getRows().add(tagetIndex, row);
-        return table;
-    }
-
-    public DataTable cloneTable() {
-        try {
-            DataTable table = new DataTable();
-            table.setTableName(this.getTableName());
-            table.setDataSourceName(this.getDataSourceName());
-            table.setTableLocalName(this.getTableLocalName());
-            table.setPrimaryKey(primaryKey);
-            table.setDataIndexs(getDataIndexs());
-            for (DataColumn dc : this.columns) {
-                DataColumn dcc = table.addColumn(dc.getColumnName(), dc.getDataType());
-                dcc.setDisplayed(dc.isDisplayed());
-            }
-            return table;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    /**
-     * 功能描述： 对当前表进行查询 过滤，并返回指定列集合拼装的DataTable对象
-     *
-     * @param
-     * @throws Exception
-     * @return: DataTable
-     * @author: James Cheung
-     * @version: 2.0
-     */
-    public DataTable select(String filterString, String[] columns, boolean distinct) throws Exception {
-        DataTable result = new DataTable();
-        List<DataRow> rows = select(filterString).getRows();
-        // 构造表结构
-        for (String c : columns) {
-            DataColumn dc = this.columns.get(c);
-            DataColumn newDc = new DataColumn(dc.getColumnName(), dc.getDataType());
-            newDc.setCaptionName(dc.getCaptionName());
-            result.columns.add(newDc);
-        }
-        // 填充数据
-        for (DataRow r : rows) {
-            DataRow newRow = result.newRow();
-            newRow.copyFrom(r);
-            result.addRow(newRow);
-        }
-        return result;
     }
 
     // 静态方法集合
@@ -544,24 +239,6 @@ public final class DataTable implements  Context {
         return count(table, "");
     }
 
-    public Object compute(Object object) {
-        if (object == null)
-            return null;
-        if (this.columns.contains(object.toString().trim().toLowerCase())) {
-            if (this.getRows().size() > 0) {
-                return this.getRows().get(0).getValue(object.toString());
-            }
-        }
-        String exp = object.toString();
-        String regEx = "(max|min|avg|sum|count)[\\s]*\\(";
-        Pattern p = Pattern.compile(regEx);
-        Matcher m = p.matcher(exp);
-        while (m.find()) {
-            exp = exp.replace(m.group(0), m.group(0) + "table,");
-        }
-        return DataExpression.executeContext.compute(exp, this);
-    }
-
     /**
      * 功能描述： 判断A的值是否大于B的值，如大于则返回true,否则返回false, 返回0 标识两个值相等，1：a>b,-1:a<b
      *
@@ -602,31 +279,6 @@ public final class DataTable implements  Context {
     }
 
     /**
-     * 保存对象结构到Xml文件
-     *
-     * @param filePath 文件保存路径
-     * @author James Cheung Date:Jul 3, 2012
-     */
-    public void structToXml(String filePath) {
-        XmlCreater xmlCreater = new XmlCreater(filePath);
-        Element rootElement = xmlCreater.createRootElement("DataTable");
-        if (this.getTableName() != null)
-            xmlCreater.createElement(rootElement, "TableName", this.getTableName());
-        if (this.getTableLocalName() != null)
-            xmlCreater.createElement(rootElement, "TableLocalName", this.getTableLocalName());
-        Element colRoot = xmlCreater.createElement(rootElement, "DataColumnCollection");
-
-        for (DataColumn col : this.columns) {
-            Element c = xmlCreater.createElement(colRoot, "DataColumn");
-            xmlCreater.createElement(c, "ColumnName", col.getColumnName());
-            xmlCreater.createElement(c, "CaptionName", col.getCaptionName());
-            xmlCreater.createElement(c, "ColumnIndex", Convert.toString(col.getColumnIndex()));
-            xmlCreater.createElement(c, "DataType", Convert.toString(col.getDataType()));
-        }
-        xmlCreater.buildXmlFile();
-    }
-
-    /**
      * 根据指定文件生成DataTable对象
      *
      * @param filePath 保存DataTable结构的xml文件
@@ -653,6 +305,362 @@ public final class DataTable implements  Context {
             table.getColumns().add(newColumn);
         }
         return table;
+    }
+
+    public static void dataRowCalculate(DataRow row, CollectionsBase<DataColumMapping> map) {
+        try {
+            for (DataColumMapping m : map) {
+                row.setValue(m.getColumnId(), DataExpression.executeContext.compute(m.getGatherFormula(), row.getItemMap()));
+            }
+        } catch (Exception e) {
+            logger.error("TableCalculate Error：" + e.getMessage(), e);
+        }
+    }
+
+    public DataKey getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(DataKey primaryKey) {
+        this.primaryKey = primaryKey;
+    }
+
+    public List<DataKey> getDataIndexs() {
+        return dataIndexs;
+    }
+
+    public void setDataIndexs(List<DataKey> dataIndexs) {
+        this.dataIndexs = dataIndexs;
+    }
+
+    public int getTotalCount() {
+        return rows.size();
+    }
+
+    // 以下为数据表扩展方法实现集合
+
+    /**
+     * 功能描述： 返回表名
+     *
+     * @param
+     * @return: String
+     * @author: guojiyong
+     * @version: 2.0
+     */
+    public String getTableName() {
+        return this.tableName;
+    }
+
+    /**
+     * 功能描述： 设置表名
+     *
+     * @param
+     * @return: void
+     * @author: guojiyong
+     * @version: 2.0
+     */
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    /**
+     * 功能描述： 返回该表引用的封装类
+     *
+     * @param
+     * @return: DataRowCollection
+     * @author: guojiyong
+     * @version: 2.0
+     */
+    public DataRowCollection getRows() {
+        return this.rows;
+    }
+
+    public DataColumnCollection getColumns() {
+        return this.columns;
+    }
+
+    /**
+     * 功能描述： 获取指定行指定列的数据
+     *
+     * @param
+     * @return: Object
+     * @author: James Cheung
+     * @version: 2.0
+     */
+
+    public Object getValue(int row, String colName) {
+        return this.rows.get(row).getValue(colName);
+    }
+
+    public Object getValue(int row, int col) {
+        return this.rows.get(row).getValue(col);
+    }
+
+    /**
+     * 功能描述： 为该表数据新建一行
+     *
+     * @param
+     * @return: DataRow
+     * @author: guojiyong
+     * @version: 2.0
+     */
+    public DataRow newRow() throws Exception {
+        DataRow tempRow = new DataRow(this);
+        // nextRowIndex = nextRowIndex < this.rows.size() ? this.rows.size()
+        // : nextRowIndex;
+        int lastRowIndex = 0;
+        if (this.rows.size() > 0) {
+            lastRowIndex = this.rows.get(this.rows.size() - 1).getRowIndex();
+        } else {
+            lastRowIndex = 0;
+        }
+        tempRow.setColumns(this.columns);
+        tempRow.setRowIndex(++lastRowIndex);
+        return tempRow;
+    }
+
+    public void setValue(int row, int col, Object value) {
+        this.rows.get(row).setValue(col, value);
+    }
+
+    public void setValue(int row, String colName, Object value) {
+        this.rows.get(row).setValue(colName, value);
+    }
+
+    /**
+     * @param name
+     * @param value
+     */
+    public void setTag(String name, Object value) {
+        this.tag.put(name, value);
+    }
+
+    /**
+     * @return the tag
+     */
+    public Object getTag(String name) {
+        return tag.get(name);
+    }
+
+    public DataColumn addColumn(String columnName, int dataType) throws Exception {
+        return this.columns.addColumn(columnName, dataType);
+    }
+
+    public DataColumn addColumnIndex(int index, String columnName, int dataType) throws Exception {
+        return this.columns.addColumn(index, columnName, dataType);
+    }
+
+    public boolean addRow(DataRow row) throws Exception {
+        // if (row.getRowIndex() > this.rows.size())
+        // row.setRowIndex(this.rows.size());
+        // return this.rows.add(row);
+
+        if (this.rows.size() > 0) {
+            // if (row.getRowIndex() >
+            // this.rows.get(this.rows.size()-1).getRowIndex() + 1) {
+            row.setRowIndex(this.rows.get(this.rows.size() - 1).getRowIndex() + 1);
+            // }
+        } else {
+            row.setRowIndex(1);
+        }
+        return this.rows.add(row);
+
+    }
+
+    /**
+     * 功能描述： 返回符合过滤条件的数据行集合，并返回
+     *
+     * @param
+     * @return: DataTable
+     * @author: James Cheung
+     * @version: 2.0
+     */
+    public DataTable select(String filterString) {
+        List<DataRow> rows = new ArrayList<DataRow>();
+        if (StringUtil.isNotEmpty(filterString)) {
+            Object o;
+            for (Object row : this.rows) {
+                DataRow currentRow = (DataRow) row;
+                try {
+                    o = DataExpression.executeContext.compute(filterString, currentRow.getItemMap());
+                } catch (Exception e) {
+                    System.out.println("DataTable select 执行错误，跳过执行");
+                    continue;
+                }
+                if ((Boolean) o) {
+                    rows.add(currentRow);
+                }
+            }
+            DataTable tb = this.cloneTable();
+            tb.getRows().addAll(rows);
+            return tb;
+        } else {
+            return this;
+        }
+    }
+
+    /**
+     * 功能描述： 选择符合指定过滤条件的数据，并按照排序规则排序输出
+     *
+     * @param orderBy lac,ci
+     * @return: List<DataRow>
+     * @author: James Cheung
+     * @version: 2.0
+     */
+    public DataTable select(String filterString, String orderBy) {
+        String[] orderFields = orderBy.split(",");
+        List<SortedDataColumn> sortColumns = new ArrayList<SortedDataColumn>();
+        for (String s : orderFields) {
+            SortedDataColumn sort = new SortedDataColumn();
+            if (s.trim().toLowerCase().endsWith("desc")) {
+                sort.setSortType(SortType.DESC);
+            } else {
+                sort.setSortType(SortType.ASC);
+            }
+            s = s.replace("desc", "").replace("asc", "").trim();
+            sort.setColumn(this.getColumns().get(s));
+            sortColumns.add(sort);
+        }
+        // 首先过滤
+        DataTable result = cloneTable();
+        List<DataRow> dataRows = select(filterString).getRows();
+        for (DataRow row : dataRows) {
+            sort(result, row, sortColumns);
+        }
+        return result;
+    }
+
+    /**
+     * 功能描述：
+     *
+     * @param sort
+     * @return: DataTable
+     * @author: James Cheung
+     * @version: 2.0
+     */
+    public DataTable sort(DataTable table, DataRow row, List<SortedDataColumn> sort) {
+        if (table == null)
+            return null;
+        int tagetIndex = 0;
+        for (DataRow r : table.rows) {
+            // 循环现有行，针对个排序字段进行判断，判断规则为：当找到第一个返回TURE的记录的索引
+            int compareResult = 0; // 默认按相等处理
+            tagetIndex++;
+            for (SortedDataColumn st : sort) {
+                // 如果倒序
+                int temp = 0;
+                if (st.getSortType() == SortType.DESC) {
+                    temp = compare(row.getValue(st.getColumn().getColumnName()), r.getValue(st.getColumn().getColumnName()));
+                } else {
+                    // 构造按正序
+                    temp = compare(r.getValue(st.getColumn().getColumnName()), row.getValue(st.getColumn().getColumnName()));
+                }
+                if (temp < 0) {
+                    compareResult = 0;
+                    break;// 出现不满足条件记录，继续对比下一条
+                } else {
+                    compareResult = compareResult + temp;
+                }
+                if (compareResult > 0) // 如果找到了，则直接跳出
+                {
+                    tagetIndex--;
+                    break;
+                }
+            }
+            if (compareResult > 0)
+                break;
+        }
+        table.getRows().add(tagetIndex, row);
+        return table;
+    }
+
+    public DataTable cloneTable() {
+        try {
+            DataTable table = new DataTable();
+            table.setTableName(this.getTableName());
+            table.setDataSourceName(this.getDataSourceName());
+            table.setTableLocalName(this.getTableLocalName());
+            table.setPrimaryKey(primaryKey);
+            table.setDataIndexs(getDataIndexs());
+            for (DataColumn dc : this.columns) {
+                DataColumn dcc = table.addColumn(dc.getColumnName(), dc.getDataType());
+                dcc.setDisplayed(dc.isDisplayed());
+            }
+            return table;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 功能描述： 对当前表进行查询 过滤，并返回指定列集合拼装的DataTable对象
+     *
+     * @param
+     * @throws Exception
+     * @return: DataTable
+     * @author: James Cheung
+     * @version: 2.0
+     */
+    public DataTable select(String filterString, String[] columns, boolean distinct) throws Exception {
+        DataTable result = new DataTable();
+        List<DataRow> rows = select(filterString).getRows();
+        // 构造表结构
+        for (String c : columns) {
+            DataColumn dc = this.columns.get(c);
+            DataColumn newDc = new DataColumn(dc.getColumnName(), dc.getDataType());
+            newDc.setCaptionName(dc.getCaptionName());
+            result.columns.add(newDc);
+        }
+        // 填充数据
+        for (DataRow r : rows) {
+            DataRow newRow = result.newRow();
+            newRow.copyFrom(r);
+            result.addRow(newRow);
+        }
+        return result;
+    }
+
+    public Object compute(Object object) {
+        if (object == null)
+            return null;
+        if (this.columns.contains(object.toString().trim().toLowerCase())) {
+            if (this.getRows().size() > 0) {
+                return this.getRows().get(0).getValue(object.toString());
+            }
+        }
+        String exp = object.toString();
+        String regEx = "(max|min|avg|sum|count)[\\s]*\\(";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(exp);
+        while (m.find()) {
+            exp = exp.replace(m.group(0), m.group(0) + "table,");
+        }
+        return DataExpression.executeContext.compute(exp, this);
+    }
+
+    /**
+     * 保存对象结构到Xml文件
+     *
+     * @param filePath 文件保存路径
+     * @author James Cheung Date:Jul 3, 2012
+     */
+    public void structToXml(String filePath) {
+        XmlCreater xmlCreater = new XmlCreater(filePath);
+        Element rootElement = xmlCreater.createRootElement("DataTable");
+        if (this.getTableName() != null)
+            xmlCreater.createElement(rootElement, "TableName", this.getTableName());
+        if (this.getTableLocalName() != null)
+            xmlCreater.createElement(rootElement, "TableLocalName", this.getTableLocalName());
+        Element colRoot = xmlCreater.createElement(rootElement, "DataColumnCollection");
+
+        for (DataColumn col : this.columns) {
+            Element c = xmlCreater.createElement(colRoot, "DataColumn");
+            xmlCreater.createElement(c, "ColumnName", col.getColumnName());
+            xmlCreater.createElement(c, "CaptionName", col.getCaptionName());
+            xmlCreater.createElement(c, "ColumnIndex", Convert.toString(col.getColumnIndex()));
+            xmlCreater.createElement(c, "DataType", Convert.toString(col.getDataType()));
+        }
+        xmlCreater.buildXmlFile();
     }
 
     @Override
@@ -740,16 +748,6 @@ public final class DataTable implements  Context {
         }
     }
 
-    public static void dataRowCalculate(DataRow row, CollectionsBase<DataColumMapping> map) {
-        try {
-            for (DataColumMapping m : map) {
-                row.setValue(m.getColumnId(), DataExpression.executeContext.compute(m.getGatherFormula(), row.getItemMap()));
-            }
-        } catch (Exception e) {
-            logger.error("TableCalculate Error：" + e.getMessage(), e);
-        }
-    }
-
     /**
      * 将DataTable对象转化为JSON字符串，基本结构为
      * {
@@ -775,7 +773,7 @@ public final class DataTable implements  Context {
             for (DataColumn dc : columns) {
                 Object value = row.getValue(dc.getColumnIndex());
                 String result = value + "";
-                result= result.replace("\"", "\\\"").replace("\\", "\\\\");
+                result = result.replace("\"", "\\\"").replace("\\", "\\\\");
                 if (value == null || StringUtil.isEmpty(value.toString()))
                     result = "null";
                 else if (dc.getDataType() == Types.BIGINT

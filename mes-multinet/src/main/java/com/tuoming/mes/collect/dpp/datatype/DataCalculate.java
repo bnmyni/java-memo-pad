@@ -15,11 +15,10 @@
  */
 package com.tuoming.mes.collect.dpp.datatype;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
 import com.pyrlong.collection.CollectionsBase;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.logging.LogFacade;
@@ -27,7 +26,6 @@ import com.tuoming.mes.collect.dpp.models.DataColumMapping;
 
 /**
  * @author James Cheung
- * 
  */
 public final class DataCalculate {
 
@@ -45,19 +43,17 @@ public final class DataCalculate {
             }
             maps.put(dataColumnMapName, result);
             return result;
-            
+
         }
     }
 
     /**
      * 根据配置的计算公式填充计算列公式
-     * 
-     * @param table
-     *            要计算的用于存储源数据的DataTable对象
-     * @param map
-     *            字段映射及计算方法配置
+     *
+     * @param table 要计算的用于存储源数据的DataTable对象
+     * @param map   字段映射及计算方法配置
      * @author James Cheung
-     *         Date:Oct 16, 2012
+     * Date:Oct 16, 2012
      */
     public static void tableCalculate(DataTable table, CollectionsBase<DataColumMapping> map) {
         if (table != null) table.calculate(map);

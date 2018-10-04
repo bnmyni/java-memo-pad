@@ -27,7 +27,7 @@ public class Numeral extends BytesValue {
         super(name, position, length, description);
     }
 
-    protected Numeral( int position, int length, String description) {
+    protected Numeral(int position, int length, String description) {
         super(position, length, description);
     }
 

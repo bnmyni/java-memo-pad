@@ -16,10 +16,6 @@
 
 package com.tuoming.mes.execute.boot.scheduler;
 
-import static com.pyrlong.quartz.CronScheduleBuilder.cronSchedule;
-import static com.pyrlong.quartz.JobBuilder.newJob;
-import static com.pyrlong.quartz.TriggerBuilder.newTrigger;
-
 import org.apache.log4j.Logger;
 
 import com.pyrlong.collection.CollectionsBase;
@@ -33,6 +29,11 @@ import com.pyrlong.quartz.impl.StdSchedulerFactory;
 import com.tuoming.mes.execute.boot.AppContext;
 import com.tuoming.mes.execute.boot.Application;
 import com.tuoming.mes.execute.boot.models.TaskPlan;
+
+import static com.pyrlong.quartz.CronScheduleBuilder.cronSchedule;
+import static com.pyrlong.quartz.JobBuilder.newJob;
+import static com.pyrlong.quartz.TriggerBuilder.newTrigger;
+
 /**
  */
 public class SchedulerManager {
@@ -64,7 +65,7 @@ public class SchedulerManager {
             // 循环将配置加入到调度器内
             for (Object o : taskPlans) {
                 TaskPlan plan = (TaskPlan) o;
-                
+
                 //将任务
                 JobDetail detail = newJob(TaskProcessorJob.class).withIdentity(plan.getTaskName(), plan.getTaskGroup()).build();
                 detail.getJobDataMap().put(AppContext.TASK_PLAN_NAME, plan);

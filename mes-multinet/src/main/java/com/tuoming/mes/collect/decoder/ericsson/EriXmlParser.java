@@ -16,15 +16,6 @@
 
 package com.tuoming.mes.collect.decoder.ericsson;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -35,6 +26,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pyrlong.Envirment;
@@ -51,7 +50,6 @@ import com.tuoming.mes.services.serve.MESConstants;
 @Scope("prototype")
 @Component("EriXmlParser")
 public class EriXmlParser extends AbstractFileProcessor implements ContentHandler {
-    private StringBuffer buf;
     private static Logger logger = Logger.getLogger(EriXmlParser.class);
     String currentFileName;
     BufferedWriter bufferedWriter;
@@ -59,6 +57,12 @@ public class EriXmlParser extends AbstractFileProcessor implements ContentHandle
     Map<String, List<String>> counterToSave;
     List<String> counterFilter = null;
     String batch;
+    String neMeContext;
+    String timeStamp;
+    List<String> currentCounterList = Lists.newLinkedList();
+    int currentCounterIdx = 0;
+    Map<String, BufferedWriter> writerMap = Maps.newHashMap();
+    private StringBuffer buf;
 
     @Override
     public void setDocumentLocator(Locator locator) {
@@ -109,11 +113,6 @@ public class EriXmlParser extends AbstractFileProcessor implements ContentHandle
             logger.error(ex.getMessage(), ex);
         }
     }
-
-    String neMeContext;
-    String timeStamp;
-    List<String> currentCounterList = Lists.newLinkedList();
-    int currentCounterIdx = 0;
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -173,8 +172,6 @@ public class EriXmlParser extends AbstractFileProcessor implements ContentHandle
     public void skippedEntity(String name) throws SAXException {
 
     }
-
-    Map<String, BufferedWriter> writerMap = Maps.newHashMap();
 
     private BufferedWriter getWriter(List<String> counterList) {
         //File file = new File(currentFileName);

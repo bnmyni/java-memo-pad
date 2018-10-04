@@ -29,13 +29,6 @@ public class SortedDataColumn {
     private SortType sortType;
 
     /**
-     * @param column
-     */
-    public void setColumn(DataColumn column) {
-        this.column = column;
-    }
-
-    /**
      * @return the column
      */
     public DataColumn getColumn() {
@@ -43,10 +36,10 @@ public class SortedDataColumn {
     }
 
     /**
-     * @param sortType
+     * @param column
      */
-    public void setSortType(SortType sortType) {
-        this.sortType = sortType;
+    public void setColumn(DataColumn column) {
+        this.column = column;
     }
 
     /**
@@ -54,6 +47,13 @@ public class SortedDataColumn {
      */
     public SortType getSortType() {
         return sortType;
+    }
+
+    /**
+     * @param sortType
+     */
+    public void setSortType(SortType sortType) {
+        this.sortType = sortType;
     }
 
 }

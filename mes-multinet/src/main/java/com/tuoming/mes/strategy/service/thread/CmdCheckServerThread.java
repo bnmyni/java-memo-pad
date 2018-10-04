@@ -5,23 +5,23 @@ import com.tuoming.mes.services.impl.ServerConnectPool;
 import com.tuoming.mes.services.serve.ServerService;
 
 public class CmdCheckServerThread implements Runnable {
-	private Server server;
+    private Server server;
 
-	public CmdCheckServerThread(Server server) {
-		this.server = server;
-	}
+    public CmdCheckServerThread(Server server) {
+        this.server = server;
+    }
 
-	@Override
-	public void run() {
-		try {
-			ServerService serverService = ServerConnectPool.getServerServiceFromPool(server.getServerName(), null);
-			if (!serverService.isEnabled()) {
-				ServerConnectPool.releaseServer(serverService);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    @Override
+    public void run() {
+        try {
+            ServerService serverService = ServerConnectPool.getServerServiceFromPool(server.getServerName(), null);
+            if (!serverService.isEnabled()) {
+                ServerConnectPool.releaseServer(serverService);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	}
+    }
 
 }

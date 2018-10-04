@@ -24,10 +24,10 @@ import java.lang.annotation.Target;
 /**
  * 用于标识需要加密存储的实体对象属性的方法
  */
-@Target( ElementType.FIELD )
-@Retention(RetentionPolicy.RUNTIME)  
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface EncodeField {
-    public enum EncodeAlgorithm {MD5, AES, DES, RSA, NONE}
-
     EncodeAlgorithm algorithm() default EncodeAlgorithm.NONE;
+
+    public enum EncodeAlgorithm {MD5, AES, DES, RSA, NONE}
 }

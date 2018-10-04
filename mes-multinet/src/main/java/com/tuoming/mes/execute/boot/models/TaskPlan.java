@@ -16,15 +16,14 @@
 
 package com.tuoming.mes.execute.boot.models;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.tuoming.mes.collect.dpp.models.AbstractModel;
@@ -54,15 +53,6 @@ public class TaskPlan extends AbstractModel {
      */
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = false;
-
-    public Long getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(Long timeout) {
-        this.timeout = timeout;
-    }
-
     /**
      * 任务执行超时设置，可以针对这个任务单独设置超时时间，如果没有设置则使用全局设置
      */
@@ -102,9 +92,16 @@ public class TaskPlan extends AbstractModel {
      */
     @Column(name = "singleton", nullable = false)
     private Boolean singleton = false;
-
     @Transient
     private int state;
+
+    public Long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(Long timeout) {
+        this.timeout = timeout;
+    }
 
     public String getRemark() {
         return remark;

@@ -45,7 +45,7 @@ public class TaskRunner extends Thread {
                 String status = Application.getStatus(task.getTaskName());
                 //如果需要刷新系统
                 if (status.equals("2")) {
-                	logger.info("Restart System!");
+                    logger.info("Restart System!");
                     Envirment.refreshConfig();
                     SchedulerManager.start();//重新启动调度系统
                 } else if (status.equals("0")) {
@@ -53,14 +53,14 @@ public class TaskRunner extends Thread {
                 } else {
                     String name = task.getInterpreter();
                     if (task.getInterpreter().equals("dsl")) {
-                    	logger.info("dsl mode!");
+                        logger.info("dsl mode!");
                         DSLUtil.getDefaultInstance().compute(task.getTaskCmd(), Envirment.getEnvs());
                     } else {
-                    	logger.info("current engine "+name);
+                        logger.info("current engine " + name);
                         AbstractEngine engine = AbstractEngine.getEngine(name);
                         engine.eval("from pyrlong import *");
                         String code = task.getTaskCmd().trim();
-                        logger.info("current code "+code);
+                        logger.info("current code " + code);
                         if (code.endsWith("&")) {
                             code = code.substring(0, code.length() - 1);
                             code = " -w " + task.getTaskGroup().trim() + " -f " + code + " -t " + (task.getTimeout() > 0 ? task.getTimeout() : AppContext.PROCESS_MAX_TIME) + " -n " + task.getTaskName();

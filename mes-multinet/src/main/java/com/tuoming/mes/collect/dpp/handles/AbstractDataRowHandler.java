@@ -36,12 +36,12 @@ public abstract class AbstractDataRowHandler implements DataRowHandler {
 
     public abstract void loadTag(Object o);
 
-    public void setUseRealType(boolean itype) {
-        useRealType = itype;
-    }
-
     public boolean isUseRealType() {
         return useRealType;
+    }
+
+    public void setUseRealType(boolean itype) {
+        useRealType = itype;
     }
 
     public Object getTag() {

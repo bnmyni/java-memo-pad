@@ -69,15 +69,6 @@ public class Server extends AbstractModel {
      */
     @Column(name = "interrupt_prompt", length = 100, nullable = true)
     private String interruptPrompt;
-
-    public String getInterruptPrompt() {
-        return interruptPrompt;
-    }
-
-    public void setInterruptPrompt(String interruptPrompt) {
-        this.interruptPrompt = interruptPrompt;
-    }
-
     /**
      * 登录用户名，针对ssh配置，telnet时本配置无效
      */
@@ -88,18 +79,8 @@ public class Server extends AbstractModel {
      */
     @Column(name = "password", length = 64, nullable = true)
     private String password;
-
-    public String getServerGroup() {
-        return serverGroup;
-    }
-
-    public void setServerGroup(String serverGroup) {
-        this.serverGroup = serverGroup;
-    }
-
     @Column(name = "server_group", length = 128, nullable = false)
     private String serverGroup;
-
     /**
      * 协议类型，目前支持telnet/ssh2
      */
@@ -110,8 +91,6 @@ public class Server extends AbstractModel {
      */
     @Column(name = "encoding", length = 32, nullable = true)
     private String encoding = null;
-
-
     /**
      * 服务器对象类型
      */
@@ -137,18 +116,41 @@ public class Server extends AbstractModel {
      */
     @Column(name = "custom_env", length = 300, nullable = true)
     private String customEnv;
-
     @Column(name = "extend1", length = 300, nullable = true)
     private String extend1;
-
     @Column(name = "extend2", length = 300, nullable = true)
     private String extend2;
-
     @Column(name = "extend3", length = 300, nullable = true)
     private String extend3;
-
     @Column(name = "extend4", length = 300, nullable = true)
     private String extend4;
+    @Column(name = "extend5", length = 300, nullable = true)
+    private String extend5;
+    @Column(name = "vt_type", length = 20, nullable = true)
+    private String vtType = "VT220";
+    @Column(name = "echo_on", nullable = true)
+    private Boolean echoOn = false;
+    /**
+     * 对象状态标识，由程序自己维护，0 正常，其他数字分别代表不同的异常情况
+     */
+    @Column(name = "status", nullable = true)
+    private int status;
+
+    public String getInterruptPrompt() {
+        return interruptPrompt;
+    }
+
+    public void setInterruptPrompt(String interruptPrompt) {
+        this.interruptPrompt = interruptPrompt;
+    }
+
+    public String getServerGroup() {
+        return serverGroup;
+    }
+
+    public void setServerGroup(String serverGroup) {
+        this.serverGroup = serverGroup;
+    }
 
     public String getExtend5() {
         return extend5;
@@ -190,9 +192,6 @@ public class Server extends AbstractModel {
         this.extend4 = extend4;
     }
 
-    @Column(name = "extend5", length = 300, nullable = true)
-    private String extend5;
-
     public String getVtType() {
         return vtType;
     }
@@ -201,9 +200,6 @@ public class Server extends AbstractModel {
         this.vtType = vtType;
     }
 
-    @Column(name = "vt_type", length = 20, nullable = true)
-    private String vtType = "VT220";
-
     public Boolean getEchoOn() {
         return echoOn;
     }
@@ -211,14 +207,6 @@ public class Server extends AbstractModel {
     public void setEchoOn(Boolean echoOn) {
         this.echoOn = echoOn;
     }
-
-    @Column(name = "echo_on", nullable = true)
-    private Boolean echoOn = false;
-    /**
-     * 对象状态标识，由程序自己维护，0 正常，其他数字分别代表不同的异常情况
-     */
-    @Column(name = "status", nullable = true)
-    private int status;
 
     public int getStatus() {
         return status;

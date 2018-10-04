@@ -16,10 +16,9 @@
 
 package com.tuoming.mes.collect.dao.impl;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import com.tuoming.mes.collect.dao.ServerCommandDao;
 import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.ServerCommand;

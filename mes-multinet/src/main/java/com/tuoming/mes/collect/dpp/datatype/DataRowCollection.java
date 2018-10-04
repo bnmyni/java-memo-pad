@@ -16,20 +16,19 @@
 
 package com.tuoming.mes.collect.dpp.datatype;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.logging.LogFacade;
 
 public final class DataRowCollection implements List<DataRow> {
 
-    List<DataRow> dataRows = new ArrayList<DataRow>();
     private static Logger logger = LogFacade.getLog4j(DataRowCollection.class);
+    List<DataRow> dataRows = new ArrayList<DataRow>();
     private DataColumnCollection columns;
 
     DataRowCollection() {
@@ -70,17 +69,17 @@ public final class DataRowCollection implements List<DataRow> {
     }
 
     /**
-     * @param columns
-     */
-    public void setColumns(DataColumnCollection columns) {
-        this.columns = columns;
-    }
-
-    /**
      * @return the columns
      */
     public DataColumnCollection getColumns() {
         return columns;
+    }
+
+    /**
+     * @param columns
+     */
+    public void setColumns(DataColumnCollection columns) {
+        this.columns = columns;
     }
 
     @Override

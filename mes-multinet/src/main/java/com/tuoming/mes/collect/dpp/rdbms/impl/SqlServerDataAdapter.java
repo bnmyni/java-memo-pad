@@ -17,7 +17,6 @@ package com.tuoming.mes.collect.dpp.rdbms.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.util.DateUtil;
 import com.pyrlong.util.ProcessHelper;

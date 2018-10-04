@@ -38,8 +38,6 @@ public interface FileProcessor {
 
     void setFiles(List<String> files, Map<String, String> envs);
 
-    public void setFiles(List<String> files);
-
     /**
      * 设置生成文件的本地存储路径
      *
@@ -52,12 +50,13 @@ public interface FileProcessor {
      */
     public void run();
 
-
     /**
      * 获取解析结果文件列表
      *
      * @return
      */
     public List<String> getFiles();
+
+    public void setFiles(List<String> files);
 
 }

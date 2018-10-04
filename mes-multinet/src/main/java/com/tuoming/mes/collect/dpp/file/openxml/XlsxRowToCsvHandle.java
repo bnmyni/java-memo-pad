@@ -16,12 +16,11 @@
 
 package com.tuoming.mes.collect.dpp.file.openxml;
 
+import org.apache.log4j.Logger;
+
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.google.common.collect.Maps;
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.DateUtil;
@@ -34,18 +33,18 @@ import com.tuoming.mes.collect.dpp.handles.DataRowToCsvHandle;
  */
 public class XlsxRowToCsvHandle implements XlsxDataRowHandler {
 
+    private static Logger logger = LogFacade.getLog4j(XlsxRowToCsvHandle.class);
+    DataRowToCsvHandle dataRowToCsvHandle = null;
+    Map<String, String> outputFiles = Maps.newHashMap();
     private boolean useRealType = true;
-
-    public void setUseRealType(boolean itype) {
-        useRealType = itype;
-    }
 
     public boolean isUseRealType() {
         return useRealType;
     }
-    private static Logger logger = LogFacade.getLog4j(XlsxRowToCsvHandle.class);
-    DataRowToCsvHandle dataRowToCsvHandle = null;
-    Map<String, String> outputFiles = Maps.newHashMap();
+
+    public void setUseRealType(boolean itype) {
+        useRealType = itype;
+    }
 
     @Override
     public void startProcessSheet(String sheetId, String sheetName) throws UnsupportedEncodingException, FileNotFoundException {
@@ -66,7 +65,7 @@ public class XlsxRowToCsvHandle implements XlsxDataRowHandler {
         if (dataRowToCsvHandle != null)
             dataRowToCsvHandle.process(key, row);
     }
- 
+
     @Override
     public void close() {
         if (dataRowToCsvHandle != null)

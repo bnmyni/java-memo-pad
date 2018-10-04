@@ -17,18 +17,16 @@
 //Created On: 13-9-10 下午4:43
 package com.tuoming.mes.execute.dao.impl;
 
+import org.apache.log4j.Logger;
+
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.StringUtil;
 import com.tuoming.mes.collect.dao.CommandMapDao;
 import com.tuoming.mes.collect.models.CommandMap;
-import com.tuoming.mes.services.impl.LogCommandServiceImpl;
 import com.tuoming.mes.services.serve.ServerService;
 
 /**
@@ -46,12 +44,15 @@ public abstract class AbstractCommandSendThread {
      * 日志记录器
      */
     private final static Logger logger = LogFacade.getLog4j(AbstractCommandSendThread.class);
-    private CommandMapDao commandMapDao;
     /**
      * 当前上下文内的指令发送开关
      */
     protected boolean sendFlag = true;
-
+    /**
+     * 记录已发送指令，避免重复发送
+     */
+    Map<String, String> cmdSentRecord = new HashMap<String, String>();
+    private CommandMapDao commandMapDao;
 
     public void setCommandMapDao(CommandMapDao commandMapDao) {
         this.commandMapDao = commandMapDao;
@@ -64,11 +65,6 @@ public abstract class AbstractCommandSendThread {
      * @param envs 运行的上下文环境
      */
     protected abstract void doSomeAction(String cmd, Map<String, String> envs);
-
-    /**
-     * 记录已发送指令，避免重复发送
-     */
-    Map<String, String> cmdSentRecord = new HashMap<String, String>();
 
     /**
      * 将给定指令序列顺序发送到serverService对象关联的服务器对象
@@ -129,15 +125,15 @@ public abstract class AbstractCommandSendThread {
             //下发指令
             sendCommand(serverService, cmd, interactiveMap, envs);
             //判断执行结果 ,如果发现执行失败标识 则 直接跳过不继续 执行
-            if (StringUtil.isNotEmpty(commandMap.getFailMark()) && serverService.getKeywordCount(commandMap.getFailMark()) > 0&&sendFlag) {
-            	/*if(commandMap.getFailMark().equals("INTERUPTED|FUNCTION BUSY|INHIBITED")){
+            if (StringUtil.isNotEmpty(commandMap.getFailMark()) && serverService.getKeywordCount(commandMap.getFailMark()) > 0 && sendFlag) {
+                /*if(commandMap.getFailMark().equals("INTERUPTED|FUNCTION BUSY|INHIBITED")){
                   Thread.currentThread().sleep(10000);
                 }*/
-            	cmdSuccess = false;
+                cmdSuccess = false;
                 doSomeAction(commandMap.getFailAction(), envs);
             }
             //如果没有发现执行成功标识 也认为是失败了
-            if (StringUtil.isNotEmpty(commandMap.getSucessfullMark()) && serverService.getKeywordCount(commandMap.getSucessfullMark()) == 0&&sendFlag) {
+            if (StringUtil.isNotEmpty(commandMap.getSucessfullMark()) && serverService.getKeywordCount(commandMap.getSucessfullMark()) == 0 && sendFlag) {
                 cmdSuccess = false;
                 doSomeAction(commandMap.getFailAction(), envs);
             }

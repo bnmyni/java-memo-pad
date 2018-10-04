@@ -16,6 +16,8 @@
 
 package com.tuoming.mes.collect.dpp.file;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,9 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.StringUtil;
@@ -60,11 +59,11 @@ public class TextFileProcessor implements Runnable {
         files.put(file, env);
     }
 
-    public void setFiles(Map<String, Map<String, String>> files) {
+    public TextFileProcessor(Map<String, Map<String, String>> files) {
         this.files = files;
     }
 
-    public TextFileProcessor(Map<String, Map<String, String>> files) {
+    public void setFiles(Map<String, Map<String, String>> files) {
         this.files = files;
     }
 

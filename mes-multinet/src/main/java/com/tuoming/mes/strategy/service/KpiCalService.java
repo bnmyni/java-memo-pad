@@ -4,12 +4,12 @@ import java.util.Map;
 
 /**
  * 关键性指标计算接口
- * @author Administrator
  *
+ * @author Administrator
  */
 public interface KpiCalService {
-	
-	public void calKpi(String groupName, String startTime);
-	
-	public void performanceCal(Map<String, String> context);
+
+    public void calKpi(String groupName, String startTime);
+
+    public void performanceCal(Map<String, String> context);
 }

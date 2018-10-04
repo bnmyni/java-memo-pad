@@ -16,15 +16,14 @@
 
 package com.tuoming.mes.collect.dpp.handles;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.io.FileOper;

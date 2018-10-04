@@ -16,9 +16,8 @@
 
 package com.tuoming.mes.collect.decoder.ericsson.ncs;
 
-import com.google.common.collect.Maps;
-
 import java.util.Map;
+import com.google.common.collect.Maps;
 
 /**
  * Created by James on 14/11/12.

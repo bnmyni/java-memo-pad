@@ -32,15 +32,46 @@ import com.tuoming.mes.strategy.util.FormatUtil;
 @Component("t2tManySleepSelHandle")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class T2tManySleepSelHandle implements SleepSelHandle {
+    Map<String, Map<String, Double>> count = new HashMap<String, Map<String, Double>>();//记录补偿小区及其相对应的门限阀值
+    Map<String, Integer> delCellMap = new HashMap<String, Integer>();//记录同一休眠小区是否已经被去除;
     @Autowired
     @Qualifier("kpiCalDao")
     private KpiCalDao kpiCalDao;
     @Autowired
     @Qualifier("businessLogDao")
     private BusinessLogDao businessLogDao;
-    Map<String, Map<String, Double>> count = new HashMap<String, Map<String, Double>>();//记录补偿小区及其相对应的门限阀值
-    Map<String, Integer> delCellMap = new HashMap<String, Integer>();//记录同一休眠小区是否已经被去除;
 
+    /**
+     * 计算td制式的数据字典
+     *
+     * @param dicTdList
+     * @param src_zbpz
+     */
+    public static Map<String, Double> calTdDic(List<Map<String, Object>> dicTdList, double trx_h) {
+        long trx = Math.round(trx_h);
+        Map<String, Double> dicMap = new HashMap<String, Double>();
+        for (Map<String, Object> dic : dicTdList) {
+            int trx_h_max = (Integer) (dic.get("trx_h_max"));
+            int trx_h_min = (Integer) (dic.get("trx_h_min"));
+            if ((trx_h_min == trx_h_max && trx == trx_h_min) || (trx >= trx_h_min && trx <= trx_h_max)) {
+                dicMap.put("y1", FormatUtil.tranferCalValue(dic.get("y1")));
+                dicMap.put("y2", FormatUtil.tranferCalValue(dic.get("y2")));
+                dicMap.put("s1", FormatUtil.tranferCalValue(dic.get("s1")));
+                dicMap.put("s2", FormatUtil.tranferCalValue(dic.get("s2")));
+                dicMap.put("c1", FormatUtil.tranferCalValue(dic.get("c1")));
+                dicMap.put("c2", FormatUtil.tranferCalValue(dic.get("c2")));
+                dicMap.put("c3", FormatUtil.tranferCalValue(dic.get("c3")));
+                dicMap.put("c4", FormatUtil.tranferCalValue(dic.get("c4")));
+                dicMap.put("u1", FormatUtil.tranferCalValue(dic.get("u1")));
+                dicMap.put("u2", FormatUtil.tranferCalValue(dic.get("u2")));
+                dicMap.put("u3", FormatUtil.tranferCalValue(dic.get("u3")));
+                dicMap.put("u4", FormatUtil.tranferCalValue(dic.get("u4")));
+                return dicMap;
+            }
+
+        }
+        return null;
+    }
 
     @Override
     public String handle(List<Map<String, Object>> dataList,
@@ -137,37 +168,5 @@ public class T2tManySleepSelHandle implements SleepSelHandle {
             }
         }
         return fileName;
-    }
-
-    /**
-     * 计算td制式的数据字典
-     *
-     * @param dicTdList
-     * @param src_zbpz
-     */
-    public static Map<String, Double> calTdDic(List<Map<String, Object>> dicTdList, double trx_h) {
-        long trx = Math.round(trx_h);
-        Map<String, Double> dicMap = new HashMap<String, Double>();
-        for (Map<String, Object> dic : dicTdList) {
-            int trx_h_max = (Integer) (dic.get("trx_h_max"));
-            int trx_h_min = (Integer) (dic.get("trx_h_min"));
-            if ((trx_h_min == trx_h_max && trx == trx_h_min) || (trx >= trx_h_min && trx <= trx_h_max)) {
-                dicMap.put("y1", FormatUtil.tranferCalValue(dic.get("y1")));
-                dicMap.put("y2", FormatUtil.tranferCalValue(dic.get("y2")));
-                dicMap.put("s1", FormatUtil.tranferCalValue(dic.get("s1")));
-                dicMap.put("s2", FormatUtil.tranferCalValue(dic.get("s2")));
-                dicMap.put("c1", FormatUtil.tranferCalValue(dic.get("c1")));
-                dicMap.put("c2", FormatUtil.tranferCalValue(dic.get("c2")));
-                dicMap.put("c3", FormatUtil.tranferCalValue(dic.get("c3")));
-                dicMap.put("c4", FormatUtil.tranferCalValue(dic.get("c4")));
-                dicMap.put("u1", FormatUtil.tranferCalValue(dic.get("u1")));
-                dicMap.put("u2", FormatUtil.tranferCalValue(dic.get("u2")));
-                dicMap.put("u3", FormatUtil.tranferCalValue(dic.get("u3")));
-                dicMap.put("u4", FormatUtil.tranferCalValue(dic.get("u4")));
-                return dicMap;
-            }
-
-        }
-        return null;
     }
 }

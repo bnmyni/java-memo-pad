@@ -21,7 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import com.tuoming.mes.execute.boot.models.TaskPlan;
 
 /**
@@ -47,8 +46,8 @@ public class MapTaskMonitor extends AbstractTaskMonitor {
         synchronized (taskRunning) {
             if (taskRunning.containsKey(task.getTaskName()))
                 taskRunning.remove(task.getTaskName());
-            if(taskBeginMap.containsKey(task.getTaskName())) {
-            	taskBeginMap.remove(task.getTaskName());
+            if (taskBeginMap.containsKey(task.getTaskName())) {
+                taskBeginMap.remove(task.getTaskName());
             }
             logger.info("Task " + task.getTaskName() + " is removed ");
         }
@@ -95,17 +94,17 @@ public class MapTaskMonitor extends AbstractTaskMonitor {
     @Override
     protected boolean taskRunning(TaskPlan task) {
         synchronized (taskRunning) {
-        	
+
             if (taskRunning.containsKey(task.getTaskName())) {
-            	if(taskBeginMap.containsKey(task.getTaskName())) {
-            		long current = Calendar.getInstance().getTimeInMillis();
-            		long before = taskBeginMap.get(task.getTaskName());
-            		if(current-before>=task.getTimeout()-1000) {
-            			logger.info(task.getTaskName()+" found timeout !");
-            			remove(task);
-            			return false;
-            		}
-            	}
+                if (taskBeginMap.containsKey(task.getTaskName())) {
+                    long current = Calendar.getInstance().getTimeInMillis();
+                    long before = taskBeginMap.get(task.getTaskName());
+                    if (current - before >= task.getTimeout() - 1000) {
+                        logger.info(task.getTaskName() + " found timeout !");
+                        remove(task);
+                        return false;
+                    }
+                }
                 for (Map.Entry<String, TaskPlan> entry : taskRunning.entrySet()) {
                     logger.info(entry.getKey() + " is running...");
                 }
@@ -115,12 +114,12 @@ public class MapTaskMonitor extends AbstractTaskMonitor {
         }
     }
 
-	@Override
-	protected void addRunThread(String taskName, Thread run) {
-		synchronized (taskRunning) {
-			taskBeginMap.put(taskName, Calendar.getInstance().getTimeInMillis());
-			logger.info(" save task thread and task time !");
-		}
-		
-	}
+    @Override
+    protected void addRunThread(String taskName, Thread run) {
+        synchronized (taskRunning) {
+            taskBeginMap.put(taskName, Calendar.getInstance().getTimeInMillis());
+            logger.info(" save task thread and task time !");
+        }
+
+    }
 }

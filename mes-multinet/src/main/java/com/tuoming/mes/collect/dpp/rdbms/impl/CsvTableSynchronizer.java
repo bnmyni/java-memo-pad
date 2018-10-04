@@ -17,13 +17,12 @@
 //Created On: 13-9-13 上午10:52
 package com.tuoming.mes.collect.dpp.rdbms.impl;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.DateUtil;
 import com.tuoming.mes.collect.dpp.datatype.AppContext;

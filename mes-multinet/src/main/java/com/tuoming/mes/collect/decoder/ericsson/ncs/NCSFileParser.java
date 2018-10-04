@@ -16,16 +16,15 @@
 
 package com.tuoming.mes.collect.decoder.ericsson.ncs;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Maps;
 import com.pyrlong.util.ConvertBinaryUtil;
 import com.pyrlong.util.DateUtil;
@@ -45,7 +44,7 @@ public class NCSFileParser extends AbstractFileProcessor {
         NCSRecordFactory ncsRecordFactory = new NCSRecordFactory(printHeander);
         int fileIdx = 0;
         for (Map.Entry<String, Map<String, String>> fileSet : sourceFileList.entrySet()) {
-        	String bsc = fileSet.getValue().get("ftpServer");
+            String bsc = fileSet.getValue().get("ftpServer");
             String fileName = fileSet.getKey();
             fileIdx++;
             batchId = DateUtil.getTimeinteger() + "" + fileIdx;// fileSet.getValue().get(AOSConstants.BATCH_KEY);
@@ -76,7 +75,7 @@ public class NCSFileParser extends AbstractFileProcessor {
                     if (rt == null) {
                         dis.skipBytes(recordLength - 3);
                     } else {
-                        rt.saveRecordToFile(targetPath, dis, batchId, bsc, recordLength - 3,csvEncoding);
+                        rt.saveRecordToFile(targetPath, dis, batchId, bsc, recordLength - 3, csvEncoding);
                     }
                 }
             }

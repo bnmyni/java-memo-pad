@@ -15,9 +15,9 @@
  */
 
 package com.tuoming.mes.collect.decoder.zte.model.mro;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import com.tuoming.mes.collect.decoder.zte.model.mrs.MeasResultMRS;
 
 /**
@@ -72,13 +72,14 @@ public class ResultDataCollection {
         this.mro = mro;
     }
 
-    public void setOtherData( Object obj ) {
+    public void setOtherData(Object obj) {
     }
 
 
     public List<IntraFreqData> getIntraFreqList() {
         return intraFreqList;
     }
+
     public void setIntraFreqList(List<IntraFreqData> intraFreqList) {
         this.intraFreqList.addAll(intraFreqList);
     }

@@ -16,35 +16,32 @@
 
 package com.tuoming.mes.collect.decoder.ericsson.ncs;
 
+import org.apache.log4j.Logger;
+
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.List;
+import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pyrlong.Envirment;
 import com.pyrlong.logging.LogFacade;
 
-import org.apache.log4j.Logger;
-
-import java.io.*;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by James on 14/11/12.
  */
 public class RecordType {
+    static boolean printHeander = true;
+    private static Logger logger = LogFacade.getLog4j(RecordType.class);
+    BufferedWriter out;
     /**
      * 记录类型标识，对应定义文件内的编号
      */
     private int typeId;
-
     private String recordName;
-
-    BufferedWriter out;
-
-    private static Logger logger = LogFacade.getLog4j(RecordType.class);
-
-    static boolean printHeander = true;
-
-
     /**
      * 当前记录类型包括的数据字段名和取值方式的对应关系
      */
@@ -65,7 +62,7 @@ public class RecordType {
         valueMap.add(bytesValue);
     }
 
-    public void saveRecordToFile(String targetPath, DataInputStream dataInputStream, String batch, String bsc, int maxLength,String csvEncoding) throws IOException {
+    public void saveRecordToFile(String targetPath, DataInputStream dataInputStream, String batch, String bsc, int maxLength, String csvEncoding) throws IOException {
         if (out == null) {
             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetPath + typeId + "_" + recordName + ".csv", false), csvEncoding));
             if (printHeander) {

@@ -16,19 +16,18 @@
 
 package com.tuoming.mes.services.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import com.pyrlong.Envirment;
 import com.pyrlong.concurrent.CustomThreadFactory;
 import com.pyrlong.configuration.ConfigurationManager;
@@ -51,7 +50,7 @@ import com.tuoming.mes.services.serve.MESConstants;
 
 /**
  * 数据查询接口通用处理进程,包括 <br/> 1. 多线程处理数据查询、处理、入库 <br/> 2. 自动适配数据库类型，执行建表、入库等操作 <br/>
- *  3. 自动处理数据库负担，查询及入库线程等均可以通过配置文件控制<br/> 4.
+ * 3. 自动处理数据库负担，查询及入库线程等均可以通过配置文件控制<br/> 4.
  * 自动处理历史数据维护、采集失败数据回滚等操作
  *
  * @see com.pyrlong.dpp.service.impl.AbstractBaseService
@@ -60,9 +59,9 @@ import com.tuoming.mes.services.serve.MESConstants;
 @Component("DbQueryService")
 public class DbQueryServiceImpl extends AbstractBaseService<DbQueryCommand, String> implements DbQueryService {
 
-    DbQueryCommandDao dbQueryCommandDao;
     private final Logger logger = LogFacade.getLog4j(DbQueryServiceImpl.class);
-    private   OperationLogDao operationLogDao;
+    DbQueryCommandDao dbQueryCommandDao;
+    private OperationLogDao operationLogDao;
 
     @Autowired
     @Qualifier("OperationLogDao")
@@ -190,9 +189,9 @@ public class DbQueryServiceImpl extends AbstractBaseService<DbQueryCommand, Stri
      * 执行数据库采集的线程实现
      */
     class DbQueryThread implements Runnable {
+        private final Logger logger = LogFacade.getLog4j(DbQueryThread.class);
         DbQueryCommand worker;
         Map<String, String> currentEnv;
-        private final Logger logger = LogFacade.getLog4j(DbQueryThread.class);
 
         public DbQueryThread(DbQueryCommand worker) {
             this.worker = worker;

@@ -17,11 +17,10 @@
 // Created On: 13-8-18 下午4:30
 package com.tuoming.mes.execute.boot.console.command;
 
-import java.util.Map;
-import java.util.Properties;
-
 import org.apache.log4j.Logger;
 
+import java.util.Map;
+import java.util.Properties;
 import com.pyrlong.Envirment;
 import com.pyrlong.logging.LogFacade;
 import com.tuoming.mes.execute.boot.console.Command;

@@ -1,9 +1,8 @@
 package com.tuoming.mes.strategy.dao;
 
+import java.util.Map;
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.strategy.model.SleepExeSetting;
-
-import java.util.Map;
 
 
 /**
@@ -13,6 +12,7 @@ public interface WarningCollectionDao extends BaseDao<SleepExeSetting, Integer> 
 
     /**
      * 添加告警信息
+     *
      * @param data
      * @param reason
      */
@@ -20,6 +20,7 @@ public interface WarningCollectionDao extends BaseDao<SleepExeSetting, Integer> 
 
     /**
      * 添加指标恶化信息
+     *
      * @param data
      * @param type
      */

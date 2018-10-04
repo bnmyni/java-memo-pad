@@ -16,14 +16,12 @@
 
 package com.tuoming.mes.execute.boot;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
+import java.io.IOException;
+import java.io.Serializable;
+import javax.xml.parsers.ParserConfigurationException;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.logging.LogFacade;
 
@@ -38,16 +36,14 @@ public class AppContext implements Serializable, Cloneable {
     private static final long serialVersionUID = 2013992800707599153L;
     public static int MAX_TASK_THREAD_COUNT = 10;
     public static Integer PROCESS_MAX_TIME;
-    private Logger logger = LogFacade.getLog4j(AppContext.class);
     public static Long ServerProcessMaxIdleTime = ConfigurationManager.getDefaultConfig().getLong(Constants.MANAGE_PROCESS_MAX_IDLE_TIME, 600000L);
+    private Logger logger = LogFacade.getLog4j(AppContext.class);
 
     /**
      * 读取指定配置文件，初始化系统配置，一般默认读取conf目录下的hamster.xml文件作为系统配置的入口文件 初始化任务调度配置： pyrlong.hamster.maxTaskThreadCount——可以同时运行的任务数量，默认20
      * pyrlong.hamster.processMaxTime——单个处理进程超时时间，默认20分钟
      *
-     * @param configFile
-     *         配置文件名，一般为hamster.xml
-     *
+     * @param configFile 配置文件名，一般为hamster.xml
      * @throws IllegalAccessException
      * @throws InstantiationException
      * @throws ClassNotFoundException

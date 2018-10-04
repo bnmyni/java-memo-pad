@@ -16,6 +16,8 @@
 
 package com.tuoming.mes.services.serve;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,9 +27,6 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.log4j.Logger;
-
 import com.google.common.collect.Maps;
 import com.pyrlong.Envirment;
 import com.pyrlong.concurrent.CustomThreadFactory;
@@ -63,25 +62,24 @@ import com.tuoming.mes.execute.dao.AdjustCommandService;
  */
 public class MESManager {
 
-    private long batchId = 0;
-    /**
-     * 当前对象保存的上下文环境变量，该对象默认是从系统的 Envirment.getEnvs()获取初始值，并且由调用者通过相关方法更改配置内容。
-     */
-    Map<String, String> envs = null;
-    Map<String, Object> cacheMap = new HashMap<String, Object>();
-    CommandTemplateDao commandTemplateDao;
-
     private final static Logger logger = LogFacade.getLog4j(MESManager.class);
     /**
      * 记录系统操作日志的Dao对象实例，主要应用于系统提供的公共记录操作日志的接口方法
      */
     private static OperationLogDao operationLogDao;
     /**
+     * 当前对象保存的上下文环境变量，该对象默认是从系统的 Envirment.getEnvs()获取初始值，并且由调用者通过相关方法更改配置内容。
+     */
+    Map<String, String> envs = null;
+    Map<String, Object> cacheMap = new HashMap<String, Object>();
+    CommandTemplateDao commandTemplateDao;
+    /**
      * 用于封装的系统线程池对象，改对象每次用户调用时都会重新初始化，该线程池产生的线程名为com.pyrlong.aos.manager_pool前缀的，线程池初始化参数为：<br/> corePoolSize： 配置名为
      * pyrlong.aos.manager.thread_corePoolSize，默认为 5 <br/> maximumPoolSize： 配置名为 pyrlong.aos.manager.thread_maximumPoolSize，默认为
      * 10
      */
     ThreadPoolExecutor poolExecutor;
+    private long batchId = 0;
 
     /**
      * 无参构造函数,使用当前环境变量初始化运行上下文,一般情况下都可以通过这个方法初始化本对象的实例
@@ -91,6 +89,32 @@ public class MESManager {
         batchId = DateUtil.getTimeinteger() / 1000;
         operationLogDao = AppContext.getBean(OperationLogDao.class);
         commandTemplateDao = AppContext.getBean(CommandTemplateDao.class);
+    }
+
+    /**
+     * 在一些特点情况下，用户可以使用自己的Map对象初始化一个本对象的实例
+     *
+     * @param envs 指定的上下文集合初始化对象
+     */
+    public MESManager(Map<String, String> envs) {
+        this.envs = envs;
+    }
+
+    /**
+     * 读取用户输入方法，由于基于当前jython调用方法，实现读取用户输入比较麻烦，所以通过这个方法代替
+     *
+     * @param msg 提示信息，在接收用户输入前，先输出这个提示信息给用户
+     * @return 返回用户输入的信息
+     * @throws IOException
+     * @since 1.0.1
+     */
+    public static String readInput(String msg) throws IOException {
+        System.out.print(msg + " : ");
+        //在Java当中，用户输入要通过InputStream(输入流)来获取。
+        //System.in就是系统的输入流。缺省情况下这个输入流连接到控制台(命令行)。
+        InputStreamReader is_reader = new InputStreamReader(System.in, "UTF-8");
+        String str = new BufferedReader(is_reader).readLine();
+        return str;
     }
 
     /**
@@ -104,8 +128,6 @@ public class MESManager {
         return Maps.newLinkedHashMap();
     }
 
-   
-
     public List<CommandTemplate> getCommandTemplate(String groupName) {
         return commandTemplateDao.getCommandTemplate(groupName);
     }
@@ -114,24 +136,12 @@ public class MESManager {
         return DSLUtil.getDefaultInstance().compute(val, context);
     }
 
- 
-
     public String buildString(String val, Map context) {
         return DSLUtil.getDefaultInstance().buildString(val, context);
     }
 
-    
     public Long getBatchId() {
         return batchId;
-    }
-
-    /**
-     * 在一些特点情况下，用户可以使用自己的Map对象初始化一个本对象的实例
-     *
-     * @param envs 指定的上下文集合初始化对象
-     */
-    public MESManager(Map<String, String> envs) {
-        this.envs = envs;
     }
 
     /**
@@ -174,7 +184,6 @@ public class MESManager {
         operationLogDao.save(operationLog);
     }
 
-
     /**
      * 通过SQL注册环境参数到当前配置内，这个方法可以用于在运行过程中根据配置批量更新系统配置值，比如针对不同对象或不同时间使用不同配置门限参数的情况
      *
@@ -194,23 +203,6 @@ public class MESManager {
                 }
             }
         }
-    }
-
-    /**
-     * 读取用户输入方法，由于基于当前jython调用方法，实现读取用户输入比较麻烦，所以通过这个方法代替
-     *
-     * @param msg 提示信息，在接收用户输入前，先输出这个提示信息给用户
-     * @return 返回用户输入的信息
-     * @throws IOException
-     * @since 1.0.1
-     */
-    public static String readInput(String msg) throws IOException {
-        System.out.print(msg + " : ");
-        //在Java当中，用户输入要通过InputStream(输入流)来获取。
-        //System.in就是系统的输入流。缺省情况下这个输入流连接到控制台(命令行)。
-        InputStreamReader is_reader = new InputStreamReader(System.in,"UTF-8");
-        String str = new BufferedReader(is_reader).readLine();
-        return str;
     }
 
     /**

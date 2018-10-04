@@ -16,16 +16,6 @@
 
 package com.tuoming.mes.collect.decoder.hw;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -36,6 +26,15 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
 import com.pyrlong.Envirment;
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.util.DateUtil;
@@ -51,17 +50,17 @@ import com.tuoming.mes.services.serve.MESConstants;
 @Scope("prototype")
 @Component("HWXmlParamParser")
 public class HWXmlParamParser extends AbstractFileProcessor implements ContentHandler {
-    private StringBuffer buf;
-    private String currentFileName;
+    static Map<String, List<String>> counterToSave;
     private static Logger logger = Logger.getLogger(HWXmlParamParser.class);
     long parseStartTime;
     BufferedWriter bufferedWriter;
     String currentIdx;
-    static Map<String, List<String>> counterToSave;
     List<String> counterFilter = null;
     String batch = "";
     String starttime;
     String lineMark = "";
+    private StringBuffer buf;
+    private String currentFileName;
 
     public HWXmlParamParser() {
 

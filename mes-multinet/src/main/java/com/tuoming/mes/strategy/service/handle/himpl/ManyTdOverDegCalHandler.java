@@ -20,12 +20,11 @@ import com.tuoming.mes.strategy.model.ManyOverDegCalModel;
 @Component("manyTdOverDegCalHandler")
 public class ManyTdOverDegCalHandler extends ManyOverDegCalHandler {
 
+    public int overDag = ConfigurationManager.getDefaultConfig().getInteger("TDMANYOVERDAG_OVERDAG", 80);
+    public int singleNcRate = ConfigurationManager.getDefaultConfig().getInteger("TDMANYOVERDAG_SINGLE_NC_RATE", 30);
     @Autowired
     @Qualifier("overlayDegreeDao")
     private OverlayDegreeDao overlayDegreeDao;
-
-    public int overDag = ConfigurationManager.getDefaultConfig().getInteger("TDMANYOVERDAG_OVERDAG", 80);
-    public int singleNcRate = ConfigurationManager.getDefaultConfig().getInteger("TDMANYOVERDAG_SINGLE_NC_RATE", 30);
 
     @Override
     public void assemblyQuerySql(Map<String, Object> data, ManyOverDegCalModel manyInfoModel) {

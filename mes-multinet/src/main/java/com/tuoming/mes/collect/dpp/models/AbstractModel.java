@@ -16,17 +16,15 @@
 
 package com.tuoming.mes.collect.dpp.models;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.lang.reflect.Field;
 import java.util.Map;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.google.common.collect.Maps;
 import com.pyrlong.reflector.ClassReflector;
 

@@ -19,7 +19,6 @@ package com.tuoming.mes.collect.dpp.datatype;
 import com.pyrlong.util.StringUtil;
 
 
-
 public final class DataColumn {
     private boolean readOnly; // 只读
 
@@ -60,17 +59,17 @@ public final class DataColumn {
         return this.columnName;
     }
 
+    public void setColumnName(String columnName) {
+        this.columnName = columnName.toLowerCase();
+        if (StringUtil.isEmpty(captionName)) captionName = columnName;
+    }
+
     public int getSize() {
         return size;
     }
 
     public void setSize(int size) {
         this.size = size;
-    }
-
-    public void setColumnName(String columnName) {
-        this.columnName = columnName.toLowerCase();
-        if (StringUtil.isEmpty(captionName)) captionName = columnName;
     }
 
     public String getCaptionName() {
@@ -98,13 +97,6 @@ public final class DataColumn {
     }
 
     /**
-     * @param dataType
-     */
-    public void setDataType(int dataType) {
-        this.dataType = dataType;
-    }
-
-    /**
      * @return the dataType
      */
     public int getDataType() {
@@ -112,10 +104,10 @@ public final class DataColumn {
     }
 
     /**
-     * @param columnIndex
+     * @param dataType
      */
-    public void setColumnIndex(int columnIndex) {
-        this.columnIndex = columnIndex;
+    public void setDataType(int dataType) {
+        this.dataType = dataType;
     }
 
     /**
@@ -125,6 +117,12 @@ public final class DataColumn {
         return columnIndex;
     }
 
+    /**
+     * @param columnIndex
+     */
+    public void setColumnIndex(int columnIndex) {
+        this.columnIndex = columnIndex;
+    }
 
     /**
      * 功能描述： 将输入数据转为当前列的数据类型返回
@@ -144,17 +142,17 @@ public final class DataColumn {
     }
 
     /**
-     * @param tag
-     */
-    public void setTag(Object tag) {
-        this.tag = tag;
-    }
-
-    /**
      * @return the tag
      */
     public Object getTag() {
         return tag;
+    }
+
+    /**
+     * @param tag
+     */
+    public void setTag(Object tag) {
+        this.tag = tag;
     }
 
     /**

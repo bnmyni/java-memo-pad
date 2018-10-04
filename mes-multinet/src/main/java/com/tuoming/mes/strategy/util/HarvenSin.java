@@ -20,6 +20,7 @@ public class HarvenSin {
 
     /**
      * 距离推导式中基本元素计算（Math.pow(Math.sin(theta/2), 2）
+     *
      * @param theta 弧度
      * @return 返回计算结果
      */
@@ -50,11 +51,10 @@ public class HarvenSin {
     }
 
     /**
-     *
-     * @param srcLongitude 源经度
-     * @param srcLatitude  源纬度
+     * @param srcLongitude  源经度
+     * @param srcLatitude   源纬度
      * @param destLongitude 邻区经度
-     * @param destLatitude 邻区纬度
+     * @param destLatitude  邻区纬度
      * @return 返回2个点的距离
      */
     public static double distance(double srcLongitude, double srcLatitude, double destLongitude, double destLatitude) {

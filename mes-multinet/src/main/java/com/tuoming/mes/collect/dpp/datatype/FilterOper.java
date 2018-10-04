@@ -17,12 +17,11 @@
 // Created On: 13-8-8 下午9:14
 package com.tuoming.mes.collect.dpp.datatype;
 
+import org.apache.log4j.Logger;
+
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.json.JSONArray;
 import com.pyrlong.json.JSONException;
 import com.pyrlong.json.JSONObject;

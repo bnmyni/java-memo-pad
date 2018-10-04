@@ -16,15 +16,14 @@
 
 package com.tuoming.mes.collect.decoder.ericsson.asn1;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.tuoming.mes.collect.decoder.ericsson.asn1.entity.MeasData;
 import com.tuoming.mes.collect.decoder.ericsson.asn1.entity.MeasDataCollection;
 import com.tuoming.mes.collect.decoder.ericsson.asn1.entity.MeasFileHeader;
@@ -47,10 +46,8 @@ public class EricssonStsDecoder extends AbstractBerDecoder {
     /**
      * 解码器构造函数
      *
-     * @param file
-     *         要被解码的数据文件
-     * @param collection
-     *         存储解码后的数据容器
+     * @param file       要被解码的数据文件
+     * @param collection 存储解码后的数据容器
      */
     public EricssonStsDecoder(File file, MeasDataCollection collection) {
         super(file);
@@ -60,10 +57,11 @@ public class EricssonStsDecoder extends AbstractBerDecoder {
 
     /**
      * 对数据进行解码
-     * @throws IOException 
-     * @throws Exception 
+     *
+     * @throws IOException
+     * @throws Exception
      */
-    public void decode() throws IOException{
+    public void decode() throws IOException {
         logger.debug("BerEricssonStsDecoder start decoding file : " + file);
         try {
             double beginTime = System.currentTimeMillis();
@@ -75,9 +73,9 @@ public class EricssonStsDecoder extends AbstractBerDecoder {
             logger.debug("Decoding has been done in " + (endTime - beginTime) / 1000 + "seconds.");
 
         } catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
             close();
         }
     }

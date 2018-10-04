@@ -66,18 +66,18 @@ public class AppContext implements ApplicationContextAware {
         FileOper.checkAndCreateForder(path);
         return path;
     }
-    
+
     public static String getCacheFileName(String fileName, boolean dateNoRelation) {
-    	String path = AppContext.CACHE_ROOT + DateUtil.getNow("yyyy_MM_dd") + Envirment.PATH_SEPARATOR + fileName;
-    	if(dateNoRelation) {
-    		path = AppContext.CACHE_ROOT + fileName;
-    	}
-    	String foderName = path;
-    	if(path.indexOf("/dynaic_dir/$")>0) {
-    		foderName = path.substring(0,path.indexOf("/dynaic_dir/")+12);
-    	}
-    	FileOper.checkAndCreateForder(foderName);
-    	return path;
+        String path = AppContext.CACHE_ROOT + DateUtil.getNow("yyyy_MM_dd") + Envirment.PATH_SEPARATOR + fileName;
+        if (dateNoRelation) {
+            path = AppContext.CACHE_ROOT + fileName;
+        }
+        String foderName = path;
+        if (path.indexOf("/dynaic_dir/$") > 0) {
+            foderName = path.substring(0, path.indexOf("/dynaic_dir/") + 12);
+        }
+        FileOper.checkAndCreateForder(foderName);
+        return path;
     }
 
     /**

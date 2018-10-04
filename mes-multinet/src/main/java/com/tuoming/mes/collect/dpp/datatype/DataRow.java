@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.pyrlong.Envirment;
 
 public final class DataRow {
@@ -38,14 +37,14 @@ public final class DataRow {
 
     }
 
-    public void clearup() {
-        itemMap.clear();
-        table = null;
-    }
-
     public DataRow(DataTable table) {
         this.table = table;
         this.columns = table.getColumns();
+    }
+
+    public void clearup() {
+        itemMap.clear();
+        table = null;
     }
 
     /**
@@ -61,6 +60,13 @@ public final class DataRow {
     }
 
     /**
+     * @param rowIndex
+     */
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    /**
      * 功能描述： 获取当前行所属数据表对象
      *
      * @param
@@ -73,17 +79,17 @@ public final class DataRow {
     }
 
     /**
-     * @param columns
-     */
-    public void setColumns(DataColumnCollection columns) {
-        this.columns = columns;
-    }
-
-    /**
      * @return the columns
      */
     public DataColumnCollection getColumns() {
         return columns;
+    }
+
+    /**
+     * @param columns
+     */
+    public void setColumns(DataColumnCollection columns) {
+        this.columns = columns;
     }
 
     public void setValue(Object[] values) {
@@ -122,13 +128,6 @@ public final class DataRow {
      */
     public Map<String, Object> getItemMap() {
         return itemMap;
-    }
-
-    /**
-     * @param rowIndex
-     */
-    public void setRowIndex(int rowIndex) {
-        this.rowIndex = rowIndex;
     }
 
     public void copyFrom(DataRow row) {

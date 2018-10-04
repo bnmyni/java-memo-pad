@@ -21,59 +21,59 @@ import java.util.List;
 
 public class MeasInfo {
 
-	private Timestamp measStartTime = null;
-	private Integer granularityPeriod = null;
-	private List<String> measTypes = null;
-	private List<MeasValue> measValues = null;
-	private String objectType = null;
-	private String ne = null;
+    private Timestamp measStartTime = null;
+    private Integer granularityPeriod = null;
+    private List<String> measTypes = null;
+    private List<MeasValue> measValues = null;
+    private String objectType = null;
+    private String ne = null;
 
-	public String getNe() {
-		return ne;
-	}
+    public String getNe() {
+        return ne;
+    }
 
-	public void setNe(String ne) {
-		this.ne = ne;
-	}
+    public void setNe(String ne) {
+        this.ne = ne;
+    }
 
-	public String getObjectType() {
-		return objectType;
-	}
+    public String getObjectType() {
+        return objectType;
+    }
 
-	public void setObjectType(String objectType) {
-		this.objectType = objectType;
-	}
+    public void setObjectType(String objectType) {
+        this.objectType = objectType;
+    }
 
-	public Timestamp getMeasStartTime() {
-		return this.measStartTime;
-	}
+    public Timestamp getMeasStartTime() {
+        return this.measStartTime;
+    }
 
-	public void setMeasStartTime(Timestamp value) {
-		this.measStartTime = value;
-	}
+    public void setMeasStartTime(Timestamp value) {
+        this.measStartTime = value;
+    }
 
-	public Integer getGranularityPeriod() {
-		return this.granularityPeriod;
-	}
+    public Integer getGranularityPeriod() {
+        return this.granularityPeriod;
+    }
 
-	public void setGranularityPeriod(Integer value) {
-		this.granularityPeriod = value;
-	}
+    public void setGranularityPeriod(Integer value) {
+        this.granularityPeriod = value;
+    }
 
-	public List<String> getMeasTypes() {
-		return this.measTypes;
-	}
+    public List<String> getMeasTypes() {
+        return this.measTypes;
+    }
 
-	public void setMeasTypes(List<String> value) {
-		this.measTypes = value;
-	}
+    public void setMeasTypes(List<String> value) {
+        this.measTypes = value;
+    }
 
-	public List<MeasValue> getMeasValues() {
-		return this.measValues;
-	}
+    public List<MeasValue> getMeasValues() {
+        return this.measValues;
+    }
 
-	public void setMeasValues(List<MeasValue> value) {
-		this.measValues = value;
-	}
+    public void setMeasValues(List<MeasValue> value) {
+        this.measValues = value;
+    }
 
 }

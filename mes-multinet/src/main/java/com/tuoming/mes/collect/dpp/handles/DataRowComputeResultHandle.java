@@ -18,7 +18,6 @@ package com.tuoming.mes.collect.dpp.handles;
 
 import java.util.List;
 import java.util.Map;
-
 import com.pyrlong.collection.NamedObject;
 
 /**

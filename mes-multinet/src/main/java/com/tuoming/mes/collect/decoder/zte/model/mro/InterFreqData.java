@@ -21,13 +21,18 @@ package com.tuoming.mes.collect.decoder.zte.model.mro;
  */
 public class InterFreqData {
 
-    public InterFreqData(int relativetimestamp,int uarfcn,int cellParamID, int pccpchRscp) {
-        this.relativetimestamp=relativetimestamp;
-        this.uarfcn=uarfcn;
-        this.cellParamID=cellParamID;
-        this.pccpchRscp=pccpchRscp;
-    }
     private int relativetimestamp;
+    private int cellParamID;
+    private int pccpchRscp;
+    private int uarfcn;
+
+    public InterFreqData(int relativetimestamp, int uarfcn, int cellParamID, int pccpchRscp) {
+        this.relativetimestamp = relativetimestamp;
+        this.uarfcn = uarfcn;
+        this.cellParamID = cellParamID;
+        this.pccpchRscp = pccpchRscp;
+    }
+
     public int getRelativetimestamp() {
         return relativetimestamp;
     }
@@ -35,9 +40,6 @@ public class InterFreqData {
     public void setRelativetimestamp(int relativetimestamp) {
         this.relativetimestamp = relativetimestamp;
     }
-    private int cellParamID;
-    private int pccpchRscp;
-    private int uarfcn;
 
     public int getCellParamID() {
         return cellParamID;

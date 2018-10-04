@@ -19,7 +19,6 @@ package com.tuoming.mes.collect.dpp.file.openxml;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-
 import com.tuoming.mes.collect.dpp.handles.DataRowPrintHandle;
 
 /**
@@ -36,16 +35,14 @@ public class XlsxDataRowPrintHandler extends DataRowPrintHandle implements XlsxD
         return null;
     }
 
-
+    @Override
+    public boolean isUseRealType() {
+        return false;
+    }
 
     @Override
     public void setUseRealType(boolean itype) {
 
-    }
-
-    @Override
-    public boolean isUseRealType() {
-        return false;
     }
 
 }

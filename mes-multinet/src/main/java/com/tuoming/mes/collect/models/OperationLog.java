@@ -41,6 +41,30 @@ import com.tuoming.mes.collect.dpp.models.AbstractModel;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class OperationLog extends AbstractModel {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
+    /**
+     * 命令生成时间
+     */
+    @Column(name = "oper_time", nullable = false)
+    private Date operTime = DateUtil.currentDate();
+    /**
+     * 执行操作涉及的对象名
+     */
+    @Column(name = "object_name", length = 64, nullable = true)
+    private String objectName;
+    /**
+     * 操作类型
+     */
+    @Column(name = "oper_type", length = 100, nullable = true)
+    private String operType;
+    @Column(name = "oper_result", length = 100, nullable = true)
+    private String operResult;
+    @Column(name = "oper_content", length = 1000, nullable = false)
+    private String operContent;
+
     public OperationLog() {
 
     }
@@ -51,28 +75,6 @@ public class OperationLog extends AbstractModel {
         this.setOperType(opType);
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    /**
-     * 命令生成时间
-     */
-    @Column(name = "oper_time", nullable = false)
-    private Date operTime = DateUtil.currentDate();
-
-    /**
-     * 执行操作涉及的对象名
-     */
-    @Column(name = "object_name", length = 64, nullable = true)
-    private String objectName;
-
-    /**
-     * 操作类型
-     */
-    @Column(name = "oper_type", length = 100, nullable = true)
-    private String operType;
-
     public String getOperResult() {
         return operResult;
     }
@@ -81,10 +83,6 @@ public class OperationLog extends AbstractModel {
         this.operResult = operResult;
     }
 
-    @Column(name = "oper_result", length = 100, nullable = true)
-    private String operResult;
-
-
     public String getOperType() {
         return operType;
     }
@@ -92,9 +90,6 @@ public class OperationLog extends AbstractModel {
     public void setOperType(String operType) {
         this.operType = operType;
     }
-
-    @Column(name = "oper_content", length = 1000, nullable = false)
-    private String operContent;
 
     public String toString() {
         StringBuffer sb = new StringBuffer();

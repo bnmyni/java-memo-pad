@@ -22,8 +22,8 @@ import com.pyrlong.util.ConvertBinaryUtil;
  * Created by James on 14/11/12.
  */
 public class Identifier extends BytesValue {
-    protected Identifier(String name,int position, int length, String description) {
-        super(name,position, length, description);
+    protected Identifier(String name, int position, int length, String description) {
+        super(name, position, length, description);
     }
 
     protected Identifier(int position, int length, String description) {

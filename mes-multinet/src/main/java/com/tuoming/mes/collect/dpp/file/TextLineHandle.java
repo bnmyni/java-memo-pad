@@ -17,7 +17,6 @@
 package com.tuoming.mes.collect.dpp.file;
 
 import java.util.Map;
-
 import com.tuoming.mes.collect.dpp.models.TextLogParser;
 
 public interface TextLineHandle {
@@ -28,9 +27,9 @@ public interface TextLineHandle {
 
     void done();
 
-    public TextLogParser getLogParser();
+    TextLogParser getLogParser();
 
-    public void setLogParser(TextLogParser logParser);
+    void setLogParser(TextLogParser logParser);
 
     String getTrigger();
 }

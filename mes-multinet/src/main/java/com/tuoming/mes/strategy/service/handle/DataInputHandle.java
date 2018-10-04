@@ -4,9 +4,9 @@ import java.util.List;
 
 /**
  * 数据输入处理器
- * @author Administrator
  *
+ * @author Administrator
  */
 public interface DataInputHandle {
-	public List<String[]> readFile(String filePath);
+    public List<String[]> readFile(String filePath);
 }

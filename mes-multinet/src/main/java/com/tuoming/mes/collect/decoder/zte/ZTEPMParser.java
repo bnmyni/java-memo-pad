@@ -38,7 +38,7 @@ public class ZTEPMParser extends AbstractContentHandler {
         columnTag.put("measCollec", "");
         columnTag.put("managedElement", "");
         columnTag.put("measValue", "");
-        columnTag.put("fileSender","");
+        columnTag.put("fileSender", "");
 
         colDef = "measTypes";
         valueDef = "measResults";

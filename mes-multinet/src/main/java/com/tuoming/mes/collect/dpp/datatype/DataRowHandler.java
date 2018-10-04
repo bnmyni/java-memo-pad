@@ -22,10 +22,9 @@ package com.tuoming.mes.collect.dpp.datatype;
 public interface DataRowHandler {
     public void process(String key, DataRow row);
 
-    public void setUseRealType(boolean itype);
-
-
     public boolean isUseRealType();
+
+    public void setUseRealType(boolean itype);
 
     public void close();
 }

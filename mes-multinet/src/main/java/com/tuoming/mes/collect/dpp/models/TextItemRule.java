@@ -17,15 +17,15 @@
 package com.tuoming.mes.collect.dpp.models;
 
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "mes_log_parser_item")
@@ -50,15 +50,6 @@ public class TextItemRule extends AbstractModel {
     private Boolean cachedItem = false;
     @Column(name = "order_id")
     private int orderId;
-
-    public String getParserName() {
-        return parserName;
-    }
-
-    public void setParserName(String parserName) {
-        this.parserName = parserName;
-    }
-
     @Column(name = "parser_name", length = 255, nullable = false)
     private String parserName;
 
@@ -74,6 +65,14 @@ public class TextItemRule extends AbstractModel {
         this.dataType = dataType;
         this.defaultValue = defaultValue;
         this.valueExpression = valueExpression;
+    }
+
+    public String getParserName() {
+        return parserName;
+    }
+
+    public void setParserName(String parserName) {
+        this.parserName = parserName;
     }
 
     public Integer getId() {

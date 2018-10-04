@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Vector;
-
 import com.google.common.collect.Maps;
 import com.pyrlong.logging.LogFacade;
 import com.tuoming.mes.collect.dpp.configuration.ConnectionStringSettingsCollection;
@@ -49,13 +48,13 @@ public class DataAdapterPool implements Serializable {
     public static final int ADAPTER_POOL_MAX_CONNS = 20; // 连接池最大值
     private static final long serialVersionUID = 9178829890648304032L;
     private static Map<String, DataAdapterPool> dataAdapterPools = Maps.newConcurrentMap();
+    private static Object synObject = new Object();
     ConnectionStringSetting connectionStringSetting;
     private String testTable = ""; // 测试连接是否可用的测试表名，默认没有测试表
     private int initialConnections; // 连接池的初始大小
     private int incrementalConnections;// 连接池自动增加的大小
     private int maxConnections; // 连接池最大的大小
     private Vector<DataAdapter> dataAdapters = null;
-    private static Object synObject = new Object();
 
     /**
      * 构造函数
@@ -105,7 +104,7 @@ public class DataAdapterPool implements Serializable {
         } else if (dbType == DbType.SqlServer || dbType == DbType.Sybase) {
             dataAapter = new SqlServerDataAdapter();
             dataAapter.setDbType(DbType.SqlServer);
-        } 
+        }
         return dataAapter;
     }
 

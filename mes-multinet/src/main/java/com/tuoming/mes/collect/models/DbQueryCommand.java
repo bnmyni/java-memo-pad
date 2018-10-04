@@ -78,6 +78,23 @@ public class DbQueryCommand extends AbstractModel {
 
     @Column(name = "target_db", length = 64, nullable = true)
     private String targetDb;
+    /**
+     * 说明
+     */
+    @Column(name = "remark", length = 256)
+    private String remark;
+    /**
+     * 迭代器，用于配置需要多次执行的指令，配置时可以通过配置一个返回DataTable的表达式或者返回Map对象的表达式
+     */
+    @Column(name = "iterator", length = 2000, nullable = true)
+    private String iterator;
+    @Column(name = "enabled", nullable = true)
+    private boolean enabled = true;
+    /**
+     * 分组信息，这里支持逗号分割的多个分组，主要用于对各个不同任务灵活调度
+     */
+    @Column(name = "group_name", length = 120)
+    private String groupName;
 
     public String getTargetDb() {
         return targetDb;
@@ -86,19 +103,6 @@ public class DbQueryCommand extends AbstractModel {
     public void setTargetDb(final String targetDb) {
         this.targetDb = targetDb;
     }
-
-    /**
-     * 说明
-     */
-    @Column(name = "remark", length = 256)
-    private String remark;
-
-
-    /**
-     * 迭代器，用于配置需要多次执行的指令，配置时可以通过配置一个返回DataTable的表达式或者返回Map对象的表达式
-     */
-    @Column(name = "iterator", length = 2000, nullable = true)
-    private String iterator;
 
     public String getIterator() {
         return iterator;
@@ -116,16 +120,12 @@ public class DbQueryCommand extends AbstractModel {
         this.enabled = enabled;
     }
 
-    @Column(name = "enabled", nullable = true)
-    private boolean enabled = true;
-    /**
-     * 分组信息，这里支持逗号分割的多个分组，主要用于对各个不同任务灵活调度
-     */
-    @Column(name = "group_name", length = 120)
-    private String groupName;
-
     public String getPreAction() {
         return preAction;
+    }
+
+    public void setPreAction(String preAction) {
+        this.preAction = preAction;
     }
 
     public String getQueryName() {
@@ -134,10 +134,6 @@ public class DbQueryCommand extends AbstractModel {
 
     public void setQueryName(String queryName) {
         this.queryName = queryName;
-    }
-
-    public void setPreAction(String preAction) {
-        this.preAction = preAction;
     }
 
     public String getAfterAction() {

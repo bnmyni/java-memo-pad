@@ -17,23 +17,23 @@
 package com.tuoming.mes.collect.decoder.ericsson.asn1.entity;
 
 public class NEId {
-	private String nEUserName = null;
-	private String nEDistinguishedName = null;
+    private String nEUserName = null;
+    private String nEDistinguishedName = null;
 
-	public String getNEUserName() {
-		return this.nEUserName;
-	}
+    public String getNEUserName() {
+        return this.nEUserName;
+    }
 
-	public void setNEUserName(String value) {
-		this.nEUserName = value;
-	}
+    public void setNEUserName(String value) {
+        this.nEUserName = value;
+    }
 
-	public String getNEDistinguishedName() {
-		return this.nEDistinguishedName;
-	}
+    public String getNEDistinguishedName() {
+        return this.nEDistinguishedName;
+    }
 
-	public void setNEDistinguishedName(String value) {
-		this.nEDistinguishedName = value;
-	}
+    public void setNEDistinguishedName(String value) {
+        this.nEDistinguishedName = value;
+    }
 
 }

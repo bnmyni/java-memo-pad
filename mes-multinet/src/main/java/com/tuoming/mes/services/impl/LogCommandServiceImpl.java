@@ -16,6 +16,13 @@
 
 package com.tuoming.mes.services.impl;
 
+import net.sf.json.JSONSerializer;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,15 +32,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import net.sf.json.JSONSerializer;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.collection.PMap;
 import com.pyrlong.concurrent.CustomThreadFactory;
@@ -86,14 +84,14 @@ import com.tuoming.mes.strategy.util.HttpUtil;
 @Component("LogCommandService")
 public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, String> implements LogCommandService {
     private final static Logger logger = LogFacade.getLog4j(LogCommandServiceImpl.class);
+    private static String LOGPARSER = MESConstants.LOG_PARSER;
+    private static String LOGFILE = MESConstants.LOGFILE;
+    List<PairedObject> serverRedo = new ArrayList<PairedObject>();
     private TextLogParserDao textLogParserDao;
     private LogCommandDao logCommandDao;
     private ServerDao serverDao;
-    private static String LOGPARSER = MESConstants.LOG_PARSER;
-    private static String LOGFILE = MESConstants.LOGFILE;
-    private   OperationLogDao operationLogDao;
+    private OperationLogDao operationLogDao;
     private CommandMapDao commandMapDao;
-    List<PairedObject> serverRedo = new ArrayList<PairedObject>();
     /**
      * 记录日志文件及对应解析器标识 ,不同线程的命令日志文件通过这个对象保存
      */
@@ -135,11 +133,11 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         List<LogCommand> commands = logCommandDao.getCommands(groupName);
         query(commands, batch);
     }
-    
+
     @Override
     public void queryAllByLogParser(String logParser, long batch) {
-    	List<LogCommand> commands = logCommandDao.getCommandList(logParser);
-    	query(commands, batch);
+        List<LogCommand> commands = logCommandDao.getCommandList(logParser);
+        query(commands, batch);
     }
 
     @Override
@@ -263,7 +261,7 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         //启动处理线程
         for (Server server : servers) {
             try {
-            	//执行线程QueryProcessor子类：mes_servers表结果（一条），mes_log_command表结果集，Constant。CURRENT_BATCH = 1
+                //执行线程QueryProcessor子类：mes_servers表结果（一条），mes_log_command表结果集，Constant。CURRENT_BATCH = 1
                 threadPool.execute(new QueryProcessor(serverRedo, server, command, batch));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -307,7 +305,7 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         serverRedo = new ArrayList<PairedObject>();
         //循环获取每个类型的对象列表并执行指令
         for (LogCommand command : commandList) {
-        	//按mes_log_command表中的object_type和manufacturers去mes_servers表中查询
+            //按mes_log_command表中的object_type和manufacturers去mes_servers表中查询
             List<Server> servers = serverDao.getNeServers(command.getObjectType(), command.getManufacturers());
             System.out.println("Query thread started," + servers.size() + " servers ready to go");
             //mes_servers表结果集，mes_log_command表结果集，线程池，Constant。CURRENT_BATCH = 1
@@ -333,8 +331,8 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         serverRedo = null;
         waitDone(threadPool);
         parseFile();
-        
-        
+
+
     }
 
     private void waitDone(ThreadPoolExecutor threadPool) {
@@ -368,8 +366,8 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
                     //处理同一个文件具有多个解析器的情况
                     String[] parsers = file.getValue().get(LOGPARSER).toString().split("#");
                     for (String parser : parsers) {
-                        if (StringUtil.isEmpty(parser)){
-                        	logger.info("获取解析器失败");
+                        if (StringUtil.isEmpty(parser)) {
+                            logger.info("获取解析器失败");
                             continue;
                         }
                         if (!loggerFiles.containsKey(parser)) {
@@ -416,7 +414,7 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         public void run() {
             TextLogParser textLogParser = getTextLogParser();
             if (textLogParser != null) {
-            	logger.info("解析log文件："+textLogParser);
+                logger.info("解析log文件：" + textLogParser);
                 AbstractTextLineHandle handle = AppContext.getBean(textLogParser.getParseHandle());
                 if (handle != null) {
                     try {
@@ -442,11 +440,11 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
                                 }
                             }
                         }
-                        
+
                         //TODO 入库完成ywy
                         submitCollectState(Constant.Log_COLLECT_END);
-                         
-                        
+
+
                     } catch (Exception e) {
                         logger.error(e.getMessage(), e);
                     }
@@ -454,44 +452,44 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
             }
         }
 
-		private void submitCollectState(int state) {
-			boolean enableMontior = ConfigurationManager.getDefaultConfig().getBoolean(Constant.ENABLE_MONTIOR, true);
-        	if(!enableMontior) {
-        		return;
-        	}
-			 List<Map<String, String>> paramList = new ArrayList<Map<String, String>>();
-             for(Entry<String, Map<String, String>> entry : files.entrySet()) {
-             	Map<String, String> envMap = entry.getValue();
-             	Map<String, String> paramMap = new HashMap<String, String>();
-             	paramMap.put("commandname", envMap.get("commandName"));
-                 paramMap.put("servername", envMap.get("serverName"));
-                 paramMap.put("username", envMap.get("userName"));
-                 paramMap.put("ip", envMap.get("ip"));
-                 paramMap.put("port", envMap.get("port"));
-                 paramMap.put("datatype", Constant.CM);
-                 paramMap.put("grading", Constant.DAYUNIT);
-                 paramMap.put("status", state+"");
-                 paramMap.put("type", Constant.MONTIOR_TYPE_COLLECT);
-                 String[] zs_factory = envMap.get("manufacturers").split("_");
-                 paramMap.put("zs", zs_factory[0]);
-                 paramMap.put("factory", zs_factory[1]);
-                 paramMap.put("dlfs", Constant.TELNET);
-                 paramList.add(paramMap);
-             }
-             HttpUtil.post(ConfigurationManager.getDefaultConfig().getString(Constant.MONTIOR_COLLECT_STATE_URL, null), "collectstate="+JSONSerializer.toJSON(paramList).toString());
-		}
+        private void submitCollectState(int state) {
+            boolean enableMontior = ConfigurationManager.getDefaultConfig().getBoolean(Constant.ENABLE_MONTIOR, true);
+            if (!enableMontior) {
+                return;
+            }
+            List<Map<String, String>> paramList = new ArrayList<Map<String, String>>();
+            for (Entry<String, Map<String, String>> entry : files.entrySet()) {
+                Map<String, String> envMap = entry.getValue();
+                Map<String, String> paramMap = new HashMap<String, String>();
+                paramMap.put("commandname", envMap.get("commandName"));
+                paramMap.put("servername", envMap.get("serverName"));
+                paramMap.put("username", envMap.get("userName"));
+                paramMap.put("ip", envMap.get("ip"));
+                paramMap.put("port", envMap.get("port"));
+                paramMap.put("datatype", Constant.CM);
+                paramMap.put("grading", Constant.DAYUNIT);
+                paramMap.put("status", state + "");
+                paramMap.put("type", Constant.MONTIOR_TYPE_COLLECT);
+                String[] zs_factory = envMap.get("manufacturers").split("_");
+                paramMap.put("zs", zs_factory[0]);
+                paramMap.put("factory", zs_factory[1]);
+                paramMap.put("dlfs", Constant.TELNET);
+                paramList.add(paramMap);
+            }
+            HttpUtil.post(ConfigurationManager.getDefaultConfig().getString(Constant.MONTIOR_COLLECT_STATE_URL, null), "collectstate=" + JSONSerializer.toJSON(paramList).toString());
+        }
     }
 
     /**
      * 任务处理线程
      */
     class QueryProcessor extends AbstractCommandSendThread implements Runnable {
+        private final Logger logger = LogFacade.getLog4j(QueryProcessor.class);
         Server neServer;
         LogCommand command;
         long batch;
         Map<String, String> currentEnv;
         boolean iterator = true;
-        private final Logger logger = LogFacade.getLog4j(QueryProcessor.class);
         private List<PairedObject> serverRedo;
 
         public QueryProcessor(Server server, LogCommand command, long batch, Map<String, String> mapSet) {
@@ -526,7 +524,7 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         public void run() {
             String logFile = AppContext.getCacheFileName("Log" + Envirment.PATH_SEPARATOR + neServer.getServerName() + "/" + neServer.getServerName() + "_" + command.getName() + "_" + DateUtil.getNow("yyyyMMddHHmm") + ".log");
             try {
-            	submitCollecteState(Constant.Log_COLLECT_BEGIN_LINK);
+                submitCollecteState(Constant.Log_COLLECT_BEGIN_LINK);
                 ServerService serverService = ServerConnectPool.getServerServiceFromPool(neServer.getServerName(), logFile);
                 String[] cmds = StringUtil.split(command.getCommand(), "#");
                 doAction(command.getPreAction(), currentEnv);
@@ -555,18 +553,18 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
                         for (DataRow row : table.getRows()) {
                             Map envs = mergerMap(row.getItemMap(), currentEnv);
                             try {
-								finishMark = sendCommands(cmds, envs, serverService, logFile)&&finishMark;
-							} catch (InterruptFoundException e) {
-								interruptFoundCount++;
-								if(interruptFoundCount>5) {
-									logger.error("Interrupted more than five times ,break all");
-								}else {
-									logger.warn("Interrupted found need reconnect");
-									ServerConnectPool.reconnect(neServer.getServerName(), logFile, serverService);
+                                finishMark = sendCommands(cmds, envs, serverService, logFile) && finishMark;
+                            } catch (InterruptFoundException e) {
+                                interruptFoundCount++;
+                                if (interruptFoundCount > 5) {
+                                    logger.error("Interrupted more than five times ,break all");
+                                } else {
+                                    logger.warn("Interrupted found need reconnect");
+                                    ServerConnectPool.reconnect(neServer.getServerName(), logFile, serverService);
 //									serverService.reconnect();
-									finishMark = sendCommands(cmds, envs, serverService, logFile)&&finishMark;
-								}
-							}
+                                    finishMark = sendCommands(cmds, envs, serverService, logFile) && finishMark;
+                                }
+                            }
 //                            if (!sendCommands(cmds, envs, serverService, logFile)) {
 //                                finishMark = false;
 //                            }
@@ -577,11 +575,11 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
                         logger.error(eex.getMessage(), eex);
                     }
                 } else {
-                	try {
-						finishMark = sendCommands(cmds, currentEnv, serverService, logFile)&&finishMark;
-					} catch (InterruptFoundException e) {
-						finishMark = false;
-					}
+                    try {
+                        finishMark = sendCommands(cmds, currentEnv, serverService, logFile) && finishMark;
+                    } catch (InterruptFoundException e) {
+                        finishMark = false;
+                    }
 //                    //单指令
 //                    if (!sendCommands(cmds, currentEnv, serverService, logFile)) {
 //                        finishMark = false;
@@ -600,10 +598,10 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
                 setEnv("BATCH", batch + "", currentEnv);
                 addFileToParser(logFile, currentEnv);
                 doAction(command.getAfterAction(), currentEnv);
-                
+
                 //TODO 下载完成ywy
                 submitCollecteState(Constant.Log_COLLECT_DONWLOAD_END);
-                
+
             } catch (PyrlongException e) {
                 logger.fatal(e.getMessage(), e);
                 setCommandRedo(logFile);
@@ -613,31 +611,31 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         }
 
         private void submitCollecteState(int state) {
-        	boolean enableMontior = ConfigurationManager.getDefaultConfig().getBoolean(Constant.ENABLE_MONTIOR, true);
-        	if(!enableMontior) {
-        		return;
-        	}
-        	 Map<String, String> paramMap = new HashMap<String, String>();
-        	 List<Map<String, String>> paramList = new ArrayList<Map<String,String>>();
-             paramMap.put("commandname", command.getName());
-             paramMap.put("servername", neServer.getServerName());
-             paramMap.put("username", neServer.getUsername());
-             paramMap.put("ip", neServer.getIp());
-             paramMap.put("port", neServer+"");
-             paramMap.put("datatype", Constant.CM);
-             paramMap.put("grading", Constant.DAYUNIT);
-             paramMap.put("type", Constant.MONTIOR_TYPE_COLLECT);
-             paramMap.put("status", state+"");
-             String[] zs_factory = command.getManufacturers().toString().split("_");
-             paramMap.put("zs", zs_factory[0]);
-             paramMap.put("factory", zs_factory[1]);
-             paramMap.put("dlfs", Constant.TELNET);
-             paramList.add(paramMap);
-             HttpUtil.post(ConfigurationManager.getDefaultConfig().getString(Constant.MONTIOR_COLLECT_STATE_URL, null), "collectstate="+JSONSerializer.toJSON(paramList).toString());
-			
-		}
+            boolean enableMontior = ConfigurationManager.getDefaultConfig().getBoolean(Constant.ENABLE_MONTIOR, true);
+            if (!enableMontior) {
+                return;
+            }
+            Map<String, String> paramMap = new HashMap<String, String>();
+            List<Map<String, String>> paramList = new ArrayList<Map<String, String>>();
+            paramMap.put("commandname", command.getName());
+            paramMap.put("servername", neServer.getServerName());
+            paramMap.put("username", neServer.getUsername());
+            paramMap.put("ip", neServer.getIp());
+            paramMap.put("port", neServer + "");
+            paramMap.put("datatype", Constant.CM);
+            paramMap.put("grading", Constant.DAYUNIT);
+            paramMap.put("type", Constant.MONTIOR_TYPE_COLLECT);
+            paramMap.put("status", state + "");
+            String[] zs_factory = command.getManufacturers().toString().split("_");
+            paramMap.put("zs", zs_factory[0]);
+            paramMap.put("factory", zs_factory[1]);
+            paramMap.put("dlfs", Constant.TELNET);
+            paramList.add(paramMap);
+            HttpUtil.post(ConfigurationManager.getDefaultConfig().getString(Constant.MONTIOR_COLLECT_STATE_URL, null), "collectstate=" + JSONSerializer.toJSON(paramList).toString());
 
-		/**
+        }
+
+        /**
          * 标识指定指令为需要重新执行的指令
          *
          * @param logfile 要删除的文件

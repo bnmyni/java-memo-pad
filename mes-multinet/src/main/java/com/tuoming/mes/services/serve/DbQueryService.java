@@ -56,8 +56,7 @@ public interface DbQueryService extends BaseService<DbQueryCommand, String> {
     /**
      * 执行特定数据库配置的非采集任务
      *
-     * @param commandName
-     *         数据库采集任务名称，对应aos_db_command表配置
+     * @param commandName 数据库采集任务名称，对应aos_db_command表配置
      */
     public void execute(String commandName);
 }

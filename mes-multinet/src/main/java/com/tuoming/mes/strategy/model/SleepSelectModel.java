@@ -41,16 +41,16 @@ public class SleepSelectModel extends AbstractModel {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public boolean isDelFlag() {
         return delFlag;
     }
 
     public void setDelFlag(boolean delFlag) {
         this.delFlag = delFlag;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getQuerySql() {

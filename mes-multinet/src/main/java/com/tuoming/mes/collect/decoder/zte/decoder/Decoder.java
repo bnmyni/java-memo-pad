@@ -72,10 +72,9 @@ public abstract class Decoder {
     private void readBitStr() throws IOException {
         byte[] b = new byte[128];
         int temp = in.read(b, 0, 128);
-        if (temp == -1)
-        {
-            isFinish=true;
-            return ;
+        if (temp == -1) {
+            isFinish = true;
+            return;
         }
 
         StringBuffer sb = new StringBuffer();
@@ -90,8 +89,7 @@ public abstract class Decoder {
         if (toatlBitStr.equals("") || toatlBitStr.length() < bitSize) {
             readBitStr();
         }
-        if (!isFinish)
-        {
+        if (!isFinish) {
             curbitStr = toatlBitStr.substring(0, bitSize);
             toatlBitStr = toatlBitStr.substring(bitSize);
         }
@@ -127,6 +125,7 @@ public abstract class Decoder {
         }
         return er;
     }
+
     protected int readBitAsNum(int bitSize) throws IOException {
         ReadBit(bitSize);
         int ss1 = Integer.parseInt(curbitStr, 2);
@@ -144,7 +143,7 @@ public abstract class Decoder {
 
                 data[i] = bitToByte(curbitStr.substring(i * 8, 8 * (i + 1)));
             }
-            isoString = new String(data,"UTF-8");
+            isoString = new String(data, "UTF-8");
         }
         return isoString;
     }

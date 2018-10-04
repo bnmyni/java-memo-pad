@@ -22,6 +22,21 @@ import com.tuoming.mes.strategy.util.HarvenSin;
  */
 public class AzimuthCalculationCommonHandle implements OverDegreeCalHandle {
 
+    /**
+     * 根据源经纬度和目的经纬度坐标求距离
+     *
+     * @param src_longitude  　　　源经度
+     * @param src_latitude   　　　　源纬度
+     * @param dest_longitude 　　　邻区经度
+     * @param dest_latitude  　　　邻区纬度
+     * @return double　2个点的距离
+     */
+    public static double getInstance(double src_longitude,
+                                     double src_latitude, double dest_longitude, double dest_latitude) {
+        double s = HarvenSin.distance(src_longitude, src_latitude, dest_longitude, dest_latitude);
+        return Double.parseDouble(FormatUtil.formatTwoDec(s));
+    }
+
     @Override
     public void handle(List<Map<String, Object>> dataList, OverlayDegreeSetting setting, PrintStream ps) {
         Map<String, Integer> count = new HashMap<>();
@@ -50,21 +65,6 @@ public class AzimuthCalculationCommonHandle implements OverDegreeCalHandle {
     @Override
     public void finalOperation(OverlayDegreeSetting setting, PrintStream ps) {
 
-    }
-
-    /**
-     * 根据源经纬度和目的经纬度坐标求距离
-     *
-     * @param src_longitude  　　　源经度
-     * @param src_latitude   　　　　源纬度
-     * @param dest_longitude 　　　邻区经度
-     * @param dest_latitude  　　　邻区纬度
-     * @return double　2个点的距离
-     */
-    public static double getInstance(double src_longitude,
-                                     double src_latitude, double dest_longitude, double dest_latitude) {
-        double s = HarvenSin.distance(src_longitude, src_latitude, dest_longitude, dest_latitude);
-        return Double.parseDouble(FormatUtil.formatTwoDec(s));
     }
 
     /**

@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public interface TdHWMROFileDecode {
-	
-	public List<String[]> parse(String fileName);
+
+    public List<String[]> parse(String fileName);
 
 }

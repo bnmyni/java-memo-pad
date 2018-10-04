@@ -17,16 +17,15 @@
 // Created On: 13-8-5 下午1:17
 package com.tuoming.mes.collect.dpp.models;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.pyrlong.util.StringUtil;
 
 /**
@@ -106,6 +105,8 @@ public class TableColumnInfo extends AbstractModel {
 
     @Column(name = "filter_op", length = 16, nullable = true)
     private String filterOP;
+    @Column(name = "edit_options", length = 500, nullable = true)
+    private String editoptions;
 
     public String getFilterOP() {
         return filterOP;
@@ -139,9 +140,6 @@ public class TableColumnInfo extends AbstractModel {
     public void setEditoptions(String editoptions) {
         this.editoptions = editoptions;
     }
-
-    @Column(name = "edit_options", length = 500, nullable = true)
-    private String editoptions;
 
     public String getFormatter() {
         if (StringUtil.isEmpty(formatter))

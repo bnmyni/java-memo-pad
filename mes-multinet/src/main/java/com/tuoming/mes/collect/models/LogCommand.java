@@ -74,6 +74,36 @@ public class LogCommand extends AbstractModel {
      */
     @Column(name = "pre_action", length = 500, nullable = true)
     private String preAction;
+    /**
+     * 迭代器，用于配置需要多次执行的指令，配置时可以通过配置一个返回DataTable的表达式或者返回Map对象的表达式 #修改类型，改为长字符串
+     */
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "iterator", nullable = true)
+    private String iterator;
+    /**
+     * 执行采集后执行的操作，该操作位于 CommandMap配置的前置操作之前
+     */
+    @Column(name = "after_action", length = 500, nullable = true)
+    private String afterAction;
+    @Column(name = "order_id", nullable = true)
+    private int orderId;
+    /**
+     * 指令是否生效
+     */
+    @Column(name = "enabled", nullable = true)
+    private boolean enabled;
+    /**
+     * 附加说明信息
+     */
+    @Column(name = "remark", length = 120, nullable = true)
+    private String remark;
+    /**
+     * 适用厂家版本信息
+     */
+    @ManyToOne
+    @JoinColumn(name = "manufacturers", nullable = false, insertable = true, updatable = true)
+    private Manufacturers manufacturers;
 
     public String getIterator() {
         return iterator;
@@ -82,14 +112,6 @@ public class LogCommand extends AbstractModel {
     public void setIterator(String iterator) {
         this.iterator = iterator;
     }
-
-    /**
-     * 迭代器，用于配置需要多次执行的指令，配置时可以通过配置一个返回DataTable的表达式或者返回Map对象的表达式 #修改类型，改为长字符串
-     */
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "iterator", nullable = true)
-    private String iterator;
 
     public String getAfterAction() {
         return afterAction;
@@ -119,12 +141,6 @@ public class LogCommand extends AbstractModel {
         this.commandName = commandName;
     }
 
-    /**
-     * 执行采集后执行的操作，该操作位于 CommandMap配置的前置操作之前
-     */
-    @Column(name = "after_action", length = 500, nullable = true)
-    private String afterAction;
-
     public int getOrderId() {
         return orderId;
     }
@@ -132,25 +148,6 @@ public class LogCommand extends AbstractModel {
     public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
-
-    @Column(name = "order_id", nullable = true)
-    private int orderId;
-    /**
-     * 指令是否生效
-     */
-    @Column(name = "enabled", nullable = true)
-    private boolean enabled;
-    /**
-     * 附加说明信息
-     */
-    @Column(name = "remark", length = 120, nullable = true)
-    private String remark;
-    /**
-     * 适用厂家版本信息
-     */
-    @ManyToOne
-    @JoinColumn(name = "manufacturers", nullable = false, insertable = true, updatable = true)
-    private Manufacturers manufacturers;
 
     public boolean isEnabled() {
         return enabled;

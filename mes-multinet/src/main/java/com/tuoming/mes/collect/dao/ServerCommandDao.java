@@ -17,7 +17,6 @@
 package com.tuoming.mes.collect.dao;
 
 import java.util.List;
-
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.models.ServerCommand;
 
@@ -31,9 +30,7 @@ public interface ServerCommandDao extends BaseDao<ServerCommand, Integer> {
     /**
      * 获取指定服务器对应操作类型的指令 列表
      *
-     * @param action
-     *         指令类型 如login/logout
-     *
+     * @param action 指令类型 如login/logout
      * @return 按照配置的执行顺序的指令对象
      */
     List<ServerCommand> getNamedCommands(String server, String action);

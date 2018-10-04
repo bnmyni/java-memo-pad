@@ -17,7 +17,6 @@
 package com.tuoming.mes.execute.dao;
 
 import java.util.List;
-
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.models.AdjustCommand;
 
@@ -32,11 +31,8 @@ public interface AdjustCommandDao extends BaseDao<AdjustCommand, Long> {
     /**
      * 获取指定应用指定分组的调整指令列表
      *
-     * @param appName
-     *         应用名称
-     * @param groupName
-     *         分组名称
-     *
+     * @param appName   应用名称
+     * @param groupName 分组名称
      * @return 符合条件的AdjustCommand对象列表
      */
     public List<AdjustCommand> getCommands(String appName, String groupName);

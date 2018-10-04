@@ -16,11 +16,11 @@
 
 package com.tuoming.mes.collect.dpp.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConditionQuery {
 

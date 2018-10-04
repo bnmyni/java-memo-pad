@@ -15,6 +15,7 @@
  */
 
 package com.tuoming.mes.collect.decoder.zte.model.mrs;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,36 +31,37 @@ public class NeData {
     private int slot;
     private int ncisRNCID;
     private int ncisCellId;
-    private List<Integer> valueList=new ArrayList<Integer>();
+    private List<Integer> valueList = new ArrayList<Integer>();
 
+
+    public NeData(int sRNCID, int sCellId, int mrsCount, int uarfcn, int slot, int ncisRNCID, int ncisCellId) {
+        this.sRNCID = sRNCID;
+        this.sCellId = sCellId;
+        this.mrsCount = mrsCount;
+        this.uarfcn = uarfcn;
+        this.slot = slot;
+        this.ncisRNCID = ncisRNCID;
+        this.ncisCellId = ncisCellId;
+    }
 
     public List<Integer> getValueList() {
         return valueList;
     }
+
     public void setValueList(List<Integer> valueList) {
         this.valueList = valueList;
     }
-    public NeData(int sRNCID,int sCellId,int mrsCount,int uarfcn,int slot,int ncisRNCID,int ncisCellId ) {
-        this.sRNCID=sRNCID;
-        this.sCellId=sCellId;
-        this.mrsCount=mrsCount;
-        this.uarfcn=uarfcn;
-        this.slot=slot;
-        this.ncisRNCID=ncisRNCID;
-        this.ncisCellId=ncisCellId;
-    }
+
     public int getsRNCID() {
         return sRNCID;
     }
 
+    public void setsRNCID(int sRNCID) {
+        this.sRNCID = sRNCID;
+    }
 
     public void addValue(int value) {
         valueList.add(value);
-    }
-
-
-    public void setsRNCID(int sRNCID) {
-        this.sRNCID = sRNCID;
     }
 
     public int getsCellId() {

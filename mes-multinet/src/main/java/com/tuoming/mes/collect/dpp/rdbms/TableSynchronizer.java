@@ -46,9 +46,9 @@ public interface TableSynchronizer {
      */
     public void restoreData(String dbName, Collection<String> tables, Collection<String> files);
 
-    public void restoreData(String dbName, Collection<String> tables, Collection<String> files,boolean clearOldData);
+    public void restoreData(String dbName, Collection<String> tables, Collection<String> files, boolean clearOldData);
 
-    public void restoreData(String dbName, Collection<String> files,boolean clearOldData);
+    public void restoreData(String dbName, Collection<String> files, boolean clearOldData);
 
     public void restoreData(String dbName, Collection<String> files);
 

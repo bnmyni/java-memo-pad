@@ -18,7 +18,6 @@ package com.tuoming.mes.execute.boot.console.command;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.tuoming.mes.execute.boot.console.Command;
 import com.tuoming.mes.execute.boot.console.CommandSet;
 

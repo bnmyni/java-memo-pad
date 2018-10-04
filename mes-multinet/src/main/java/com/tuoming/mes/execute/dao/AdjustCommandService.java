@@ -22,10 +22,10 @@ import com.tuoming.mes.collect.models.AdjustCommand;
 /**
  * 业务指令适配器，用于处理指令下发等相关操作, 支持针对不同对象(BSC) 同步下发调整指令 可以通过Spring注入调用
  * 也可以使用AOSManager获取服务的一个实例对象，然后进行相关操作
- *
+ * <p>
  * <li>Spring调用</li>
  * <p>AppContext.getBean(AdjustCommandService.class)</p>
- *
+ * <p>
  * <li>AOSManager调用</li>
  * <p>new AOSManager().getService("AdjustCommandService")</p>
  *
@@ -45,9 +45,10 @@ public interface AdjustCommandService extends BaseService<AdjustCommand, Long> {
      * @see BaseService
      */
     public void apply(String appName, String groupName);
-    
+
     /**
      * 节能休眠或唤醒命令下发
+     *
      * @param appName
      * @param groupName
      */

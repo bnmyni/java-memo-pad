@@ -21,6 +21,11 @@ package com.tuoming.mes.collect.decoder.zte.model.mro;
  */
 public class IntraFreqData {
 
+    private int relativetimestamp;
+    private int uarfcn;
+    private int cellParamID;
+    private int pccpchRscp;
+
     public IntraFreqData(int relativetimestamp, int uarfcn, int cellParamID, int pccpchRscp) {
 
         this.relativetimestamp = relativetimestamp;
@@ -44,11 +49,6 @@ public class IntraFreqData {
     public void setUarfcn(int uarfcn) {
         this.uarfcn = uarfcn;
     }
-
-    private int relativetimestamp;
-    private int uarfcn;
-    private int cellParamID;
-    private int pccpchRscp;
 
     public int getCellParamID() {
         return cellParamID;

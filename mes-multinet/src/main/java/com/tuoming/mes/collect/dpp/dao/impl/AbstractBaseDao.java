@@ -1,12 +1,12 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2013.  Pyrlong All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,17 +18,6 @@
  *
  */
 package com.tuoming.mes.collect.dpp.dao.impl;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.persistence.Id;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -42,13 +31,21 @@ import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import javax.persistence.Id;
 import com.pyrlong.logging.LogFacade;
 import com.pyrlong.util.Assert;
 import com.pyrlong.util.StringUtil;
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.dpp.dao.ConditionQuery;
 import com.tuoming.mes.collect.dpp.dao.OrderBy;
-import com.tuoming.mes.collect.models.Server;
 
 /**
  * @author James Cheung
@@ -56,8 +53,8 @@ import com.tuoming.mes.collect.models.Server;
 public abstract class AbstractBaseDao<M extends java.io.Serializable, PK extends java.io.Serializable> implements BaseDao<M, PK> {
 
     protected static final Logger LOGGER = LogFacade.getLog4j(AbstractBaseDao.class);
-    private final Class<M> entityClass;
     protected final String HQL_LIST_ALL;
+    private final Class<M> entityClass;
     private final String HQL_COUNT_ALL;
     private final String HQL_OPTIMIZE_PRE_LIST_ALL;
     private final String HQL_OPTIMIZE_NEXT_LIST_ALL;
@@ -69,9 +66,9 @@ public abstract class AbstractBaseDao<M extends java.io.Serializable, PK extends
 
 
     @SuppressWarnings("unchecked")
-	public AbstractBaseDao() {
-    	//getGenericSuperclass() 通过反射获取当前类表示的实体（类，接口，基本类型或void）的直接父类的Type
-    	//getActualTypeArguments()返回参数数组
+    public AbstractBaseDao() {
+        //getGenericSuperclass() 通过反射获取当前类表示的实体（类，接口，基本类型或void）的直接父类的Type
+        //getActualTypeArguments()返回参数数组
         this.entityClass = (Class<M>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         Field[] fields = this.entityClass.getDeclaredFields();
         for (Field f : fields) {

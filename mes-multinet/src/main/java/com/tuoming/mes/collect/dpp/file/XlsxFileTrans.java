@@ -17,14 +17,6 @@
 //Created On: 13-9-13 上午10:53
 package com.tuoming.mes.collect.dpp.file;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -34,6 +26,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import com.pyrlong.logging.LogFacade;
 
 /**
@@ -95,7 +94,6 @@ public class XlsxFileTrans {
         logger.info("Import file  " + file + " done!");
         ifs.close();
     }
-
 
 
     private void refreashFile2(String file) throws IOException {

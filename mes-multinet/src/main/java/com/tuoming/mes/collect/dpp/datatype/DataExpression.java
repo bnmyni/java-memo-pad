@@ -23,12 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import com.pyrlong.dsl.tools.Context;
 import com.pyrlong.dsl.tools.DSLUtil;
 import com.pyrlong.dsl.tools.ExecuteContext;
 
- 
+
 /**
  * 此类描述的是： 专用于数据处理的表达式扩展类
  *
@@ -36,8 +35,8 @@ import com.pyrlong.dsl.tools.ExecuteContext;
  * @version: 2.0
  */
 public final class DataExpression extends DSLUtil {
-    private static final Number ROUND_NUM = 4;
     public static final ExecuteContext executeContext;
+    private static final Number ROUND_NUM = 4;
 
     static {
         executeContext = DSLUtil.getNewInstance();
@@ -55,7 +54,6 @@ public final class DataExpression extends DSLUtil {
      * 功能描述： 获取符合过滤条件的指定指标的最新值，过滤条件支持为空
      *
      * @param
-     *
      * @return: Object
      * @author: James Cheung
      * @version: 2.0
@@ -151,16 +149,11 @@ public final class DataExpression extends DSLUtil {
     /**
      * 功能描述： 实现对DataTable对象的复杂查询，包括分组、汇总、过滤等
      *
-     * @param tableName
-     *         要生成的数据表名称,如 "FilterResultTable"
-     * @param selectField
-     *         要选择的字段，需要显示到最终结果表中的数据，其形态如: max(col_1) col_1_max,min(col_2)
-     *         col_2_min,avg(col_3) col_3_avg,count(col_4) col_4_count
-     * @param filterString
-     *         col_1>10 && col_2<100 && (col_3+col_1)>0
-     * @param groupField
-     *         lac,ci
-     *
+     * @param tableName    要生成的数据表名称,如 "FilterResultTable"
+     * @param selectField  要选择的字段，需要显示到最终结果表中的数据，其形态如: max(col_1) col_1_max,min(col_2)
+     *                     col_2_min,avg(col_3) col_3_avg,count(col_4) col_4_count
+     * @param filterString col_1>10 && col_2<100 && (col_3+col_1)>0
+     * @param groupField   lac,ci
      * @throws Exception
      * @return: DataTable
      * @author: James Cheung
@@ -174,7 +167,7 @@ public final class DataExpression extends DSLUtil {
         // 获取需要操作的数据表
         DataTable table = getDataTable(
                 (DataSet) ((Context) context).get("dataSet"), fields);
-       // selectField = selectField.replace("[", "").replace("]", "");
+        // selectField = selectField.replace("[", "").replace("]", "");
         groupField = groupField.replace("[", "").replace("]", "");
         filterString = filterString.replace("[", "").replace("]", "");
         // 构造结果表结构
@@ -217,10 +210,8 @@ public final class DataExpression extends DSLUtil {
     }
 
     /**
-     * @param context
-     *         上下文对象
-     * @param displayName
-     *         显示的名称
+     * @param context     上下文对象
+     * @param displayName 显示的名称
      */
     public static Object referenceFlow(Object context, String displayName) {
         Context nodeContext = (Context) context;
@@ -233,8 +224,7 @@ public final class DataExpression extends DSLUtil {
      * 参考案例
      *
      * @param context
-     * @param displayName
-     *         显示的名称
+     * @param displayName 显示的名称
      */
     public static Object referenceCase(Object context, String displayName) {
         Context nodeContext = (Context) context;
@@ -269,14 +259,14 @@ public final class DataExpression extends DSLUtil {
                     dc.setColumnName(fieldParts[0]); // 设置列名
                     dc.setCaptionName(fieldParts[0]); // 设置标题
                     dc.setTag(fieldParts[0]); // 通过tag对象保存公式配置
-                    dc.setDataType( com.pyrlong.dsl.DataTypes.STRING);//
+                    dc.setDataType(com.pyrlong.dsl.DataTypes.STRING);//
                     dt.getColumns().add(dc);
                     break;
                 case 2:
                     dc.setColumnName(fieldParts[1]); // 设置列名
                     dc.setCaptionName(fieldParts[1]); // 设置标题
                     dc.setTag(fieldParts[0]); // 通过tag对象保存公式配置
-                    dc.setDataType( com.pyrlong.dsl.DataTypes.STRING);//
+                    dc.setDataType(com.pyrlong.dsl.DataTypes.STRING);//
                     dt.getColumns().add(dc);
                     break;
                 default:
@@ -297,7 +287,6 @@ public final class DataExpression extends DSLUtil {
      * 功能描述： 获取输入字符串内用[]标识的变量
      *
      * @param
-     *
      * @return: List<String>
      * @author: James Cheung
      * @version: 2.0

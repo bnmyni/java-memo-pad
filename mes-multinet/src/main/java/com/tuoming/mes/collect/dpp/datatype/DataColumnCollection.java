@@ -41,7 +41,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 根据列名取得该列名所处的列位置
      *
      * @param
-     *
      * @return: int
      */
     public int getColumnIndex(String columnName) {
@@ -56,7 +55,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 返回DataTable的实际列数
      *
      * @param
-     *
      * @return: int
      */
     public int size() {
@@ -67,7 +65,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 清空columns和nameMap
      *
      * @param
-     *
      * @return: void
      */
     public void clear() {
@@ -79,7 +76,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 给columns加入一列
      *
      * @param
-     *
      * @return: boolean
      */
     public boolean add(DataColumn column) {
@@ -97,7 +93,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 在指定位置 给columns加入一列并同时修改所对应的nameMap集合
      *
      * @param index
-     *
      * @return: void
      */
     public void add(int index, DataColumn column) {
@@ -118,7 +113,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 在指定位置 给columns加入一列并同时修改所对应的nameMap集合
      *
      * @param index
-     *
      * @return: void
      */
     public boolean addDataColumn(int index, DataColumn column) {
@@ -142,7 +136,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 删除columns的一列数据
      *
      * @param
-     *
      * @return: boolean
      */
     public boolean remove(DataColumn column) {
@@ -158,7 +151,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 删除columns的指定列数据
      *
      * @param
-     *
      * @return: DataColumn
      */
     public DataColumn remove(int index) {
@@ -177,7 +169,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 根据列名删除columns的指定列数据
      *
      * @param
-     *
      * @return: DataColumn
      */
     public void remove(String columnName) {
@@ -191,7 +182,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 得到指定列位置数据
      *
      * @param
-     *
      * @return: DataColumn
      */
     public DataColumn get(int index) {
@@ -202,7 +192,6 @@ public final class DataColumnCollection implements List<DataColumn> {
      * 功能描述： 得到指定列名称的数据
      *
      * @param
-     *
      * @return: DataColumn
      */
     public DataColumn get(String columnName) {

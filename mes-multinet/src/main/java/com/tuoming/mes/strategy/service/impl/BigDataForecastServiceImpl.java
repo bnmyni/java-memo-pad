@@ -3,6 +3,7 @@ package com.tuoming.mes.strategy.service.impl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,12 +29,12 @@ import com.tuoming.mes.strategy.util.BigDataForecastUtil;
 import com.tuoming.mes.strategy.util.CsvUtil;
 import com.tuoming.mes.strategy.util.DateUtil;
 
-//@Service("bigDataForecastService")
+@Service("bigDataForecastService")
 public class BigDataForecastServiceImpl implements BigDataForecastService {
-    private static Logger logger = LogFacade.getLog4j(BeforeAfterService.class);
     // 查询需要根据多少天之前的数据进行预测
     private static final String appDays = ConfigurationManager
             .getDefaultConfig().getString("bigdata_days", "30");
+    private static Logger logger = LogFacade.getLog4j(BeforeAfterService.class);
     @Autowired
     @Qualifier(value = "bigDataForecastDao")
     private BigDataForecastDao bigDataForecastDao;
@@ -41,6 +42,78 @@ public class BigDataForecastServiceImpl implements BigDataForecastService {
     @Autowired
     @Qualifier("businessLogDao")
     private BusinessLogDao businessLogDao;
+
+    private static List<Date> testList() {
+        List<Date> resultList = new ArrayList<Date>();
+        // 当前天的预测时间
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.set(Calendar.SECOND, 0);// 采集时间不需要秒信息
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.MINUTE,
+                (cal.get(Calendar.MINUTE) / Constant.PM_COLLECT_LD)
+                        * Constant.PM_COLLECT_LD);
+        Date nowBefore15Min = DateUtil.tranStrToDate(DateUtil.getBeforeMinStr(
+                cal.getTime(), 15));
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date sqlTime;
+        try {
+            //sqlTime = df.parse("2016-11-25 6:45:00");
+            sqlTime = null;
+            // yyyy-MM-dd
+//		String sqlTime = "2016-11-15 05:00:00";
+            // HH:mm:ss
+            if (null == sqlTime || "".equals(sqlTime)) {
+                if (nowBefore15Min.getHours() >= 0 && nowBefore15Min.getHours() <= 6) {
+                    resultList = DateUtil.getTimeList(new Date(), nowBefore15Min.getHours(), 7, 15);
+                    //resultList.add(nowBefore15Min);
+                } else {
+                    String befortime = DateUtil.getDay(1);//获取下一天0点开始到6点的数据
+                    resultList = DateUtil.getTimeList(DateUtil.tranStrToDate(befortime), 0, 7, 15);
+                }
+            } else {
+                // 数据库预测的最后时间转为预测时间
+                Date sqlBeforeDate = DateUtil.getBeforeDay(sqlTime);
+                while (sqlBeforeDate.before(nowBefore15Min)) {
+                    sqlBeforeDate = DateUtil.tranStrToDate(DateUtil
+                            .getBeforeMinStr(sqlBeforeDate, -15));// 当前时间再取前15min
+                    if (sqlBeforeDate.getHours() >= 0 && sqlBeforeDate.getHours() <= 6) {
+                        resultList.add(sqlBeforeDate);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return resultList;
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(appDays);
+        Date forecastDate = new Date();
+        List<Date> dayList = DateUtil.getRelateDays(forecastDate, -Integer.parseInt(appDays));// 获得要预测的天数字符串
+        for (Date date : dayList) {
+            System.out.println(date);
+        }
+        String resTime = "";
+        // String before15Min =
+        // DateUtil.getMultiple15Min(forecastDate);//获得当前天前15min,HH:mm:SS
+        String before15Min = DateUtil.format(forecastDate).substring(10);// 获得当前天前15min,HH:mm:SS
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        StringBuilder timeBuilder = new StringBuilder();
+        for (Date day : dayList) {
+            String dayStr = df.format(day).substring(0, 10);
+            timeBuilder.append("'" + dayStr + before15Min + "',");
+        }
+        resTime = timeBuilder.toString();
+        if (resTime.endsWith(",")) {
+            resTime = resTime.substring(0, resTime.length() - 2);
+        }
+        resTime += "'";
+        System.out.println(resTime);
+    }
 
     public void bigDataForcast(String groupName) {
         businessLogDao.insertLog(8, "数据预测开始", 0);
@@ -684,77 +757,5 @@ public class BigDataForecastServiceImpl implements BigDataForecastService {
             result[i] = Double.parseDouble(list.get(i).toString());
         }
         return result;
-    }
-
-    private static List<Date> testList() {
-        List<Date> resultList = new ArrayList<Date>();
-        // 当前天的预测时间
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.set(Calendar.SECOND, 0);// 采集时间不需要秒信息
-        cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.MINUTE,
-                (cal.get(Calendar.MINUTE) / Constant.PM_COLLECT_LD)
-                        * Constant.PM_COLLECT_LD);
-        Date nowBefore15Min = DateUtil.tranStrToDate(DateUtil.getBeforeMinStr(
-                cal.getTime(), 15));
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date sqlTime;
-        try {
-            //sqlTime = df.parse("2016-11-25 6:45:00");
-            sqlTime = null;
-            // yyyy-MM-dd
-//		String sqlTime = "2016-11-15 05:00:00";
-            // HH:mm:ss
-            if (null == sqlTime || "".equals(sqlTime)) {
-                if (nowBefore15Min.getHours() >= 0 && nowBefore15Min.getHours() <= 6) {
-                    resultList = DateUtil.getTimeList(new Date(), nowBefore15Min.getHours(), 7, 15);
-                    //resultList.add(nowBefore15Min);
-                } else {
-                    String befortime = DateUtil.getDay(1);//获取下一天0点开始到6点的数据
-                    resultList = DateUtil.getTimeList(DateUtil.tranStrToDate(befortime), 0, 7, 15);
-                }
-            } else {
-                // 数据库预测的最后时间转为预测时间
-                Date sqlBeforeDate = DateUtil.getBeforeDay(sqlTime);
-                while (sqlBeforeDate.before(nowBefore15Min)) {
-                    sqlBeforeDate = DateUtil.tranStrToDate(DateUtil
-                            .getBeforeMinStr(sqlBeforeDate, -15));// 当前时间再取前15min
-                    if (sqlBeforeDate.getHours() >= 0 && sqlBeforeDate.getHours() <= 6) {
-                        resultList.add(sqlBeforeDate);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return resultList;
-    }
-
-    public static void main(String[] args) {
-
-        System.out.println(appDays);
-        Date forecastDate = new Date();
-        List<Date> dayList = DateUtil.getRelateDays(forecastDate, -Integer.parseInt(appDays));// 获得要预测的天数字符串
-        for (Date date : dayList) {
-            System.out.println(date);
-        }
-        String resTime = "";
-        // String before15Min =
-        // DateUtil.getMultiple15Min(forecastDate);//获得当前天前15min,HH:mm:SS
-        String before15Min = DateUtil.format(forecastDate).substring(10);// 获得当前天前15min,HH:mm:SS
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        StringBuilder timeBuilder = new StringBuilder();
-        for (Date day : dayList) {
-            String dayStr = df.format(day).substring(0, 10);
-            timeBuilder.append("'" + dayStr + before15Min + "',");
-        }
-        resTime = timeBuilder.toString();
-        if (resTime.endsWith(",")) {
-            resTime = resTime.substring(0, resTime.length() - 2);
-        }
-        resTime += "'";
-        System.out.println(resTime);
     }
 }

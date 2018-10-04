@@ -65,8 +65,6 @@ public abstract class Constant {
     public static final String CURRENT_COLLECTTIME = "CURRENT_COLLECTTIME";
     public static final String CURRENT_TIME_DELAY = "CURRENT_TIME_DELAY";//延迟后任务开启系统时间
     public static final String KEY_GROUP_NAME = "GROUPNAME";// 要执行配置表中配置数据的组的key
-    public static final String[] BUSTYPEARR = new String[]{Constant.L2L,
-            Constant.T2L, Constant.T2G, Constant.G2G, Constant.T2T_MANY};
     public static final String KPI_CAL_REAL = "KPI_CAL_REAL";
     public static final String KPI_CAL_HIS = "KPI_CAL_HIS";
     public static final String KPI_CAL_PERF_CELL_MIN = "KPI_CAL_PERF_CELL_MIN";
@@ -79,7 +77,6 @@ public abstract class Constant {
     public static final String KPI_CAL_PERF_ALL_HOUR = "KPI_CAL_PERF_ALL_HOUR";
     public static final String KPI_CAL_PERF_ALL_DAY = "KPI_CAL_PERF_ALL_DAY";
     public static final String KPI_CAL_MINUTE_TIME = "KPI_CAL_MINUTE_TIME";
-
     public static final String AFTER_COLLECT_DATA_UPDATE_CARRIER_CM = "AFTER_COLLECT_DATA_UPDATE_CARRIER_CM";
     public static final String AFTER_COLLECT_DATA_UPDATE_CARRIER_PM = "AFTER_COLLECT_DATA_UPDATE_CARRIER_PM";
     public static final String BEFORE_COLLECT_DATA_CLEAN_PM = "BEFORE_COLLECT_DATA_CLEAN_PM";
@@ -94,7 +91,6 @@ public abstract class Constant {
     public static final String AFTER_COLLECT_DATA_HANDLE_CM = "AFTER_COLLECT_DATA_HANDLE_CM";
     public static final String AFTER_COLLECT_DATA_IMPORTDATA_CM = "AFTER_COLLECT_DATA_IMPORTDATA_CM";
     public static final String CM_COLLECT_DIFFER_NUM = "CM_COLLECT_DIFFER_NUM";
-
     public static final int PM_COLLECT_LD = 15;// PM采集粒度
     public static final int PM_COLLECT_DELAY = 6;// PM采集延迟时间
     public static final String START_PERIOD = "start_period";// 节能开始时间
@@ -112,7 +108,6 @@ public abstract class Constant {
     public static final String AFTER_COLLECT_DATA_UPDATE_NETELE = "AFTER_COLLECT_DATA_UPDATE_NETELE";
     public static final String CURRENT_BATCH_MR = "CURRENT_BATCH_MR";
     public static final String PREFIX_LSB = "rst_";
-
     public static final String NIL = "NIL";
     public static final String ZERO = "0";
     public static final String CSV_SEPTRATOR = ",";
@@ -124,7 +119,6 @@ public abstract class Constant {
     public static final String N = "N";
     public static final String scanDir = "scanDir/";
     public static final String END = "END";
-
     /****************Neusoft*********************/
     //t2l覆盖度
     public static final String TAB_SUFIX = "_exceed";
@@ -149,7 +143,8 @@ public abstract class Constant {
     public static final String NOTIFY_MANY = "NOTIFY_MANY";
     public static final String L2L_MANY = "l2l_many";
     public static final String T2T_MANY = "t2t_many";
-
+    public static final String[] BUSTYPEARR = new String[]{Constant.L2L,
+            Constant.T2L, Constant.T2G, Constant.G2G, Constant.T2T_MANY};
     //数据预测
     public static final String BIGDATA_KPI_CAL_HIS = "BIGDATA_KPI_CAL_HIS";
     public static final String BIGDATA_GROUP = "GROUP_NAME";//数据预测的制式

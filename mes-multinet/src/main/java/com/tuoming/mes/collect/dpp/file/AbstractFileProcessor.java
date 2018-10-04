@@ -17,15 +17,14 @@
 // Created On: 13-8-1 上午9:41
 package com.tuoming.mes.collect.dpp.file;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.logging.LogFacade;
@@ -87,15 +86,14 @@ public abstract class AbstractFileProcessor implements FileProcessor {
     }
 
     @Override
+    public List<String> getFiles() {
+        return resultFiles;
+    }
+
+    @Override
     public void setFiles(Map<String, Map<String, String>> files) {
         this.sourceFileList = files;
         //每次更新要解析的文件后都清空列表？
         resultFiles = new ArrayList<String>();
-    }
-
-
-    @Override
-    public List<String> getFiles() {
-        return resultFiles;
     }
 }

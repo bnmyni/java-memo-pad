@@ -17,10 +17,13 @@
 // Created On: 13-8-5 下午1:17
 package com.tuoming.mes.collect.dpp.models;
 
+import org.apache.log4j.Logger;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,11 +33,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.apache.log4j.Logger;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.pyrlong.logging.LogFacade;
 
 /**
@@ -51,46 +49,41 @@ public class TableInfo extends AbstractModel {
 
     private static Logger logger = LogFacade.getLog4j(TableInfo.class);
     /**
-     * 存储数据库中数据表名
-     */
-    @Id
-    @Column(name = "tab_name", length = 64, nullable = false)
-    private String name;
-
-    /**
-     * 数据表显示名称
-     */
-    @Column(name = "tab_caption", length = 72, nullable = false)
-    private String caption;
-
-    /**
      * 数据表对应的字段配置
      */
     @OrderBy("orderId asc")
     @OneToMany(mappedBy = "tableInfo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     Set<TableColumnInfo> columnInfoSet;
-
+    @Transient
+    Map<String, TableColumnInfo> columnInfoHashMap = null;
+    /**
+     * 存储数据库中数据表名
+     */
+    @Id
+    @Column(name = "tab_name", length = 64, nullable = false)
+    private String name;
+    /**
+     * 数据表显示名称
+     */
+    @Column(name = "tab_caption", length = 72, nullable = false)
+    private String caption;
     /**
      * 数据表类型 view/table/....
      */
     @Column(name = "tab_type", length = 64, nullable = false)
     private String tabType;
-
     /**
      * 数据表对应的实体对象，当处理该表的编辑操作时 基于该对象通过Hibernate实现
      */
     @Column(name = "model_class", length = 64, nullable = true)
     private String modelClass;
-
     /**
      * 主键表达式 ，用于基于现有列计算主键值的表达式
      */
     @Column(name = "primary_key_exp", length = 64, nullable = true)
     private String primaryKey;
-
     @Column(name = "form_width", nullable = true)
     private Integer width = 500;
-
     @Column(name = "form_height", length = 64, nullable = true)
     private Integer height = 500;
 
@@ -163,9 +156,6 @@ public class TableInfo extends AbstractModel {
     public void setPrimaryKey(String primaryKey) {
         this.primaryKey = primaryKey;
     }
-
-    @Transient
-    Map<String, TableColumnInfo> columnInfoHashMap = null;
 
     public String getColumnCaption(String name) {
         TableColumnInfo info = getColumnInfo(name);

@@ -24,7 +24,6 @@ import com.pyrlong.logging.LogFacade;
 /**
  * 对读入文本执行格式化操作的处理
  *
- *
  * @author James Cheung
  * @version 1.0
  * @since 1.0

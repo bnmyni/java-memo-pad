@@ -19,7 +19,6 @@ package com.tuoming.mes.collect.dpp.dao;
 
 import java.io.Serializable;
 import java.util.List;
-
 import com.tuoming.mes.collect.dpp.datatype.DataTable;
 
 public interface CommonDao {

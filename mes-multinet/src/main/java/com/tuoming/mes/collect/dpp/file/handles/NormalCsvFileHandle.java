@@ -16,6 +16,9 @@
 
 package com.tuoming.mes.collect.dpp.file.handles;
 
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,10 +28,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.configuration.ConfigurationManager;
 import com.pyrlong.dsl.tools.DSLUtil;

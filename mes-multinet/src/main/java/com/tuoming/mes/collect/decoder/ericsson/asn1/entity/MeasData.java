@@ -20,24 +20,24 @@ import java.util.List;
 
 public class MeasData {
 
-	private NEId nEId = null;
+    private NEId nEId = null;
 
-	private List<MeasInfo> measInfo = null;
+    private List<MeasInfo> measInfo = null;
 
-	public NEId getNEId() {
-		return this.nEId;
-	}
+    public NEId getNEId() {
+        return this.nEId;
+    }
 
-	public void setNEId(NEId value) {
-		this.nEId = value;
-	}
+    public void setNEId(NEId value) {
+        this.nEId = value;
+    }
 
-	public List<MeasInfo> getMeasInfo() {
-		return this.measInfo;
-	}
+    public List<MeasInfo> getMeasInfo() {
+        return this.measInfo;
+    }
 
-	public void setMeasInfo(List<MeasInfo> value) {
-		this.measInfo = value;
-	}
+    public void setMeasInfo(List<MeasInfo> value) {
+        this.measInfo = value;
+    }
 
 }

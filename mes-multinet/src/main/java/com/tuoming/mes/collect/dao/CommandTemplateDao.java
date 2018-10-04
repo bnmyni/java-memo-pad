@@ -17,7 +17,6 @@
 package com.tuoming.mes.collect.dao;
 
 import java.util.List;
-
 import com.tuoming.mes.collect.dpp.dao.BaseDao;
 import com.tuoming.mes.collect.models.CommandTemplate;
 

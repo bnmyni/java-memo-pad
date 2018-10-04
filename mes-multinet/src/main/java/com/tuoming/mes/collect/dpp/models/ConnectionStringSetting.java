@@ -17,15 +17,14 @@
 package com.tuoming.mes.collect.dpp.models;
 
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.pyrlong.Envirment;
 import com.pyrlong.util.StringUtil;
 import com.tuoming.mes.collect.dpp.rdbms.DbType;
@@ -61,6 +60,54 @@ public class ConnectionStringSetting extends AbstractModel {
 
     @Column(name = "remark", length = 120, nullable = false)
     private String remark;
+
+    public static String getHibernateDialect(String dbType) {
+        dbType = dbType.toLowerCase();
+        if (dbType.indexOf("mysql") >= 0)
+            return "org.hibernate.dialect.MySQLDialect";
+        if (dbType.indexOf("oracle") >= 0)
+            return "org.hibernate.dialect.Oracle9iDialect";
+        if (dbType.indexOf("sqlserver") >= 0)
+            return "org.hibernate.dialect.SQLServer2008Dialect";
+        if (dbType.indexOf("sybase") >= 0)
+            return "org.hibernate.dialect.SQLServer2008Dialect";
+        if (dbType.indexOf("h2") >= 0) {
+            return "org.hibernate.dialect.H2Dialect";
+        }
+        return "";
+    }
+
+    public static String getUrlTemplate(String dbType) {
+        dbType = dbType.toLowerCase();
+        if (dbType.indexOf("mysql") >= 0)
+            return "jdbc:mysql://[IP]:[PORT]/[SCHEME]?characterEncoding=utf-8&autoReconnect=true&maxReconnects=3&zeroDateTimeBehavior=convertToNull";
+        if (dbType.indexOf("oracle") >= 0)
+            return "jdbc:oracle:thin:@[IP]:[PORT]:[SCHEME]";
+        if (dbType.indexOf("sqlserver") >= 0)
+            return "jdbc:jtds:sqlserver://[IP]:[PORT]/[SCHEME]";
+        if (dbType.indexOf("sybase") >= 0)
+            return "jdbc:jtds:sybase://[IP]:[PORT]/[SCHEME]";
+        if (dbType.indexOf("h2") >= 0) {
+            String path = Envirment.getHome() + "data/h2/[SCHEME]";
+            return "jdbc:h2:" + path + ";MODE=MYSQL";
+        }
+        return "";
+    }
+
+    public static String getDriverClass(String dbType) {
+        dbType = dbType.toLowerCase();
+        if (dbType.indexOf("mysql") >= 0)
+            return "com.mysql.jdbc.Driver";
+        if (dbType.indexOf("oracle") >= 0)
+            return "oracle.jdbc.driver.OracleDriver";
+        if (dbType.indexOf("sqlserver") >= 0)
+            return "net.sourceforge.jtds.jdbc.Driver";
+        if (dbType.indexOf("sybase") >= 0)
+            return "net.sourceforge.jtds.jdbc.Driver";
+        if (dbType.indexOf("h2") >= 0)
+            return "org.h2.Driver";
+        return "";
+    }
 
     public String getRemark() {
         return remark;
@@ -149,54 +196,6 @@ public class ConnectionStringSetting extends AbstractModel {
         return dbType;
     }
 
-    public static String getHibernateDialect(String dbType) {
-        dbType = dbType.toLowerCase();
-        if (dbType.indexOf("mysql") >= 0)
-            return "org.hibernate.dialect.MySQLDialect";
-        if (dbType.indexOf("oracle") >= 0)
-            return "org.hibernate.dialect.Oracle9iDialect";
-        if (dbType.indexOf("sqlserver") >= 0)
-            return "org.hibernate.dialect.SQLServer2008Dialect";
-        if (dbType.indexOf("sybase") >= 0)
-            return "org.hibernate.dialect.SQLServer2008Dialect";
-        if (dbType.indexOf("h2") >= 0) {
-            return "org.hibernate.dialect.H2Dialect";
-        }
-        return "";
-    }
-
-    public static String getUrlTemplate(String dbType) {
-        dbType = dbType.toLowerCase();
-        if (dbType.indexOf("mysql") >= 0)
-            return "jdbc:mysql://[IP]:[PORT]/[SCHEME]?characterEncoding=utf-8&autoReconnect=true&maxReconnects=3&zeroDateTimeBehavior=convertToNull";
-        if (dbType.indexOf("oracle") >= 0)
-            return "jdbc:oracle:thin:@[IP]:[PORT]:[SCHEME]";
-        if (dbType.indexOf("sqlserver") >= 0)
-            return "jdbc:jtds:sqlserver://[IP]:[PORT]/[SCHEME]";
-        if (dbType.indexOf("sybase") >= 0)
-            return "jdbc:jtds:sybase://[IP]:[PORT]/[SCHEME]";
-        if (dbType.indexOf("h2") >= 0) {
-            String path = Envirment.getHome() + "data/h2/[SCHEME]";
-            return "jdbc:h2:" + path + ";MODE=MYSQL";
-        }
-        return "";
-    }
-
-    public static String getDriverClass(String dbType) {
-        dbType = dbType.toLowerCase();
-        if (dbType.indexOf("mysql") >= 0)
-            return "com.mysql.jdbc.Driver";
-        if (dbType.indexOf("oracle") >= 0)
-            return "oracle.jdbc.driver.OracleDriver";
-        if (dbType.indexOf("sqlserver") >= 0)
-            return "net.sourceforge.jtds.jdbc.Driver";
-        if (dbType.indexOf("sybase") >= 0)
-            return "net.sourceforge.jtds.jdbc.Driver";
-        if (dbType.indexOf("h2") >= 0)
-            return "org.h2.Driver";
-        return "";
-    }
-
     public String getDefaultScheme(String dbType) {
         dbType = dbType.toLowerCase();
         if (dbType.indexOf("mysql") >= 0)
@@ -219,14 +218,13 @@ public class ConnectionStringSetting extends AbstractModel {
         }
         return false;
     }
-    
-    
+
+
     @Override
-    public int hashCode(){
-    	  return  this.getName().hashCode();
-    	 }
-    	 
-    
+    public int hashCode() {
+        return this.getName().hashCode();
+    }
+
 
     public String getIP() {
         return StringUtil.getMatchString(getUrl(), "\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b");
