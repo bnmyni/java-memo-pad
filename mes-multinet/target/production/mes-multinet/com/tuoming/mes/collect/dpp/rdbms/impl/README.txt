@@ -1,7 +1,0 @@
-目录功能说明：
-/AbstractDataAdapter：数据库适配器抽象类
-/CsvTableSynchronizer：基于CSV文件的表同步器实现
-/MysqlDataAdapterImpl：Mysql数据库操作类
-/OraDataAdapterImpl：Oracle数据库操作类
-/SqlServerDataAdapter：SqlServer数据库操作类
-/XlsxTableSynchronizer：基于Excel的表同步器实现

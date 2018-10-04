@@ -1,4 +1,0 @@
-目录功能说明：
-/ConfigurationDbImportHandler：conf目录下hamster配置文件自定义节点处理类
-/ConnectionStringSettingHandler：conf目录下hamster配置文件自定义节点处理类
-/ConnectionStringSettingsCollection：conf目录下hamster配置文件ConnectionStringSettings自定义节点集合

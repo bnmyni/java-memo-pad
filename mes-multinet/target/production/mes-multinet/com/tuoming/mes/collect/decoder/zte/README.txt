@@ -1,6 +1,0 @@
-目录功能说明：
-/AbstractContentHandler：解析MRS/MRO xml格式文件的基础类
-/MROFileParser：mro文件解析器，主要解析列头标签为smr，列值标签为v的xml文件的所有数据。
-/MROPartFileParser：mro文件解析器，继承MROFileParser文件，可通过数据表mes_ftp_command的result_filter字段进行配置，增加了过滤字段功能
-/ZTEPMParser：中兴xml文件解析器，主要解析列头标签为measTypes，列值标签为measResults的所有数据
-/ZTEPMPartParser：中兴xml文件解析器，继承ZTEPMParser类，可通过数据表mes_ftp_command的result_filter字段进行配置，增加了过滤字段功能

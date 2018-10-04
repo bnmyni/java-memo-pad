@@ -1,4 +1,0 @@
-目录功能说明：
-/AbstractCommandSendThread：用于参数采集及指令下发的基础实现类，该类封装了根据配置内容动态执行指令、执行指令附加操作、跌代执行指令等操作
-/AdjustCommandDao：对调整指令表的相关数据操作接口的实现
-/AdjustCommandService：对调整指令下发操作接口的实现

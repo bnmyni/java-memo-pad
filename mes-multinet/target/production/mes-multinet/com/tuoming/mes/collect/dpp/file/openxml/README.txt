@@ -1,5 +1,0 @@
-目录功能说明：
-/LargeXlsxWorkBook：xlsx相关操作类
-/XlsxDataRowHandler：xlsx处理类接口
-/XlsxDataRowPrintHandler：xlsx转化为控制台输出处理类
-/XlsxRowToCsvHandle：Xlsx转化为csv处理类
