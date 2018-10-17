@@ -1,0 +1,9 @@
+目录功能说明：
+/handles：指令打印log文件的解析实现
+/openxml：xlsx操作的实现
+/AbstractFileProcessor：log文件的解析抽象处理类
+/FileProcessor：log文件的解析处理接口
+/TextFileProcessor：对文本文件的统一处理的入口类
+/TextLine：数据行对象
+/TextLineHandle：数据行处理接口
+/XlsxFileTrans：基于Excel的表同步器实现

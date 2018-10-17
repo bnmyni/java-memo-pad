@@ -27,10 +27,8 @@ import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.FtpLogCommand;
 
 /**
- * 这里描述本类的功能及使用场景
- *
- * @author James Cheung
- * @version 1.0
+ * FTP采集数据任务
+ * mes_ftp_command
  */
 @Component("FtpLogCommandDao")
 public class FtpLogCommandDaoImpl extends AbstractBaseDao<FtpLogCommand, String> implements FtpLogCommandDao {

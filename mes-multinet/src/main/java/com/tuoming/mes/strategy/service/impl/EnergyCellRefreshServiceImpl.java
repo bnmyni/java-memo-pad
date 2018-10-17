@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import com.tuoming.mes.collect.dao.BusinessLogDao;
 import com.tuoming.mes.strategy.consts.Constant;
 import com.tuoming.mes.strategy.dao.AlarmInfoImpDao;
@@ -187,23 +189,21 @@ public class EnergyCellRefreshServiceImpl implements EnergyCellRefreshService {
         }
     }
 
+    /**
+     * 根据groupName查询 mes_mrdetail_model 配置，将 query sql 查询到的数据写入到 res_table 中
+     * update by sunke: 将2个for变成一个for，通过set处理多条记录写入一个表时只做一次清除操作
+     * @param groupName 需要处理的groupName
+     */
     @Override
     public void improveMrData(String groupName) {
-        List<MrDetailModel> setList = mrDetailDao.querySetList(groupName);
-        Map<String, List<MrDetailModel>> map = new HashMap<String, List<MrDetailModel>>();
-        for (MrDetailModel detail : setList) {
-            if (map.get(detail.getResTable()) == null) {
-                map.put(detail.getResTable(), new ArrayList<MrDetailModel>());
+        List<MrDetailModel> list = mrDetailDao.querySetList(groupName);
+        Set<String> tableNameSet = new HashSet<>();
+        for(MrDetailModel model : list) {
+            if (!tableNameSet.contains(model.getResTable())) {
+                mrDetailDao.removeAllData(model.getResTable());
+                tableNameSet.add(model.getResTable());
             }
-            map.get(detail.getResTable()).add(detail);
-        }
-
-        for (Entry<String, List<MrDetailModel>> entry : map.entrySet()) {
-            String tableName = entry.getKey();
-            mrDetailDao.removeAllData(tableName);
-            for (MrDetailModel detail : entry.getValue()) {
-                mrDetailDao.insertData(detail.getResTable(), detail.getQuerySql());
-            }
+            mrDetailDao.insertData(model.getResTable(), model.getQuerySql());
         }
     }
 }

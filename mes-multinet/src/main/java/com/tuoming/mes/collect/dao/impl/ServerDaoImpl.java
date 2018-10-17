@@ -26,7 +26,8 @@ import com.tuoming.mes.collect.models.ObjectType;
 import com.tuoming.mes.collect.models.Server;
 
 /**
- * @see com.pyrlong.dpp.dao.impl.AbstractBaseDao
+ * 服务器对象
+ * mes_servers
  */
 @Component("ServerDao")
 public class ServerDaoImpl extends AbstractBaseDao<Server, String> implements ServerDao {

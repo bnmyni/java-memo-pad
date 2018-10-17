@@ -1,16 +1,44 @@
+#spring:
+#  cache:
+#    #缓存名称
+#    cache-names: dicmp-parter, aspire, sunke
+#    guava:
+#      #缓存最大数量500条, 缓存失效时间 6个小时
+#      spec: maximumSize=500, expireAfterWrite=360m
+#    type: guava
+##  redis:
+##    host: 10.12.70.22
+##    port: 6379
+##    pool:
+##      max-active: 8
+##      max-wait: -1
+##      min-idle: 1
+##      max-idle: 8
+
+
 spring:
   cache:
-    #缓存名称
-    cache-names: dicmp-parter, aspire, sunke
-    guava:
-      #缓存最大数量500条, 缓存失效时间 6个小时
-      spec: maximumSize=500, expireAfterWrite=360m
-    type: guava
-#  redis:
-#    host: 10.12.70.22
-#    port: 6379
-#    pool:
-#      max-active: 8
-#      max-wait: -1
-#      min-idle: 1
-#      max-idle: 8
+    type: caffeine
+    cache-names: dicmp-parter
+    caffeine:
+    # initialCapacity= 初始的缓存空间大小
+    # maximumSize=[long]: 缓存的最大条数
+    # maximumWeight=[long]: 缓存的最大权重
+      # maximumSize 和 maximumWeight 不可以同时使用
+    # expireAfterAccess=[duration]: 最后一次写入或访问后经过固定时间过期
+    # expireAfterWrite=[duration]: 最后一次写入后经过固定时间过期
+    # refreshAfterWrite=[duration]: 创建缓存或者最近一次更新缓存后经过固定的时间间隔，刷新缓存,如果使用了refreshAfterWrite配置还必须指定一个CacheLoader
+    # weakKeys: 打开key的弱引用
+    # weakValues：打开value的弱引用
+    # softValues：打开value的软引用
+    # weakValues和softValues不可以同时使用
+    # recordStats：开发统计功能
+      spec: initialCapacity=50, maximumSize=500, expireAfterWrite= 10s, refreshAfterWrite= 5s
+        initialCapacity: 50
+        maximumSize: 500
+        expireAfterAccess: 10s
+        expireAfterWrite: 10s
+        refreshAfterWrite: 10s
+
+
+

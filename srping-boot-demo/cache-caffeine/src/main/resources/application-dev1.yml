@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:mysql://10.12.70.25:3306/dicmp_test
+    username: root
+    password: 1mqay3zXSW!
+    dbcp2:
+      driver-class-name: com.mysql.jdbc.Driver

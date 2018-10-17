@@ -1,0 +1,7 @@
+目录功能说明：
+/DbQueryServiceImpl： 数据库查询采集操作等操作服务接口实现
+/FtpLogCommandServiceImpl：基于FTP的数据采集下载解析入库等操作服务接口实现
+/FtpServerServiceImpl：FTP服务器对象配置操作服务接口实现
+/LogCommandServiceImpl：查询指令解析操作服务接口实现
+/ServerConnectPool：查询指令解服务器对象连接池实现类
+/ServerServiceImpl：TELNET服务器对象配置操作服务接口实现

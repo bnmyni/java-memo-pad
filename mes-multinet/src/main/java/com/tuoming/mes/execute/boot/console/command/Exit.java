@@ -20,6 +20,9 @@ import com.pyrlong.logging.LogFacade;
 import com.tuoming.mes.execute.boot.console.Command;
 import com.tuoming.mes.execute.boot.console.ShellSession;
 
+/**
+ * 系统推出命令
+ */
 public class Exit implements Command {
 
     public Object execute(ShellSession session, String[] args) {

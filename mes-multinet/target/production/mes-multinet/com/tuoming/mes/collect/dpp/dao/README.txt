@@ -1,0 +1,13 @@
+目录功能说明：
+/impl：系统的上下文对象，用于获取Spring注册的bean
+/AppsettingDao：Appsetting数据表的数据操作接口定义
+/AppSettingService：Appsetting相关功能服务接口定义
+/BaseDao：定义基础数据库操作接口
+/BaseService：定义基础数据库对外服务接口
+/CommonDao：定义通用数据库操作接口
+/ConditionQuery：hibernate查询条件添加类
+/OrderBy：hibernate查询排序添加类
+/SysStatusDao：SysStatus数据表的数据操作接口定义
+/TableInfoDao：TableInfo数据表的数据操作接口定义
+/TableInfoService：TableInfo相关功能服务接口定义
+/TextLogParserDao：LogParser数据表的数据操作接口定义

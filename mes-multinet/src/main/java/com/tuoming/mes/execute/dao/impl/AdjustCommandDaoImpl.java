@@ -24,7 +24,7 @@ import com.tuoming.mes.collect.models.AdjustCommand;
 import com.tuoming.mes.execute.dao.AdjustCommandDao;
 
 /**
- * @see com.pyrlong.dpp.dao.impl.AbstractBaseDao
+ * mes_adjust_command
  */
 @Component("AdjustCommandDao")
 public class AdjustCommandDaoImpl extends AbstractBaseDao<AdjustCommand, Long> implements AdjustCommandDao {

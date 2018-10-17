@@ -26,7 +26,8 @@ import com.tuoming.mes.collect.models.Manufacturers;
 import com.tuoming.mes.collect.models.ObjectType;
 
 /**
- * @see com.pyrlong.dpp.dao.impl.AbstractBaseDao
+ * 指令采集
+ * mes_log_command
  */
 @Component("LogCommandDao")
 public class LogCommandDaoImpl extends AbstractBaseDao<LogCommand, String> implements LogCommandDao {

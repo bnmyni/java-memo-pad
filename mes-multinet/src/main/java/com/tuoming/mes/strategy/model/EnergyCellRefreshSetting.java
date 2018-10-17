@@ -12,7 +12,7 @@ import com.tuoming.mes.collect.dpp.models.AbstractModel;
 
 /**
  * 小区列表刷新配置表
- *
+ * mes_celllist_ref
  * @author Administrator
  */
 @Entity

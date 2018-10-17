@@ -24,7 +24,8 @@ import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.DbQueryCommand;
 
 /**
- * @see com.pyrlong.dpp.dao.impl.AbstractBaseDao
+ * 采集任务配置
+ * mes_db_command
  */
 @Component("DbQueryCommandDao")
 public class DbQueryCommandDaoImpl extends AbstractBaseDao<DbQueryCommand, String> implements DbQueryCommandDao {

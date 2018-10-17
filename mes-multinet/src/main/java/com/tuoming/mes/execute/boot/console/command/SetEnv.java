@@ -26,7 +26,7 @@ import com.tuoming.mes.execute.boot.console.Command;
 import com.tuoming.mes.execute.boot.console.ShellSession;
 
 /**
- * 这里描述本类的功能及使用场景
+ * 设置环境变量命令
  *
  * @author James Cheung
  * @version 1.0

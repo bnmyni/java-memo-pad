@@ -7,6 +7,10 @@ import com.tuoming.mes.collect.models.BusinessLog;
 import com.tuoming.mes.services.ftp.AbstractBaseDao;
 import com.tuoming.mes.strategy.util.DateUtil;
 
+/**
+ * 业务日志
+ * mes_business_log_info
+ */
 @Repository("businessLogDao")
 public class BusinessLogDaoImpl extends AbstractBaseDao<BusinessLog, Integer> implements BusinessLogDao {
     public void insertLog(Integer module_type, String desc, Integer result) {

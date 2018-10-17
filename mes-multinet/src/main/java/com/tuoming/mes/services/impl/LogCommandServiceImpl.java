@@ -76,7 +76,6 @@ import com.tuoming.mes.strategy.util.HttpUtil;
  * 针对同一批（组）采集指令，每次根据配置启动相应的并发线程进行采集，待本组所有采集任务结束后再调用解析入库方法执行解析和入库操作，也就是说如果你希望 一些参数能先完成采集然后基于这个结果执行后续采集，那么
  * 需要将它们划分为不同的分组，然后分别调用。 </p>
  *
- * @see com.pyrlong.dpp.service.impl.AbstractBaseService
  * @see java.util.concurrent.ThreadPoolExecutor#ThreadPoolExecutor(int, int, long, java.util.concurrent.TimeUnit,
  * java.util.concurrent.BlockingQueue)
  */
@@ -130,6 +129,7 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
 
     @Override
     public void queryAll(String groupName, long batch) {
+        logger.info("start cm telnet collect ,group name is " +  groupName);
         List<LogCommand> commands = logCommandDao.getCommands(groupName);
         query(commands, batch);
     }
@@ -249,19 +249,10 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         }
     }
 
-    private void query(List<Server> servers, LogCommand command, ThreadPoolExecutor threadPool, long batch) {
-        Server[] servers1 = new Server[servers.size()];
-        servers.toArray(servers1);
-        //mes_servers表结果集，mes_log_command表结果集，线程池，Constant。CURRENT_BATCH = 1
-        query(servers1, command, threadPool, batch);
-    }
 
-    //参数mes_servers表结果集，mes_log_command表结果集，线程池，Constant。CURRENT_BATCH = 1
     private void query(Server[] servers, LogCommand command, ThreadPoolExecutor threadPool, long batch) {
-        //启动处理线程
         for (Server server : servers) {
             try {
-                //执行线程QueryProcessor子类：mes_servers表结果（一条），mes_log_command表结果集，Constant。CURRENT_BATCH = 1
                 threadPool.execute(new QueryProcessor(serverRedo, server, command, batch));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -291,25 +282,26 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
     }
 
     /**
-     * 采集命令执行的入口方法，本方法接收一系列需要采集的指令， 然后根据指令关联的对象类型执行采集指令并关联解析器执行解析操作 本方法实现步骤如下： 对传入需执行指令按照对象类型进行分类 对象类型-关联指令 获取每个对象类型对应的
-     * 对象列表 然后分别执行 采集指令
-     *
-     * @param commandList
+     * 采集命令执行的入口方法，本方法接收一系列需要采集的指令，
+     * 然后根据指令关联的对象类型执行采集指令并关联解析器执行解析操作
+     * 本方法实现步骤如下：
+     * 对传入需执行指令按照对象类型进行分类 对象类型-关联指令 获取每个对象类型对应的对象列表 然后分别执行 采集指令
+     * @param commandList 需要处理的指令集合
      */
     private void query(List<LogCommand> commandList, long batch) {
-        logger.info(commandList.size() + " command need to run ....");
-        if (commandList == null || commandList.size() == 0)
+        if (commandList == null || commandList.size() == 0) {
             return;
-        //创建线程池
+        }
         ThreadPoolExecutor threadPool = getNewThreadPoolExecutor();
-        serverRedo = new ArrayList<PairedObject>();
+        serverRedo = new ArrayList<>();
         //循环获取每个类型的对象列表并执行指令
         for (LogCommand command : commandList) {
-            //按mes_log_command表中的object_type和manufacturers去mes_servers表中查询
             List<Server> servers = serverDao.getNeServers(command.getObjectType(), command.getManufacturers());
             System.out.println("Query thread started," + servers.size() + " servers ready to go");
             //mes_servers表结果集，mes_log_command表结果集，线程池，Constant。CURRENT_BATCH = 1
-            query(servers, command, threadPool, batch);
+            Server[] servers1 = new Server[servers.size()];
+            servers.toArray(servers1);
+            query(servers1, command, threadPool, batch);
         }
         waitDone(threadPool);
         threadPool = getNewThreadPoolExecutor();
@@ -353,7 +345,7 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
         logger.info(">>>>>Start parsing file:" + logParsers.size());
         //重新打开一个处理线程池
         ThreadPoolExecutor threadPool = getNewThreadPoolExecutor();
-        Map<String, Map<String, Map<String, String>>> loggerFiles = new HashMap<String, Map<String, Map<String, String>>>();
+        Map<String, Map<String, Map<String, String>>> loggerFiles = new HashMap<>();
         /*
             对生成文件执行解析 文件名/解析器对象
             这里处理的主要目的是 将使用相同解析器的文件同时进行解析并保存到同一个目标文件，然后入库 目的是减少对目标表的占用时间
@@ -388,7 +380,7 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
             }
         }
         waitDone(threadPool);
-        logParsers = new HashMap<String, Map<String, String>>();
+        logParsers = new HashMap<>();
         logger.info("All file parsed");
     }
 
@@ -523,6 +515,7 @@ public class LogCommandServiceImpl extends AbstractBaseService<LogCommand, Strin
 
         public void run() {
             String logFile = AppContext.getCacheFileName("Log" + Envirment.PATH_SEPARATOR + neServer.getServerName() + "/" + neServer.getServerName() + "_" + command.getName() + "_" + DateUtil.getNow("yyyyMMddHHmm") + ".log");
+            System.out.println("start create log file :" + logFile);
             try {
                 submitCollecteState(Constant.Log_COLLECT_BEGIN_LINK);
                 ServerService serverService = ServerConnectPool.getServerServiceFromPool(neServer.getServerName(), logFile);

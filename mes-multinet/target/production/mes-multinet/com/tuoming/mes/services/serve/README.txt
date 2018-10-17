@@ -1,0 +1,8 @@
+目录功能说明：
+/DbQueryService： 数据库查询采集操作等操作服务接口定义
+/FtpLogCommandService：基于FTP的数据采集下载解析入库等操作服务接口定义
+/FtpServerService：FTP服务器对象配置操作服务接口定义
+/LogCommandService：查询指令解析操作服务接口定义
+/MESConstants：工程常量定义类
+/MESManager：系统管理器工具类
+/ServerService：TELNET服务器对象配置操作服务接口定义

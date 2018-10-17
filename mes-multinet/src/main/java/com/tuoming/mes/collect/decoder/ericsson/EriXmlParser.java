@@ -45,6 +45,7 @@ import com.tuoming.mes.collect.dpp.file.AbstractFileProcessor;
 import com.tuoming.mes.services.serve.MESConstants;
 
 /**
+ * 爱立信文件解析器,
  * Created by James on 15/3/13.
  */
 @Scope("prototype")

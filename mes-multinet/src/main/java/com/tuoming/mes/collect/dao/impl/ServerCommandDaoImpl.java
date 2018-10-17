@@ -24,7 +24,9 @@ import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.ServerCommand;
 
 /**
- * @see com.pyrlong.dpp.dao.impl.AbstractBaseDao
+ * 服务固化操作配置对象
+ * 主要配置一些针对服务器固化的操作内容，如登录、退出
+ * mes_server_command
  */
 @Component("ServerCommandDao")
 public class ServerCommandDaoImpl extends AbstractBaseDao<ServerCommand, Integer> implements ServerCommandDao {

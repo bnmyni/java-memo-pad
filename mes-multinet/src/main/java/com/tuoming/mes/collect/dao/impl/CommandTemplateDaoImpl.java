@@ -24,7 +24,8 @@ import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.CommandTemplate;
 
 /**
- * Created by james on 14-3-10.
+ * 指令模板
+ * mes_command_template
  */
 @Component("CommandTemplateDao")
 public class CommandTemplateDaoImpl extends AbstractBaseDao<CommandTemplate, Long> implements CommandTemplateDao {

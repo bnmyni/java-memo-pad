@@ -21,7 +21,7 @@ import com.tuoming.mes.execute.boot.console.Command;
 import com.tuoming.mes.execute.boot.console.ShellSession;
 
 /**
- * Created by james on 14-4-24.
+ *  关闭调度服务命令.
  */
 public class Stop implements Command {
     @Override

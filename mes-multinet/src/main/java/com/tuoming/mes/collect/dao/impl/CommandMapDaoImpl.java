@@ -26,7 +26,8 @@ import com.tuoming.mes.collect.models.CommandMap;
 
 
 /**
- * @see com.pyrlong.dpp.dao.impl.AbstractBaseDao
+ * 　指令字典
+ * mes_command_map
  */
 @Component("CommandMapDao")
 public class CommandMapDaoImpl extends AbstractBaseDao<CommandMap, String> implements CommandMapDao {

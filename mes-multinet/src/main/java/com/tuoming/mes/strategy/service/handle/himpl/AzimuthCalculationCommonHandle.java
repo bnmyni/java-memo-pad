@@ -22,6 +22,15 @@ import com.tuoming.mes.strategy.util.HarvenSin;
  */
 public class AzimuthCalculationCommonHandle implements OverDegreeCalHandle {
 
+    public static void main(String[] args) {
+        double slong = 103.753711;
+        double slat = 36.058155;
+        double dlong = 103.753711	;
+        double dlat = 36.058155;
+        double instance = AzimuthCalculationHandle.getInstance(slong, slat, dlong, dlat);
+        System.out.println(instance);
+    }
+
     /**
      * 根据源经纬度和目的经纬度坐标求距离
      *

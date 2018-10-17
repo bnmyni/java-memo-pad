@@ -27,10 +27,8 @@ import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.FtpServer;
 
 /**
- * 这里描述本类的功能及使用场景
- *
- * @author James Cheung
- * @version 1.0
+ * ftp服务器
+ * mes_ftp_servers
  */
 @Component("FtpServerDao")
 public class FtpServerDaoImpl extends AbstractBaseDao<FtpServer, String> implements FtpServerDao {

@@ -27,8 +27,8 @@ import com.tuoming.mes.collect.dpp.dao.impl.AbstractBaseDao;
 import com.tuoming.mes.collect.models.OperationLog;
 
 /**
- * 这里描述本类的功能及使用场景
- *
+ * 操作日志
+ * mes_oper_log
  * @author James Cheung
  * @version 1.0
  */

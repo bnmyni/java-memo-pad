@@ -21,7 +21,7 @@ import com.tuoming.mes.execute.boot.console.ShellSession;
 import com.tuoming.mes.execute.boot.scheduler.SchedulerManager;
 
 /**
- * Created by james on 14-4-24.
+ * 启动调度服务命令
  */
 public class Start implements Command {
     @Override

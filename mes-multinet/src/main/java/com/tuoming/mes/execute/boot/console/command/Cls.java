@@ -24,8 +24,7 @@ import com.tuoming.mes.execute.boot.console.Command;
 import com.tuoming.mes.execute.boot.console.ShellSession;
 
 /**
- * 这里描述本类的功能及使用场景
- *
+ * 清屏命令
  * @author James Cheung
  * @version 1.0
  * @since 1.0

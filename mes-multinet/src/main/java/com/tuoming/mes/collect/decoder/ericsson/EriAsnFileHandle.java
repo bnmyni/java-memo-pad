@@ -47,7 +47,7 @@ import com.tuoming.mes.services.serve.MESConstants;
 
 
 /**
- * 二进制文件解析类(ASN)
+ * 爱立信文件解析器,二进制文件解析类(ASN)
  *
  * @author zhql
  */
