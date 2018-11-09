@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import com.tuoming.mes.strategy.consts.Constant;
 
 public class DateUtil {
 
@@ -460,19 +461,45 @@ public class DateUtil {
     }
 
 
-    public static void main(String args[]) {
-//		List<String> list = DateUtil.getIntervalTime("06:00:00", "10:00:00", 15);
-//		for(int i=0;i<list.size();i++){
-//			System.out.println(list.get(i));
-//		}
-//		System.out.println(exceed6Hour("22:00:00", "3:00:00"));
-//		System.out.println("2016-03-15 02:25:40".substring(11));
-//		List<Date> list = getRelateDays(new Date(), -30);
-//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		for(Date d:list){
-//			System.out.println(df.format(d));
-//		}
-//		System.out.println(getMultiple15Min(new Date()));
-        System.out.println(DateUtil.getDay(-80));
-    }
+    public static void main(String args[]) throws ParseException {
+            List<Date> resultList = new ArrayList<>();
+            // 当前天的预测时间
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.set(Calendar.SECOND, 0);// 采集时间不需要秒信息
+            cal.set(Calendar.MILLISECOND, 0);
+            cal.set(Calendar.MINUTE,
+                    (cal.get(Calendar.MINUTE) / Constant.PM_COLLECT_LD)
+                            * Constant.PM_COLLECT_LD);
+            Date nowBefore15Min = DateUtil.tranStrToDate(DateUtil.getBeforeMinStr(
+                    cal.getTime(), 15));
+//                    new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2018-11-02 03:15");
+
+
+            Date sqlTime =   new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2018-11-02 06:15");
+            // HH:mm:ss
+            if (null == sqlTime || "".equals(sqlTime)) {
+                if (nowBefore15Min.getHours() >= 0 && nowBefore15Min.getHours() <= 6) {
+                    System.out.println(">>>>>>>>>>>>>>>>>>" + nowBefore15Min.getHours());
+                    resultList = DateUtil.getTimeList(new Date(), nowBefore15Min.getHours(), 7, 15);
+                } else {
+                    String befortime = DateUtil.getDay(1);//获取下一天0点开始到6点的数据
+                    resultList = DateUtil.getTimeList(DateUtil.tranStrToDate(befortime), 0, 7, 15);
+                }
+            } else {
+                // 数据库预测的最后时间转为预测时间
+                Date sqlBeforeDate = DateUtil.getBeforeDay(sqlTime);
+                while (sqlBeforeDate.before(nowBefore15Min)) {
+                    // 当前时间再取前15min
+                    sqlBeforeDate = DateUtil.tranStrToDate(DateUtil.getBeforeMinStr(sqlBeforeDate, -15));
+                    if (sqlBeforeDate.getHours() >= 0 && sqlBeforeDate.getHours() <= 6) {
+                        resultList.add(sqlBeforeDate);
+                    }
+                }
+            }
+
+        for (int i = 0; i < resultList.size(); i++) {
+            System.out.println(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(resultList.get(i)));
+        }
+        }
 }

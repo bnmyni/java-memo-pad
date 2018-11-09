@@ -7,10 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.github.benmanes.caffeine.cache.RemovalListener;
 
 /**
  * Copyright © 2008   卓望公司
@@ -22,29 +26,41 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
  */
 public class SimpleApp {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        // 测试下超过了最大条数后，缓存的变化
+        LoadingCache<String, Object> cache = Caffeine.newBuilder()
+                .maximumSize(1)
+                .build(k -> DataObject.get("Data for " + k));
 
-        AsyncLoadingCache<String, DataObject> cache = Caffeine.newBuilder()
-                .maximumSize(100).expireAfterWrite(1, TimeUnit.MINUTES)
-                .buildAsync(k -> DataObject.get("Data for " + k));
-
-        System.out.println(cache.get("A"));
-        cache.get("A").thenAccept(dataObject -> {
-            System.out.println(dataObject.getData());
-        });
-
-        List<String> keys = new ArrayList<>();
-        keys.add("V");
-        keys.add("H");
-        CompletableFuture<Map<String, DataObject>> graphs = cache.getAll(keys);
-
-        graphs.thenAccept(stringDataObjectMap -> {
-            System.out.println("CompletableFuture data..................");
-            System.out.println("stringDataObjectMap:" + stringDataObjectMap.get("A").getData());
-        });
-
-        // 异步转同步
-//        LoadingCache<String, DataObject> loadingCache = cache.synchronous();
+        cache.get("A");
+        System.out.println(cache.estimatedSize());
+        cache.get("B");
+        System.out.println(cache.estimatedSize());
+//        cache.cleanUp(); // 手动触发清除
+        Thread.sleep(400);
+        System.out.println(cache.estimatedSize());
+//
+//        AsyncLoadingCache<String, DataObject> cache = Caffeine.newBuilder()
+//                .maximumSize(100).expireAfterWrite(1, TimeUnit.MINUTES)
+//                .buildAsync(k -> DataObject.get("Data for " + k));
+//
+//        System.out.println(cache.get("A"));
+//        cache.get("A").thenAccept(dataObject -> {
+//            System.out.println(dataObject.getData());
+//        });
+//
+//        List<String> keys = new ArrayList<>();
+//        keys.add("V");
+//        keys.add("H");
+//        CompletableFuture<Map<String, DataObject>> graphs = cache.getAll(keys);
+//
+//        graphs.thenAccept(stringDataObjectMap -> {
+//            System.out.println("CompletableFuture data..................");
+//            System.out.println("stringDataObjectMap:" + stringDataObjectMap.get("A").getData());
+//        });
+//
+//        // 异步转同步
+////        LoadingCache<String, DataObject> loadingCache = cache.synchronous();
 
     }
 
@@ -54,6 +70,15 @@ public class SimpleApp {
     public void loadingCache() {
         LoadingCache<String, DataObject> cache = Caffeine.newBuilder()
                 .maximumSize(100).expireAfterWrite(1, TimeUnit.MINUTES)
+                .expireAfterAccess(10, TimeUnit.SECONDS)
+                .expireAfterWrite(10, TimeUnit.SECONDS)
+                .recordStats()
+//                .removalListener(new RemovalListener<String, DataObject>() {
+//                    @Override
+//                    public void onRemoval(@Nullable String s, @Nullable DataObject dataObject, @Nonnull RemovalCause removalCause) {
+////                         TODO 发送通知给二级缓存？
+//                    }
+//                })
                 .build(k -> DataObject.get("Data for " + k));
 
         // cache 里面是没有 a的

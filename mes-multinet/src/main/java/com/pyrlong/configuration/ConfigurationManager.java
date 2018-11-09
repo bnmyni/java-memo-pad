@@ -88,6 +88,13 @@ public final class ConfigurationManager {
         }
     }
 
+    public static void main(String[] args) {
+        ConfigurationManager instance =  new ConfigurationManager();
+
+        String path = "C:\\Users\\sunke\\Documents\\WeChat Files\\AiyaBnmyni\\Files\\hamster.xml";
+        instance.openConfiguration(path);
+    }
+
     /**
      * @param configFile
      * @throws javax.xml.parsers.ParserConfigurationException

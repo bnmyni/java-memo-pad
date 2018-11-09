@@ -210,7 +210,7 @@ public class FtpLogCommandServiceImpl extends AbstractBaseService<FtpLogCommand,
      */
     private synchronized void downloadAndParser(List<FtpLogCommand> logCommandList, long batchId) throws InterruptedException {
         logger.info("There are " + logCommandList.size() + " ftp command founded!");
-
+        // TODO 这个是垃圾代码，一个set搞定的事情，没有必要这么循环来搞
         Map<FtpServer, List<FtpLogCommand>> commandMap = new HashMap<FtpServer, List<FtpLogCommand>>();
         List<FtpLogCommand> localCommands = new ArrayList<FtpLogCommand>();
         for (FtpLogCommand cmd : logCommandList) {

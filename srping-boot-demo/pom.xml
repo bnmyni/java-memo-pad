@@ -17,7 +17,8 @@
         <module>cache-caffeine02</module>
         <module>jedis-topic</module>
         <module>spring-boot-jpa</module>
-        <module>cache-caffeine00</module>
+        <module>cache-caffeine-jpa</module>
+        <module>cache-redis-jpa</module>
     </modules>
 
     <parent>

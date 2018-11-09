@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    username: root
+    password: 1mqay3zXSW!
+    url: jdbc:mysql://10.12.70.25:3306/dicmp_test
+    dbcp2:
+      driver-class-name: com.mysql.jdbc.Driver
+  cache:
+    type: redis
+  redis:
+    database: 0
+    host: 10.12.70.29
+    port: 6380
+    pool:
+      max-idle: 8
+      max-active: 8
+      max-wait: -1
+      min-idle: 0
+
+server:
+  port: 8089
+
+
