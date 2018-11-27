@@ -1,0 +1,20 @@
+CREATE TABLE `t_user` (
+  `id` INT PRIMARY KEY  AUTO_INCREMENT NOT NULL COMMENT '用户ID',
+  `user_name` varchar(100) NOT NULL COMMENT '登录名',
+  `real_name` varchar(100) NOT NULL COMMENT '用户姓名',
+  `password` varchar(128) NOT NULL COMMENT '密码（经过加密）',
+  `status` varchar(20) NOT NULL DEFAULT 'INITIAL' COMMENT '用户状态',
+  `sex` varchar(10) DEFAULT NULL COMMENT '性别 1-男性；2-女性；',
+  `telephone` varchar(30) DEFAULT NULL COMMENT '电话',
+  `mobile` varchar(16) NOT NULL COMMENT '手机号码',
+  `email` varchar(64) DEFAULT NULL COMMENT '邮件地址',
+  `expire_date` timestamp NULL DEFAULT NULL COMMENT '用户帐号过期时间',
+  `password_expire_date` timestamp NULL DEFAULT NULL COMMENT '密码失效时间',
+  `lock_date` timestamp NULL DEFAULT NULL COMMENT '用户锁定时间',
+  `domain` varchar(30) DEFAULT NULL COMMENT '归属域',
+  `create_user` varchar(16) NOT NULL COMMENT '用户创建者',
+  `create_user_name` varchar(50) DEFAULT NULL COMMENT '创建人名称',
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '用户创建时间',
+  `last_update_date` timestamp NULL DEFAULT NULL COMMENT '用户最后修改时间',
+  KEY `IDX_LOGIN_NAME` (`user_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户'
