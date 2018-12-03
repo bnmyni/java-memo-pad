@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
   */
 //@Configuration
 //public class WebConfiguration {
+
+
 //     /**
 //      * 是否开启H2客户端
 //      * @return
