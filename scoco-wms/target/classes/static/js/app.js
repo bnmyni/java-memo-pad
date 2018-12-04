@@ -109,7 +109,7 @@ $(document).ready(function() {
         backToTop: {
             active: true, //activate back to top
             scrolltime: 800, //scroll time speed
-            imgsrc: 'static/img/backtop.png', //image 
+            imgsrc: '../img/backtop.png', //image
             width: 48, //width of image
             place: 'bottom-right', //position top-left, top-right, bottom-right, bottom-left
             fadein: 500, //fadein speed
