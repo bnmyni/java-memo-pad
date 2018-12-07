@@ -3,6 +3,7 @@ package com.scoco.wms.service.impl;
 import com.scoco.wms.entity.Product;
 import com.scoco.wms.repository.ProductRepository;
 import com.scoco.wms.service.ProductService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

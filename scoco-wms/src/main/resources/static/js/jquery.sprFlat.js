@@ -1070,7 +1070,7 @@
             var navsub = navel.closest('.nav.sub');
             //empty curmb
             breadcrumb.empty();
-            breadcrumb.append('<li>'+homeIcon+'<a href="index.html">首页</a>'+rightArrow+'</li>');
+            breadcrumb.append('<li>'+homeIcon+'<a href="index-content.html">首页</a>'+rightArrow+'</li>');
 
             if (navsub.closest('li').hasClass('hasSub')) {
                 //get previous

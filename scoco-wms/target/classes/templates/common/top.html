@@ -23,8 +23,8 @@
                 <ul class="nav navbar-nav pull-right">
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">
-                            <img class="user-avatar" src="../static/img/avatars/48.jpg" th:src="@{img/avatars/admin.png}"
-                                 alt="SuggeEl son"><span th:text="${user.realName}"></span></a>
+                            <img class="user-avatar"  th:src="@{/img/avatars/admin.png}"
+                                 alt="SuggeEl son"><span th:text="${user?.realName}"></span></a>
                         <ul class="dropdown-menu right" role="menu">
                             <li><a href="profile.html"><i class="st-user"></i> Profile</a>
                             </li>

@@ -6,13 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.scoco.wms.entity.User;
 
 /**
- * 项目名称: 伟明丰查询系统
- * 包名称: com.scoco.wms.repository
- * 类名称: UserRepository.java
- * 类描述: 系统用户dao
- * 创建人: sunke
- * 版本号: 1.0.0.0
- * 创建时间: 2018/11/22 20:47
+ * 项目名称: 伟明丰查询系统 包名称: com.scoco.wms.repository 类名称: UserRepository.java 类描述: 系统用户dao 创建人: sunke 版本号:
+ * 1.0.0.0 创建时间: 2018/11/22 20:47
  */
 public interface UserRepository extends JpaRepository<User, Integer> {
 

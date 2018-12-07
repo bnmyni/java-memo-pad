@@ -3,15 +3,11 @@ package com.scoco.wms.configuration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
- /**
-  * 项目名称: 伟明丰查询系统
-  * 包名称: com.scoco.wms
-  * 类名称: SecurityConfiguration.java.java
-  * 类描述: 系统web安全鉴权
-  * 创建人: sunke
-  * 版本号: 1.0.0.0
-  * 创建时间: 2018/11/22 11:29
-  */
+
+/**
+ * 项目名称: 伟明丰查询系统 包名称: com.scoco.wms 类名称: SecurityConfiguration.java.java 类描述: 系统web安全鉴权 创建人: sunke
+ * 版本号: 1.0.0.0 创建时间: 2018/11/22 11:29
+ */
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 

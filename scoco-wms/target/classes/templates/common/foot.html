@@ -2,56 +2,57 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <body>
-<script src="../static/plugins/core/pace/pace.min.js" th:src="@{plugins/core/pace/pace.min.js}"></script>
+<script  th:src="@{/plugins/core/pace/pace.min.js}"></script>
 <!-- Important javascript libs(put in all pages) -->
-<script src="../static/js/jquery-1.8.3.min.js" th:src="@{js/jquery-1.8.3.min.js}"></script>
+<script   th:src="@{/js/jquery-1.8.3.min.js}"></script>
 <script>
-    window.jQuery || document.write('<script src="../static/js/libs/jquery-2.1.1.min.js" th:src="@{js/libs/jquery-2.1.1.min.js}">\x3C/script>')
+    window.jQuery || document.write('<script th:src="@{/js/libs/jquery-2.1.1.min.js}">\x3C/script>')
 </script>
-<script src="../static/js/jquery-ui.js" th:src="@{js/jquery-ui.js}"></script>
+<script  th:src="@{/js/jquery-ui.js}"></script>
 <script>
     window.jQuery || document.write(
-        '<script src="../static/js/libs/jquery-ui-1.10.4.min.js" th:src="@{js/libs/jquery-ui-1.10.4.min.js}">\x3C/script>')
+        '<script  th:src="@{/js/libs/jquery-ui-1.10.4.min.js}">\x3C/script>')
 </script>
 <!--[if lt IE 9]>
-<script type="text/javascript" src="../static/js/libs/excanvas.min.js" th:src="@{js/libs/excanvas.min.js}"></script>
+<script type="text/javascript"   th:src="@{/js/libs/excanvas.min.js}"></script>
 <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-<script type="text/javascript" src="../static/js/libs/respond.min.js" th:src="@{js/libs/respond.min.js}"></script>
+<script type="text/javascript"  th:src="@{/js/libs/respond.min.js}"></script>
 <![endif]-->
 <!-- Bootstrap plugins -->
-<script src="../static/js/bootstrap/bootstrap.js" th:src="@{js/bootstrap/bootstrap.js}"></script>
+<script  th:src="@{/js/bootstrap/bootstrap.js}"></script>
 <!-- Core plugins ( not remove ever) -->
 <!-- Handle responsive view functions -->
-<script src="../static/js/jRespond.min.js" th:src="@{js/jRespond.min.js}"></script>
+<script  th:src="@{/js/jRespond.min.js}"></script>
 <!-- Custom scroll for sidebars,tables and etc. -->
-<script src="../static/plugins/core/slimscroll/jquery.slimscroll.min.js" th:src="@{plugins/core/slimscroll/jquery.slimscroll.min.js}"></script>
-<script src="../static/plugins/core/slimscroll/jquery.slimscroll.horizontal.min.js" th:src="@{plugins/core/slimscroll/jquery.slimscroll.horizontal.min.js}"></script>
+<script  th:src="@{/plugins/core/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/plugins/core/slimscroll/jquery.slimscroll.horizontal.min.js}"></script>
 <!-- Resize text area in most pages -->
-<script src="../static/plugins/forms/autosize/jquery.autosize.js" th:src="@{plugins/forms/autosize/jquery.autosize.js}"></script>
+<script th:src="@{/plugins/forms/autosize/jquery.autosize.js}"></script>
 <!-- Proivde quick search for many widgets -->
-<script src="../static/plugins/core/quicksearch/jquery.quicksearch.js" th:src="@{plugins/core/quicksearch/jquery.quicksearch.js}"></script>
+<script  th:src="@{/plugins/core/quicksearch/jquery.quicksearch.js}"></script>
 <!-- Bootbox confirm dialog for reset postion on panels -->
-<script src="../static/plugins/ui/bootbox/bootbox.js" th:src="@{plugins/ui/bootbox/bootbox.js}"></script>
-<script th:src="@{plugins/charts/flot/jquery.flot.js}"></script>
-<script th:src="@{plugins/charts/flot/jquery.flot.pie.js}"></script>
-<script th:src="@{plugins/charts/flot/jquery.flot.resize.js}"></script>
-<script th:src="@{plugins/charts/flot/jquery.flot.time.js}"></script>
-<script th:src="@{plugins/charts/flot/jquery.flot.growraf.js}"></script>
-<script th:src="@{plugins/charts/flot/jquery.flot.categories.js}"></script>
-<script th:src="@{plugins/charts/flot/jquery.flot.stack.js}"></script>
-<script th:src="@{plugins/charts/flot/jquery.flot.tooltip.min.js}"></script>
-<script th:src="@{plugins/charts/flot/date.js}"></script>
-<script th:src="@{plugins/charts/sparklines/jquery.sparkline.js}"></script>
-<script th:src="@{plugins/charts/pie-chart/jquery.easy-pie-chart.js}"></script>
-<script th:src="@{plugins/forms/icheck/jquery.icheck.js}"></script>
-<script th:src="@{plugins/forms/tags/jquery.tagsinput.min.js}"></script>
-<script th:src="@{plugins/forms/tinymce/tinymce.min.js}"></script>
-<script th:src="@{plugins/misc/highlight/highlight.pack.js}"></script>
-<script th:src="@{plugins/misc/countTo/jquery.countTo.js}"></script>
-<script th:src="@{plugins/ui/weather/skyicons.js}"></script>
-<script th:src="@{plugins/ui/notify/jquery.gritter.js}"></script>
-<script th:src="@{plugins/ui/calendar/fullcalendar.js}"></script>
-<script th:src="@{js/jquery.sprFlat.js}"></script>
-<script th:src="@{js/app.js}"></script>
-<script th:src="@{js/pages/dashboard.js}"></script>
+<script th:src="@{/plugins/ui/bootbox/bootbox.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.pie.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.resize.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.time.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.growraf.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.categories.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.stack.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.tooltip.min.js}"></script>
+<script th:src="@{/plugins/charts/flot/date.js}"></script>
+<script th:src="@{/plugins/charts/sparklines/jquery.sparkline.js}"></script>
+<script th:src="@{/plugins/charts/pie-chart/jquery.easy-pie-chart.js}"></script>
+<script th:src="@{/plugins/forms/icheck/jquery.icheck.js}"></script>
+<script th:src="@{/plugins/forms/tags/jquery.tagsinput.min.js}"></script>
+<script th:src="@{/plugins/forms/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/plugins/misc/highlight/highlight.pack.js}"></script>
+<script th:src="@{/plugins/misc/countTo/jquery.countTo.js}"></script>
+<script th:src="@{/plugins/ui/weather/skyicons.js}"></script>
+<script th:src="@{/plugins/ui/notify/jquery.gritter.js}"></script>
+<script th:src="@{/plugins/ui/calendar/fullcalendar.js}"></script>
+<script th:src="@{/js/jquery.sprFlat.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/js/pages/dashboard.js}"></script>
+<script th:src="@{/plugins/charts/flot/jquery.flot.orderBars.js}"></script>
 </body>
