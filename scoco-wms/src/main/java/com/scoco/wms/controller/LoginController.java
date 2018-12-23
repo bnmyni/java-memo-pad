@@ -33,7 +33,6 @@ public class LoginController {
         LoginUserVo userVo = userService.login(user);
         model.addAttribute("user", userVo);
         model.addAttribute("msg", userVo.getMsg());
-        model.addAttribute("content", " content/index::html");
         LOG.info("用户登录返回信息: {}", model);
         return StringUtils.isEmpty(userVo.getMsg()) ? "index" : "login";
     }

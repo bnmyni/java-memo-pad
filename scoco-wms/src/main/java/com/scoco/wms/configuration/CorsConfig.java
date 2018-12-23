@@ -8,13 +8,16 @@ import org.springframework.web.filter.CorsFilter;
 
 /**
  * 允许用户跨域请求
+ *
  * @author sunke
+ * @version 1.0.0.0
+ * @date 2018/12/18
  */
 @Configuration
 public class CorsConfig {
 
     private CorsConfiguration buildConfig() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
@@ -23,7 +26,7 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", buildConfig());
         return new CorsFilter(source);
     }

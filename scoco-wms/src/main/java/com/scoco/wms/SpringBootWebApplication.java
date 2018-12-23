@@ -1,9 +1,9 @@
 package com.scoco.wms;
 
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 
 /**
  * 应用启动入口
@@ -12,7 +12,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  * @date 2018年12月7日10:42:06
  */
 @SpringBootApplication
-//@ServletComponentScan(basePackages = "com.scoco.wms.filter")
+@MapperScan("com.scoco.wms.dao")
 public class SpringBootWebApplication {
 
 

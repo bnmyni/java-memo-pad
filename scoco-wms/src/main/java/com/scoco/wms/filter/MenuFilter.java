@@ -18,8 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 
 public class MenuFilter implements Filter {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MenuFilter.class);
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -30,7 +28,6 @@ public class MenuFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String uri = request.getRequestURI();
-        LOGGER.info("request uri is : {}", uri);
         String loginUri = "/";
         if (loginUri.equals(uri)) {
             request.getRequestDispatcher("/login.html").forward(servletRequest,servletResponse);
