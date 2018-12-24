@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title>Announce</title>
+<!--#include virtual="/include.html"  -->
+<!--    <script src="ueditor/js/ueditor.config.js"></script>
+<script src="ueditor/js/ueditor.all.js"></script>-->
+<script type="text/javascript" src="codeDict/queryScript.ajax?codeType=announce_cat,announce_status"></script>
+</head>
+<body>
+<!--  详情查看  -->
+<div class="modal-body">
+  <form class="form-horizontal" id="view-form-modal" role="form">
+    <div class="form-group">
+      <div class="col-sm-11">
+        <p name="content" style="padding-left:10px;" class="form-control-static"></p>
+      </div>
+    </div>
+   <div id="aaaaaaa" style="display:none" class="clearfix form-actions">
+    <div class="center">
+      <button  type="button"id="auditOK" class="btn btn-sm btn-success" >
+       审批通过 
+      </button>
+      <a href="pages/main.shtml">
+      <button type="button" class="btn btn-sm" type="button" id="auditpass"  data-dismiss="modal">  审批不通过 </button>
+      </a> </div>
+  </div>
+  </form>
+</div>
+</div>
+<!--#include virtual="/include_footer.html"  --> 
+<script type="text/javascript">
+/* 栏目数据加载  */
+$("#cat").localRender(CodeDict['announce_cat'],{
+	//firstOption:{text:'请选择分类',value:''},
+	keyValue:{text:'value',value:'key'}
+});
+var obj_url=ctxPaths+"/lessee/lessee/listExclude.ajax";
+var audit_url  =ctxPaths+'/announce/announce/audit.ajax';//审批
+var view_url 	 = ctxPaths+ '/announce/announce/get.ajax';
+var id=getP("id");
+var tempdata;
+$(function($) {
+	viewEvent(id);
+});
+$("#auditOK").click(function(){
+	var id=getP("id");
+	//console.log(id);
+		$.ajaxSubmit(audit_url+"?announceId="+id+"&status=2",{}, function(data){
+		//console.log(data);
+		if(data.success == true){
+			viewEvent(id);
+			//console.log("审批通过");
+			$("#aaaaaaa").css({"display":"none"});
+		}else{
+			Q_Alert_Fail(data.message);
+		}
+	});
+});
+$("#auditpass").click(function(){
+	var id=getP("id");
+	$.ajaxSubmit(audit_url+"?announceId="+id+"&status=3",{'id': id}, function(data){
+		//console.log(data);
+		//console.log(data.success);
+		if(data.success == true){
+			viewEvent(id);
+			$("#aaaaaaa").css({"display":"none"});
+		
+		}else{
+			Q_Alert_Fail(data.message);
+		}
+	});
+});
+function viewEvent(id){
+	$.ajaxSubmit(view_url,{'id' : id}, function(data){
+		//console.log(data);
+		var html="";
+		if(data.data['status']=='1'){
+			$("#aaaaaaa").css({"display":""});
+		}
+		$.dataInput($('#view-form-modal').find('.form-control-static'),data.data);	
+	});
+};
+</script>
+</body>
+</html>

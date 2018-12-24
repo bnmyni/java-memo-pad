@@ -1,0 +1,39 @@
+<script>
+var getP = function(n) {
+	var hrefstr, pos, parastr, para, tempstr;
+	hrefstr = window.location.href.split('#')[0];
+	pos = hrefstr.indexOf("?");
+	parastr = hrefstr.substring(pos + 1);
+	para = parastr.split("&");
+	tempstr = "";
+	for (var i = 0; i < para.length; i++) {
+		tempstr = para[i];
+		pos = tempstr.indexOf("=");
+		if (tempstr.substring(0, pos).toLowerCase() == n.toLowerCase()) {
+			return tempstr.substring(pos + 1);
+		}
+	}
+	return '';
+};
+function  pseth() {
+    //var iObj = parent.parent.document.getElementById('mainFrame');//A和main同域，所以可以访问节点
+    var iObjH = window.location.href;//访问自己的location对象获取hash值
+	var arr = iObjH.split("#");
+	var referrer = decodeURIComponent(getP('referrer')),c = decodeURIComponent(getP('c'));
+	if (arr.length == 3){
+		 var parentIfmId = arr[1],vheight = arr[2];
+		 if (!parentIfmId){
+			parentIfmId = window.parent.parent.cache.getCache(referrer);
+		 }
+		 if (parentIfmId){
+			var iObj = parent.parent.document.getElementById(parentIfmId);
+			 iObj.style.height = (vheight > 520 ? vheight : 520)+ "px";//操作dom
+			 parent.parent.cache.setCache(c,parentIfmId);
+		 }
+	}
+	/**if (parent.parent.initIfmStyle){
+		parent.parent.initIfmStyle();
+	}**/
+}
+pseth();
+</script>

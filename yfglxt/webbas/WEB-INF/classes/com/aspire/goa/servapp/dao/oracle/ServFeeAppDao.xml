@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aspire.goa.servapp.dao.ServFeeAppDao" >
+  <resultMap id="AppMap" type="com.aspire.goa.servapp.entity.ServFeeApp" >
+    <result property="bizId" column="BIZ_ID" />
+    <result property="bizSn" column="BIZ_SN"/>
+    <result property="servOrg" column="SERVORG"/>
+    <result property="servType" column="SERVTYPE"/>
+    <result property="guestOrg" column="GUESTORG"/>
+    <result property="servReason" column="SERVREASON"/>
+    <result property="servDate" column="SERVDATE"/>
+    <result property="servLoc" column="SERVLOC"/>
+    <result property="guestNum" column="GUESTNUM"/>
+    <result property="servNum" column="SERVNUM"/>
+    <result property="dishFee" column="DISHFEE"/>
+    <result property="giftFee" column="GIFTFEE" />
+    <result property="sumFee" column="SUMFEE" />
+    <result property="servRemark" column="SERVREMARK" />
+    <result property="appDate" column="APPDATE" />
+    <result property="appPerson" column="APPPERSON" />
+    <result property="appPersonName" column="APPPERSONNAME" />
+    <result property="appOrg" column="APPORG" />
+    <result property="upLeader" column="UPLEADER" />
+    <result property="bizStatus" column="BIZSTATUS" />
+    <result property="endLeader" column="ENDLEAER" />
+    <result property="appStatus" column="APPSTATUS" />
+    <result property="upStatus" column="UPSTATUS" />
+    <result property="endStatus" column="ENDSTATUS" />
+    <result property="createTime" column="CREATETIME"/>
+    <result property="status" column="STATUS"/>
+    <result property="departLeader" column="DEPARTLEADER"/>
+    <result property="departStatus" column="DEPARTSTATUS"/>
+  </resultMap>
+  
+  <insert id="addServApp" 
+	        parameterType="com.aspire.goa.servapp.entity.ServFeeApp">
+        <![CDATA[
+		INSERT INTO biz_servfeeapp  (
+		       BIZ_ID     ,
+		       BIZ_SN     ,
+		       SERVORG    ,
+		       SERVTYPE   ,
+		       GUESTORG   ,
+		       SERVREASON ,
+		       SERVDATE   ,
+		       SERVLOC    ,
+		       GUESTNUM   ,
+		       SERVNUM    ,
+		       DISHFEE    ,
+		       GIFTFEE    ,
+		       SUMFEE     ,
+		       SERVREMARK ,
+		       APPDATE	  ,
+               APPPERSON  ,
+               APPPERSONNAME,
+               APPORG	  ,
+               UPLEADER   ,
+               BIZSTATUS  ,
+		       ENDLEAER   ,
+		       UPSTATUS   ,
+		       CREATETIME ,
+		       STATUS ,
+		       APPSTATUS,
+		       ENDSTATUS,
+		       ACCOUNTSUBJECT,
+		       COASTAIM,
+		       DEPARTLEADER,
+		       DEPARTSTATUS
+		       )
+		VALUES(#{bizId,jdbcType=NUMERIC},
+		       #{bizSn,jdbcType=VARCHAR},
+		       #{servOrg,jdbcType=VARCHAR},
+		       #{servType,jdbcType=VARCHAR},
+		       #{guestOrg,jdbcType=VARCHAR},
+		       #{servReason,jdbcType=VARCHAR},
+		       #{servDate,jdbcType=DATE},
+		       #{servLoc,jdbcType=VARCHAR},
+		       #{guestNum,jdbcType=NUMERIC},
+		       #{servNum,jdbcType=NUMERIC},
+		       #{dishFee,jdbcType=DECIMAL},
+		       #{giftFee,jdbcType=DECIMAL},
+		       #{sumFee,jdbcType=DECIMAL},
+		       #{servRemark,jdbcType=VARCHAR},
+               #{appDate,jdbcType=DATE}, 
+               #{appPerson,jdbcType=NUMERIC},
+               #{appPersonName,jdbcType=VARCHAR},
+		       #{appOrg,jdbcType=NUMERIC},
+               #{upLeader,jdbcType=NUMERIC},
+               #{bizStatus,jdbcType=VARCHAR}, 
+               #{endLeader,jdbcType=NUMERIC},
+               #{upStatus,jdbcType=VARCHAR},
+               SYSDATE,
+               #{status,jdbcType=VARCHAR},
+               #{appStatus,jdbcType=VARCHAR},
+               #{endStatus,jdbcType=VARCHAR},
+               #{accountSubject,jdbcType=VARCHAR},
+               #{coastAim,jdbcType=VARCHAR},
+               #{departLeader,jdbcType=NUMERIC},
+               #{departStatus,jdbcType=VARCHAR}
+               )
+		]]>
+    </insert>
+    
+    <select id="findApp"
+    		resultMap="AppMap" 
+            parameterType="long">
+        <![CDATA[
+		SELECT *
+		FROM   biz_servfeeapp             
+		WHERE  BIZ_ID = #{biz_id}
+		]]>
+    </select>
+    
+     <select id="findApps"
+    		resultMap="AppMap">
+        SELECT *
+		FROM   biz_servfeeapp
+		WHERE  BIZ_ID  IN  
+        <foreach item="item" index="index" collection="array"   
+                         open="(" separator="," close=")">  
+        	#{item}  
+        </foreach>
+    </select>
+    
+    <update id="updateApp" 
+            parameterType="com.aspire.goa.servapp.entity.ServFeeApp">
+    	<![CDATA[
+		UPDATE biz_servfeeapp     
+		SET    SERVORG 		= #{servOrg,jdbcType=VARCHAR},         
+		       SERVTYPE 	= #{servType,jdbcType=VARCHAR},      
+		       GUESTORG 	= #{guestOrg,jdbcType=VARCHAR},          
+		       SERVREASON 	= #{servReason,jdbcType=VARCHAR},
+		       SERVDATE 	= #{servDate,jdbcType=DATE},
+		       SERVLOC 		= #{servLoc,jdbcType=VARCHAR}, 
+		       GUESTNUM 	= #{guestNum,jdbcType=NUMERIC},            
+		       SERVNUM 		= #{servNum,jdbcType=NUMERIC},     
+		       DISHFEE 		= #{dishFee,jdbcType=NUMERIC},        
+		       GIFTFEE 		= #{giftFee,jdbcType=NUMERIC},
+		       SUMFEE 		= #{sumFee,jdbcType=NUMERIC},   
+		       SERVREMARK 	= #{servRemark,jdbcType=VARCHAR},  
+		       UPLEADER 	= #{upLeader,jdbcType=NUMERIC},
+               ENDLEAER 	= #{endLeader,jdbcType=NUMERIC},
+		       BIZSTATUS 	= #{bizStatus,jdbcType=VARCHAR},
+		       STATUS 		= #{status,jdbcType=VARCHAR},
+		       APPSTATUS 	= #{appStatus,jdbcType=VARCHAR},
+		       UPSTATUS 	= #{upStatus,jdbcType=VARCHAR},
+		       ACCOUNTSUBJECT= #{accountSubject,jdbcType=VARCHAR},
+		       COASTAIM = #{coastAim,jdbcType=VARCHAR},
+		       ENDSTATUS 	= #{endStatus,jdbcType=VARCHAR},
+		       DEPARTLEADER = #{departLeader,jdbcType=NUMERIC},
+		       DEPARTSTATUS 	= #{departStatus,jdbcType=VARCHAR}
+		WHERE  BIZ_ID       = #{bizId,jdbcType=NUMERIC}
+		]]>
+    </update>
+    
+    <select id="listServApps"
+    		resultMap="AppMap" 
+            parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page">
+		SELECT *
+		FROM   biz_servfeeapp             
+		<where>
+			((APPPERSON = trim(#{params.staffID}) AND BIZSTATUS='res')
+			OR (DEPARTLEADER = trim(#{params.staffID}) AND BIZSTATUS='depart')
+			OR (UPLEADER = trim(#{params.staffID}) AND BIZSTATUS='upper')
+			OR (ENDLEAER = trim(#{params.staffID}) AND BIZSTATUS='last'))
+			<if test="params['appDateStart'] != null and  params['appDateStart'] != ''">
+				 AND APPDATE >=  to_date(trim(#{params.appDateStart}),'yyyy-MM-dd')
+			</if> 
+			<if test="params['appDateEnd'] != null and  params['appDateEnd'] != ''"> 
+				<![CDATA[AND APPDATE <= to_date(trim(#{params.appDateEnd}),'yyyy-MM-dd')]]>
+			</if>
+			<if test="params['guestOrg'] != null and  params['guestOrg'] != ''"> 
+				AND GUESTORG like CONCAT(CONCAT('%', trim(#{params.guestOrg})), '%')
+			</if>
+			<if test="params['appPersonName'] != null and  params['appPersonName'] != ''"> 
+				AND APPPERSONNAME like CONCAT(CONCAT('%', trim(#{params.appPersonName})), '%')
+			</if>
+			<if test="params['status'] != null and  params['status'] != ''">
+				AND STATUS = trim(#{params.status})
+			</if>
+		</where>
+    </select>
+    
+    <select id="listMyServApps"
+    		resultMap="AppMap" 
+            parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page">
+		SELECT *
+		FROM   biz_servfeeapp             		
+		<where>
+			((DEPARTLEADER = trim(#{params.staffID}) AND BIZSTATUS='depart')
+			OR (UPLEADER = trim(#{params.staffID}) AND BIZSTATUS='upper')
+			OR (ENDLEAER = trim(#{params.staffID}) AND BIZSTATUS='last'))
+			<if test="params['appDateStart'] != null and  params['appDateStart'] != ''">
+				 AND APPDATE >=  to_date(trim(#{params.appDateStart}),'yyyy-MM-dd')
+			</if> 
+			<if test="params['appDateEnd'] != null and  params['appDateEnd'] != ''"> 
+				<![CDATA[AND APPDATE <= to_date(trim(#{params.appDateEnd}),'yyyy-MM-dd')]]>
+			</if>
+			<if test="params['guestOrg'] != null and  params['guestOrg'] != ''"> 
+				AND GUESTORG like CONCAT(CONCAT('%', trim(#{params.guestOrg})), '%')
+			</if>
+			<if test="params['appPersonName'] != null and  params['appPersonName'] != ''"> 
+				AND APPPERSONNAME like CONCAT(CONCAT('%', trim(#{params.appPersonName})), '%')
+			</if>
+			<if test="params['status'] != null and  params['status'] != ''">
+				AND STATUS = trim(#{params.status})
+			</if>
+		</where>
+    </select>
+    
+    <select id="getServAppBySn"
+    		resultMap="AppMap" 
+            parameterType="java.lang.String">
+        <![CDATA[
+		SELECT *
+		FROM   biz_servfeeapp             
+		WHERE  BIZ_SN LIKE #{sn}
+		]]>
+    </select>
+    
+    <select id="listMyApplyApps"
+    		resultMap="AppMap" 
+            parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page">
+		SELECT *
+		FROM   biz_servfeeapp             
+		<where>
+			APPPERSON = trim(#{params.staffID})
+			<if test="params['appDateStart'] != null and  params['appDateStart'] != ''">
+				 AND APPDATE >=  to_date(trim(#{params.appDateStart}),'yyyy-MM-dd')
+			</if> 
+			<if test="params['appDateEnd'] != null and  params['appDateEnd'] != ''"> 
+				<![CDATA[AND APPDATE <= to_date(trim(#{params.appDateEnd}),'yyyy-MM-dd')]]>
+			</if>
+			<if test="params['guestOrg'] != null and  params['guestOrg'] != ''"> 
+				AND GUESTORG like CONCAT(CONCAT('%', trim(#{params.guestOrg})), '%')
+			</if>
+			<if test="params['status'] != null and  params['status'] != ''">
+				AND STATUS = trim(#{params.status})
+			</if>
+		</where>
+    </select>
+    
+    <select id="listMyApprovalApps"
+    		resultMap="AppMap" 
+            parameterType="java.util.HashMap">
+		SELECT *
+		FROM   biz_servfeeapp             
+		<where>
+			((DEPARTLEADER = trim(#{params.staffID}) and (DEPARTSTATUS='Y' or DEPARTSTATUS='R'))
+			OR (UPLEADER = trim(#{params.staffID}) and (UPSTATUS='Y' or UPSTATUS='R'))
+			OR (ENDLEAER = trim(#{params.staffID}) and (ENDSTATUS='Y' or ENDSTATUS='R'))) 
+			<if test="params['appDateStart'] != null and  params['appDateStart'] != ''">
+				 AND APPDATE >=  to_date(trim(#{params.appDateStart}),'yyyy-MM-dd')
+			</if> 
+			<if test="params['appDateEnd'] != null and  params['appDateEnd'] != ''"> 
+				<![CDATA[AND APPDATE <= to_date(trim(#{params.appDateEnd}),'yyyy-MM-dd')]]>
+			</if>
+			<if test="params['guestOrg'] != null and  params['guestOrg'] != ''"> 
+				AND GUESTORG like CONCAT(CONCAT('%', trim(#{params.guestOrg})), '%')
+			</if>
+			<if test="params['appPersonName'] != null and  params['appPersonName'] != ''"> 
+				AND APPPERSONNAME like CONCAT(CONCAT('%', trim(#{params.appPersonName})), '%')
+			</if>
+			<if test="params['status'] != null and  params['status'] != ''">
+				AND STATUS = trim(#{params.status})
+			</if>
+		</where>
+    </select>
+    
+</mapper>

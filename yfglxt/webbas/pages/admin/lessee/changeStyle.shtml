@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+<!--#include virtual="/root.jsp"  -->
+<title>样式设置</title>
+<!--#include virtual="/include.html"  -->
+<style>
+.checkbox LABEL {
+	display: inline-block;
+}
+.table-responsive{margin-left: 200px;}
+#button{margin-left:150px;}
+</style>
+</head>
+
+<body>
+<div class="page-content">
+<div class="table-responsive">
+<div style="width:auto;">
+  <div class="page-header">
+    <h1> 系统设置 <small> <i class="ace-icon fa fa-angle-double-right"></i> 样式设置 </small></h1>
+  </div>
+  <div class="widget-box" style="width:600px;">
+    <div class="widget-header widget-header-flat">
+      <h4 class="widget-title lighter smaller">样式设置</h4>
+    </div>
+    <div class="widget-body" style=" height:400px;">
+      <form id="changeStyleForm" class="form-horizontal" role="form"  onsubmit="return false;">
+        <input type="hidden" name="lesseeId"  id="lesseeId"/>
+        <div class="widget-main padding-8">
+          <div class="form-group">
+            <label class="control-label col-sm-3 no-padding-right" for="lesseeName">租户名称：</label>
+            <div class="col-sm-4">
+              <p id="lesseeName" name="lesseeName" class="form-control-static"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="style">样式：</label>
+            <input type="hidden" name="styleConfig" id="styleConfig"/>
+            <div class="col-sm-9" id="styleradioDiv"> </div>
+          </div>
+          <div class="form-group">
+            <label for="logo" class="control-label col-sm-3 no-padding-right">租户标志：</label>
+            <div class="col-sm-4">
+              <input type="text" name="unit" id="unit" class="form-control input-sm" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-9" style="margin: auto;">
+              <input type="submit" class="btn btn-success" name="button" id="button" value="提交" />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+</div>
+<script>
+//设置一变量，用于缓存页面中的原始值，用于重设操作
+var originalValue = {};
+
+$(document).ready(function(e) {
+	
+	// 加载页面数据
+	formLoad();
+
+	var validator = $('#changeStyleForm').validate(
+			{
+				rules : {
+					'lesseeName' : {
+						required : true,
+						maxlength : 100
+					},
+					'radiostyle' : 'required',
+					'unit' : {
+						maxlength : 30
+					}
+				},
+
+				messages : {
+					'radiostyle' : '请选择样式'
+				},
+				submitHandler : function(form) {
+					var str= $("input[type='radio']:checked").val();
+					//console.log(str);
+					$("#styleConfig").val(str)  ;
+					$.ajaxSubmit(window.ctxPaths + "/lessee/lessee/modLessee.ajax",
+							$('#changeStyleForm').serializeArray(), function(
+									data) {
+								if (data.success) {
+									Q_Alert("定制门户信息成功", function() {
+										//formLoad()
+										window.parent.location.reload();
+									});
+										//console.log(str)
+										
+										
+										$("#skin").attr("href","assets/css/"+str+".css");
+									
+								} else {
+									if (data.message) {
+										Q_Alert_Fail(data.message);
+									} else {
+										Q_Alert_Fail('原因未知');
+									}
+								}
+								$("#skin").attr("href","assets/css/"+str+".css");
+							});
+					return false;
+				}
+			
+			});
+
+});
+
+//表单数据加载
+function formLoad() {
+	
+	$.ajaxSubmit(window.ctxPaths + "/lessee/lessee/getLessee.ajax", {},
+					function(rtn) {
+						if (rtn.success) {
+							var data = rtn.data;
+							// 数据成功加载完毕，开始缓存页面中的原始值
+							for ( var p in data) {
+								originalValue[p] = data[p];
+							}
+							$.dataInput($('.field'), data);
+							$('#changeStyleForm').json2Form2(rtn.data);
+							// 设置登录名：
+							$('#lesseeName').text(data['lesseeName']);
+							
+							var str=data['style'];
+							//alert(str);
+							var arr=str.split(",");
+							var temp ="";
+							$("#styleradioDiv").html("");
+							for(var i=0;i<arr.length;i++){
+								temp += "<input type='radio' name='radiostyle' value='"+arr[i]+"'";
+								if(data['styleConfig'] == arr[i]){
+									temp += " checked/>";
+									//console.log(data['styleConfig']);
+									//console.log(arr[i]);
+									//$(this).attr("checked", "checked");
+								}else{
+									temp += " />";
+								}
+								temp += ""+arr[i]+"主题 ";
+								
+							}
+							$("<div>"+temp+"</div>").appendTo("#styleradioDiv");
+							//console.log(temp.toString());
+							
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+
+		});
+}
+</script> 
+<!-- page specific plugin scripts --> 
+<!--script src="assets/js/jquery.nestable.min.js"></script--> 
+<!--#include virtual="/include_footer.html"  --> 
+<!--script src="js/common.js"></script-->
+</body>
+</html>

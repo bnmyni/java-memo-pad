@@ -1,0 +1,19 @@
+﻿<project name="oa" basedir="." default="getVssCode">
+<!--path mapping-->
+<property name="name" value="OA"/>
+<property name="base.dir" value="D:/demo/smt_files"/>
+<property name="vss.dir" value="/08_研发资源视图/研发资源视图.xls"/>
+<property name="vss.ssdir" value="D:/demo/Microsoft Visual SourceSafe"/>
+<property name="vss.svrdir" value="//asp-sz-vss/技术资产库$"/>
+
+<target name="getVssCode">
+<tstamp>
+<format property="TODAY" pattern="yyyy-MM-dd" />
+</tstamp>
+<echo message="Getting latest source codes from: ${TODAY}" /> 
+<echo message="${vss.svrdir}" /> 
+<vssget vsspath="${vss.dir}" localpath="${base.dir}" login="kangxg,"
+ssdir="${vss.ssdir}" serverPath="${vss.svrdir}" autoresponse="Y" recursive="true" quiet="true" />
+</target>
+
+</project>

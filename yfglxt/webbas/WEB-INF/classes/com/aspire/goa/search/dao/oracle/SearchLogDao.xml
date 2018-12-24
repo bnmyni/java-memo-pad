@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aspire.goa.search.dao.SearchLogDao" >
+  <resultMap id="BaseResultMap" type="com.aspire.goa.search.entity.SearchLog" >
+    <result column="ID" property="id" />
+    <result column="KEYWORD" property="keyword" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="DOMAIN" property="domain" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Where_Clause" >
+    <where >
+      		1 = 1
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				AND KEYWORD like '%${params.keyword}%'
+			</if>
+			<if test="params['domain'] != null and  params['domain'] != ''">
+				AND DOMAIN = #{params.domain}
+			</if>
+			<if test="params['creator'] != null and  params['creator'] != ''">
+				AND CREATOR = #{params.creator}
+			</if>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, KEYWORD, CREATOR, DOMAIN, CREATE_TIME
+  </sql>
+  <select id="list" resultMap="BaseResultMap" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" >
+    select
+    <include refid="Base_Column_List" />
+    from G_SEARCH_LOG
+    <if test="params != null" >
+      <include refid="Base_Where_Clause" />
+    </if>
+  </select>
+    <select id="findHistory" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    SELECT
+				KEYWORD,
+		        count(KEYWORD)  num
+		FROM	G_SEARCH_LOG 
+		<where>
+			1=1  
+			<if test="keyword != null and keyword != ''"> 
+				AND KEYWORD like '%${keyword}%'
+			</if>
+			<if test="domain != null and domain != ''"> 
+				AND DOMAIN = '${domain}'
+			</if>
+			<if test="creator != null and creator != ''"> 
+				AND CREATOR = '${creator}'
+			</if>
+		</where>
+		 group by keyword order by count(keyword) desc 
+  </select> 
+  <insert id="insert" parameterType="com.aspire.goa.search.entity.SearchLog" >
+  		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT SEQ_G_SEARCH_LOG_ID.NEXTVAL FROM DUAL
+		</selectKey>
+    insert into G_SEARCH_LOG (ID, KEYWORD, CREATOR, 
+      DOMAIN, CREATE_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{domain,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE})
+  </insert>
+</mapper>

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	类名:     LesseeSql
+	描述:     数据访问语句
+	作者:     王磊
+	时间:     2015-05-24 15:49:05
+ -->
+<mapper namespace="com.aspire.goa.lessee.dao.LesseeDao">
+
+	<resultMap type="com.aspire.goa.lessee.entity.Lessee" id="baseResultMap">
+		<result property="lesseeId" column="LESSEE_ID" jdbcType="VARCHAR"/>
+		<result property="lesseeName" column="LESSEE_NAME" jdbcType="VARCHAR"/>
+		<result property="unit" column="UNIT" jdbcType="VARCHAR"/>
+		<result property="style" column="STYLE" jdbcType="VARCHAR"/>
+		<result property="styleConfig" column="STYLE_CONFIG" jdbcType="VARCHAR"/>
+		<result property="module" column="MODULE" jdbcType="VARCHAR"/>
+		<result property="device" column="DEVICE" jdbcType="VARCHAR"/>
+		<result property="adminLoginName" column="ADMIN_LOGIN_NAME" jdbcType="VARCHAR"/>
+		<result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+		<result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+		<result property="creator" column="CREATOR" jdbcType="VARCHAR"/>
+		<result property="lastUpdateTime" column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP"/>
+		
+		<!-- 其他字段 -->
+		<result property="creatorDesc" column="CREATOR_DESC" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="baseWhereClause">
+		<where>
+			<!--
+			1 = 1
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				EXAMPLE_NAME like '%${params.keyword}%'
+			</if>
+			-->
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				LESSEE_NAME like '%${params.keyword}%'
+			</if>
+		</where>
+	</sql>
+	<sql id="baseColumnList">
+		LESSEE_ID,LESSEE_NAME,UNIT,STYLE,STYLE_CONFIG,MODULE,DEVICE,ADMIN_LOGIN_NAME,REMARK,CREATE_TIME,CREATOR,LAST_UPDATE_TIME,
+		(select real_name from sec_staff where staff_id = CREATOR) as CREATOR_DESC
+	</sql>
+	
+	<!-- 获取ID -->
+	 <select id="getNextId" resultType="java.lang.String">
+        SELECT
+        ltrim(to_char(SEQ_G_LESSEE.Nextval))||'00000'
+        AS Id
+        FROM dual
+    </select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="com.aspire.goa.lessee.entity.Lessee">
+		insert into 
+			g_lessee(LESSEE_ID,LESSEE_NAME,UNIT,STYLE,STYLE_CONFIG,MODULE,DEVICE,ADMIN_LOGIN_NAME,REMARK,CREATE_TIME,CREATOR,LAST_UPDATE_TIME) 
+		values(
+			#{lesseeId,jdbcType=VARCHAR} ,
+			#{lesseeName,jdbcType=VARCHAR} ,
+			#{unit,jdbcType=VARCHAR} ,
+			#{style,jdbcType=VARCHAR} ,
+			#{styleConfig,jdbcType=VARCHAR} ,
+			#{module,jdbcType=VARCHAR} ,
+			#{device,jdbcType=VARCHAR} ,
+			#{adminLoginName,jdbcType=VARCHAR} ,
+			#{remark,jdbcType=VARCHAR} ,
+			#{createTime,jdbcType=TIMESTAMP} ,
+			#{creator,jdbcType=VARCHAR} ,
+			#{lastUpdateTime,jdbcType=TIMESTAMP} 
+		)
+	</insert>
+	
+	<!-- 列表 -->
+	<select id="list" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" resultMap="baseResultMap">
+		select
+		<include refid="baseColumnList" />
+		from g_lessee
+		<if test="params != null">
+			<include refid="baseWhereClause" />
+		</if>
+	</select>
+	
+	<!-- 详情 -->
+	<select id="get" parameterType="String" resultMap="baseResultMap">
+		select 
+		<include refid="baseColumnList"/>
+		from g_lessee t where LESSEE_ID = #{lesseeId}
+	</select>
+	
+	
+	
+	<!-- 修改 -->
+	<update id="mod" parameterType="com.aspire.goa.lessee.entity.Lessee">
+		update g_lessee set LESSEE_ID = #{lesseeId}
+		<if test="lesseeName != null">
+			, LESSEE_NAME = #{lesseeName}
+		</if>
+		<if test="unit != null">
+			, UNIT = #{unit}
+		</if>
+		<if test="style != null">
+			, STYLE = #{style}
+		</if>
+		<if test="styleConfig != null">
+			, STYLE_CONFIG = #{styleConfig}
+		</if>
+		<if test="module != null">
+			, MODULE = #{module}
+		</if>
+		<if test="device != null">
+			, DEVICE = #{device}
+		</if>
+		<if test="adminLoginName != null">
+			, ADMIN_LOGIN_NAME = #{adminLoginName}
+		</if>
+		<if test="remark != null">
+			, REMARK = #{remark}
+		</if>
+		<if test="createTime != null">
+			, CREATE_TIME = #{createTime}
+		</if>
+		<if test="creator != null">
+			, CREATOR = #{creator}
+		</if>
+		<if test="lastUpdateTime != null">
+			, LAST_UPDATE_TIME = #{lastUpdateTime}
+		</if>
+		where LESSEE_ID = #{lesseeId}
+	</update> 
+	
+	<!-- 删除 -->
+	<update id="del" parameterType="string">
+		
+		declare
+		   cursor v_lessee_cursor is select lessee_id from g_lessee where LESSEE_ID = #{lesseeId} and lessee_id not like '%ADMIN%';
+		begin
+		  
+		  for v_lessee in  v_lessee_cursor loop
+		  	delete from sec_staff where department_id in (select sd.department_id from SEC_DEPARTMENT sd where sd.domain = v_lessee.lessee_id );
+		    delete from SEC_STAFF_DEPARTMENT_ROLE where  DEPARTMENT_ID = ('-'||v_lessee.lessee_id) and ROLE_ID = (v_lessee.lessee_id||'999');
+		    delete from SEC_DEPARTMENT_ROLE where DEPARTMENT_ID = ('-'||v_lessee.lessee_id) and ROLE_ID = (v_lessee.lessee_id||'999');
+		    delete from SEC_DEPARTMENT where DEPARTMENT_ID =( '-'||v_lessee.lessee_id);
+		    delete from SEC_ROLE_RESOURCE_OPERATION where role_id=(v_lessee.lessee_id||'999');
+		    delete from sec_role where role_id=(v_lessee.lessee_id||'999');
+		    delete from SEC_OPERATION_ADDRESS where domain=v_lessee.lessee_id;
+		    delete from SEC_OPERATION where domain=v_lessee.lessee_id;
+		    delete from sec_resources where domain=v_lessee.lessee_id;
+		    delete from sec_resource_category where domain=v_lessee.lessee_id;
+		    delete from menu where domain=v_lessee.lessee_id;
+		  end loop;
+		  delete from g_lessee where LESSEE_ID = #{lesseeId};
+		end;
+	</update>
+	
+	<!-- 新增租户相关权限信息 -->
+	<insert id="addAuthInfo" parameterType="com.aspire.goa.lessee.entity.Lessee">
+	begin 
+		<!--禁用菜单约束，menu_key不唯一
+alter table menu disable constraint UNQ_MENU_KEY;-->
+<!--租户菜单查询
+select * from menu where domain='${lesseeId}';-->
+<!--创建租户菜单-->
+insert into menu 
+select 
+'${lesseeId}'||to_char(t1.menu_id),
+t1.menu_name,
+t1.menu_key,
+decode(t1.parent_id,0,0,'${lesseeId}'||to_char(t1.parent_id)),
+t1.image_url,
+t1.url,
+t1.menu_order,
+t1.subsystem,
+'${lesseeId}'
+from menu t1 where domain='admin' 
+and (
+
+<foreach collection="moduleList" item="item" index="index" separator="or">
+	t1.menu_key like '${item}%'
+</foreach>
+or t1.menu_key like 'auth_sysmgt%' or t1.menu_key like 'admin_style%' or t1.menu_key like 'admin_calendar%'
+
+);
+<!--回滚创建的租户菜单
+delete from menu where domain='${lesseeId}';-->
+
+
+<!--资源目录查询
+select * from sec_resource_category where domain='${lesseeId}';-->
+<!--创建租户资源目录-->
+insert into sec_resource_category 
+select 
+'${lesseeId}'||to_char(t1.category_id),
+decode(t1.parent_id,null,null,'${lesseeId}'||to_char(t1.parent_id)),
+t1.category_name,
+t1.category_desc,
+t1.metadata_id,
+t1.category_key,
+'${lesseeId}',
+t1.order_key
+from sec_resource_category t1 where domain='admin' 
+and (
+
+<foreach collection="moduleList" item="item" index="index" separator="or">
+	t1.category_key like '${item}%'
+</foreach>
+or t1.category_key like 'auth_admin%' or t1.category_key like 'exclude_%' 
+or t1.category_key like 'admin_style%'  or t1.category_key like 'admin_calendar%'
+
+);
+<!--回滚创建的租户资源目录
+delete from sec_resource_category where domain='${lesseeId}';-->
+
+
+<!--禁用资源约束，resource_key不唯一
+alter table sec_resources disable constraint UNQ_RESOURCE_KEY;-->
+<!--资源查询
+select * from sec_resources where domain='${lesseeId}';-->
+<!--创建租户资源-->
+insert into sec_resources
+select 
+'${lesseeId}'||to_char(t1.resource_id),
+t1.resource_key,
+t1.resource_name,
+t1.resource_desc,
+'${lesseeId}'||to_char(t1.category_id),
+t1.auth_type,
+t1.metadata_id,
+'${lesseeId}',
+t1.order_key
+from sec_resources t1 where domain='admin' 
+and (
+
+<foreach collection="moduleList" item="item" index="index" separator="or">
+	t1.resource_key like '${item}%'
+</foreach>
+or t1.resource_key like 'auth_admin%' or t1.resource_key like 'exclude_%'
+or t1.resource_key like 'admin_style%'  or t1.resource_key like 'admin_calendar%'
+
+);
+<!--回滚创建的租户资源
+delete from sec_resources where domain='${lesseeId}';-->
+
+<!--操作查询
+select * from SEC_OPERATION where domain='${lesseeId}';-->
+<!--创建租户操作-->
+insert into SEC_OPERATION
+select 
+'${lesseeId}'||to_char(t1.operation_id),
+'${lesseeId}'||to_char(t1.resource_id),
+t1.operation_key,
+t1.operation_name,
+t1.operation_desc,
+t1.depend_key,
+t1.depend_by_key,
+t1.metadata_id,
+'${lesseeId}',
+t1.order_key
+from SEC_OPERATION t1 where domain='admin' 
+and t1.resource_id in (select substr(resource_id,length('${lesseeId}')) from sec_resources where domain='${lesseeId}');
+<!--回滚创建的租户操作
+delete from SEC_OPERATION where domain='${lesseeId}';-->
+
+<!--操作地址查询
+select * from SEC_OPERATION_ADDRESS where domain='${lesseeId}';-->
+<!--创建租户操作地址-->
+insert into SEC_OPERATION_ADDRESS
+select 
+'${lesseeId}'||to_char(t1.address_id),
+'${lesseeId}'||to_char(t1.resource_id),
+t1.operation_key,
+t1.operation_address_name,
+t1.operation_address_url,
+t1.parameter_name1,
+t1.parameter_value1,
+t1.parameter_name2,
+t1.parameter_value2,
+t1.parameter_name3,
+t1.parameter_value3,
+t1.metadata_id,
+'${lesseeId}'
+from SEC_OPERATION_ADDRESS t1 where domain='admin' 
+and t1.resource_id in (select substr(resource_id,length('${lesseeId}')) from sec_resources where domain='${lesseeId}');
+<!--回滚创建的租户操作地址
+delete from SEC_OPERATION_ADDRESS where domain='${lesseeId}';-->
+
+
+<!--禁用角色约束，role_key不唯一
+alter table sec_role disable constraint UNQ_ROLE_KEY;-->
+<!--角色查询
+select * from sec_role where domain='${lesseeId}';-->
+<!--创建租户角色
+insert into sec_role
+select
+'${lesseeId}'||to_char(t1.role_id),
+t1.role_name,
+t1.role_desc,
+t1.create_user,
+t1.create_date,
+t1.can_modify,
+t1.last_update_date,
+t1.role_key,
+t1.visible,
+t1.auto_assign,
+'${lesseeId}'
+from sec_role t1 where domain='admin' 
+and t1.role_key in ('1001','101','1002')
+and t1.resource_id in (select substr(resource_id,length('${lesseeId}')) from sec_resources where domain='${lesseeId}');-->
+<!--回滚创建的租户角色
+delete from sec_role where domain='${lesseeId}';-->
+
+<!--添加全量角色权限-->
+insert into sec_role (ROLE_ID,ROLE_NAME,ROLE_DESC,CREATE_USER,CREATE_DATE,CAN_MODIFY,LAST_UPDATE_DATE,ROLE_KEY,AUTO_ASSIGN,DOMAIN) 
+values('${lesseeId}'||'999','租户管理员_'||'${lesseeName}','租户管理员','dbscript',SYSDATE,0,SYSDATE,'${lesseeId}'||'999','0','${lesseeId}');
+<!--插入角色资源操作数据-->
+insert into SEC_ROLE_RESOURCE_OPERATION select '${lesseeId}'||'999',t2.resource_id,t2.operation_key from SEC_OPERATION t2 where t2.domain='${lesseeId}';
+<!--回滚脚本
+delete from SEC_ROLE_RESOURCE_OPERATION where role_id=('${lesseeId}'||'999');
+delete from sec_role where role_id=('${lesseeId}'||'999');-->
+
+
+<!--创建租户对应的组织-->
+INSERT INTO SEC_DEPARTMENT(DEPARTMENT_ID,DEPARTMENT_NAME,DEPARTMENT_DESC,PARENT_ID,
+EMAIL,ADDRESS,ADD_SUB,CREATE_USER,CREATE_DATE,LAST_UPDATE_DATE,DOMAIN)
+VALUES
+  ('-'||'${lesseeId}',
+   '${lesseeName}',
+   '${lesseeName}',
+   '',
+   '',
+   '',
+   '0',
+   'system',
+   SYSDATE,
+   SYSDATE,
+   '${lesseeId}'); 
+<!--为组织添加角色-->
+INSERT INTO SEC_DEPARTMENT_ROLE(DEPARTMENT_ID, ROLE_ID)
+values('-'||'${lesseeId}','${lesseeId}'||'999');
+<!--组织、组织角色回滚
+delete from SEC_DEPARTMENT_ROLE where DEPARTMENT_ID = ('-'||'${lesseeId}') and ROLE_ID = ('${lesseeId}'||'999');
+delete from SEC_DEPARTMENT where DEPARTMENT_ID =( '-'||'${lesseeId}');
+		)-->
+		end;
+	</insert>
+	
+	<!-- 新增人员、部门、角色信息 -->
+	<insert id="addStaffDeptRole" parameterType="java.util.Map">
+		begin
+		insert into SEC_STAFF_DEPARTMENT_ROLE(staff_id,Department_Id,role_id) values(#{staffId},#{departmentId},#{roleId});
+		end;
+	</insert>
+</mapper>

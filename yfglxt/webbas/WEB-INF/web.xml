@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    id="WebApp_ID" version="2.5">
+    
+    <display-name>Spring3MVC</display-name>
+    
+    <context-param>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	  
+    <!-- 字符过滤 -->
+  	<filter>
+    	<filter-name>encodingFilter</filter-name>
+    	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    	<init-param>
+      		<param-name>encoding</param-name>
+      		<param-value>UTF-8</param-value>
+   		</init-param>
+    	<init-param>
+      		<param-name>forceEncoding</param-name>
+      		<param-value>true</param-value>
+    	</init-param>
+  	</filter>
+  	<filter-mapping>
+    	<filter-name>encodingFilter</filter-name>
+    	<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+  	
+  	<filter>  
+        <filter-name>bpmxFilter</filter-name>  
+        <filter-class>com.aspire.webbas.portal.common.filter.BpmxFilter</filter-class>  
+    </filter>  
+    <filter-mapping>  
+        <filter-name>bpmxFilter</filter-name>  
+        <url-pattern>/*</url-pattern>  
+    </filter-mapping> 
+  	
+  	<!-- 配置上下文信息初始监听 \日志配置上下文信息初始监听-->
+	<listener>
+        <listener-class>com.aspire.webbas.portal.common.listener.DefaultInitListener</listener-class>
+    </listener>
+  	
+	<!-- Spring的加载监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- Spring内存泄漏清除监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	
+	<filter>
+        <filter-name>portalAuthFilter</filter-name>
+        <filter-class>com.aspire.webbas.portal.common.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>  
+        <filter-name>portalAuthFilter</filter-name>  
+        <url-pattern>*.shtml</url-pattern>  
+    </filter-mapping>
+    <filter-mapping>  
+        <filter-name>portalAuthFilter</filter-name>  
+        <url-pattern>*.ajax</url-pattern>  
+    </filter-mapping>
+    <servlet>
+        <servlet-name>springServlet</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <init-param>
+		  <param-name>contextConfigLocation</param-name>
+		  <param-value>/WEB-INF/spring-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+    </servlet>
+	
+	<listener>
+        <listener-class>com.aspire.webbas.portal.common.auth.session.SessionListener</listener-class>
+    </listener>
+	
+    <servlet-mapping>
+        <servlet-name>springServlet</servlet-name>
+        <url-pattern>*.ajax</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+		<servlet-name>FacadeServlet</servlet-name>
+		<servlet-class>com.aspire.webbas.portal.common.servlet.FacadeServlet</servlet-class>
+	</servlet>
+	 <servlet-mapping>   
+        <servlet-name>FacadeServlet</servlet-name>   
+        <url-pattern>/servlet/facade.script</url-pattern>   
+	</servlet-mapping> 
+	
+	<!-- 
+	<servlet>
+		<servlet-name>BpmxServlet</servlet-name>
+		<servlet-class>com.aspire.webbas.portal.common.servlet.BpmxServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>   
+        <servlet-name>BpmxServlet</servlet-name>   
+        <url-pattern>/pages/admin/process/bpmx.shtml</url-pattern>   
+	</servlet-mapping>
+	-->
+	
+	<servlet>
+		<servlet-name>auth</servlet-name>
+		<servlet-class>com.caucho.hessian.server.HessianServlet</servlet-class>
+		<init-param>
+			<param-name>service-class</param-name>
+			<param-value>com.aspire.webbas.portal.modules.authapi.PortalClientImpl</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>auth</servlet-name>
+		<url-pattern>/auth</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>JobLoader</servlet-name>
+		<servlet-class>com.aspire.goa.servapp.job.JobLoader</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+   	</welcome-file-list> 
+	<welcome-file-list>
+		<welcome-file>/pages/login.shtml</welcome-file>
+	</welcome-file-list>
+    
+  	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+    	<location>/pages/500.shtml</location>
+  	</error-page>
+  	<error-page>
+    	<error-code>500</error-code>
+    	<location>/pages/500.shtml</location>
+  	</error-page>
+  	<error-page>
+    	<error-code>404</error-code>
+    	<location>/pages/404.shtml</location>
+  	</error-page>
+  	<security-constraint>
+			<web-resource-collection>
+				<url-pattern>/*</url-pattern>
+				<http-method>PUT</http-method>
+				<http-method>DELETE</http-method>
+				<http-method>HEAD</http-method>
+				<http-method>OPTIONS</http-method>
+				<http-method>TRACE</http-method>
+			</web-resource-collection>
+			<auth-constraint></auth-constraint>
+		</security-constraint>
+		<login-config>
+			<auth-method>BASIC</auth-method>
+		</login-config>
+</web-app>

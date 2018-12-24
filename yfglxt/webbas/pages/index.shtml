@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--#include virtual="/root.jsp"  -->
+<title>业务招待费申请平台</title>
+<link type="text/css" rel="stylesheet" href="pages/css/app.css">
+<!--#include virtual="/include.html"  -->
+<script type="text/javascript"
+	src="servlet/facade.script?action=getStaffInfo"></script>
+<!-- <script src="js/lg/util/DialogUtil.js"></script> -->
+</head>
+<body>
+	<div class="page-content">
+<div class="row">
+<div class="col-xs-12 col-sm-12 widget-container-col">
+				<!-- #section:custom/widget-box -->
+					
+						<img style="width: 23px;" src="pages/image/danban.png" />
+						<h5 class="widget-title">
+							<span> <strong> 待办工作 </strong>
+							</span>
+						</h5>
+    <div>	
+      <!-- 新增活动按钮 -->
+	  <div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->			
+			<div class="space-6"></div>
+			
+			<table id="todo-table"></table>
+
+			<div id="grid-pager"></div>
+
+	  </div>
+    </div>
+    <!-- /.span -->
+  </div>
+  <!-- /.row -->
+</div>
+</div>
+</body>
+<script src="assets/js/date-time/bootstrap-datepicker.min.js"></script>
+<script src="assets/js/bootstrap-tag.min.js"></script>
+<script src="assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="assets/js/jqGrid/i18n/grid.locale-cn.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/jquery.validate.min.js"></script>
+<script src="assets/js/additional-methods.min.js"></script>
+<script src="assets/js/bootbox.min.js"></script>
+<!---------------------------------------------------------------------------------------------------------->
+<!-- ace scripts -->
+<script type="text/javascript" src="assets/js/ace-elements.min.js"></script>
+<script>
+	document
+			.write('<script type="text/javascript" src="js/custom/jquery.common-1.0.js?'
+					+ (new Date()).getTime() + '"><\/script>');
+	//document.write('<script type="text/javascript" src="js/custom/aspire.ui.js?'+(new Date()).getTime() + '"><\/script>');
+	document.write('<script type="text/javascript" src="js/custom/biz.js?'
+			+ (new Date()).getTime() + '"><\/script>');
+</script>
+<script src="pages/index.js"></script>
+</html>

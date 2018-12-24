@@ -1,0 +1,112 @@
+<div id="forgot-box" class="modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button aria-hidden="true" data-dismiss="modal" class="bootbox-close-button close" type="button" style="margin-top: -10px;">×</button>
+				<div class="bootbox-body">
+					<div class="widget-body">
+						<div class="widget-main">
+							<h4 class="header red lighter bigger"> <i class="ace-icon fa fa-key"></i>
+								找回密码
+							</h4>
+
+							<div class="space-6"></div>
+							<p class="green middle">请输入您的帐号名和邮箱，系统将把重置密码链接发送到您的邮箱中</p>
+
+							<form id="forgotPwdForm" class="form-horizontal" role="form" onsubmit="return false;">
+								<div class="form-group">
+									<label for="oldPassword" class="col-sm-3 control-label no-padding-right">
+										<span class="red">*</span>
+										用户名：
+									</label>
+									<div class="col-sm-5">
+										<input type="text" name="loginName" class="col-sm-12"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="oldPassword" class="col-sm-3 control-label no-padding-right">
+										<span class="red">*</span>
+										电子邮箱：
+									</label>
+									<div class="col-sm-5">
+										<input type="text" name="email" class="col-sm-12"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="oldPassword" class="col-sm-3 control-label no-padding-right">
+										<span class="red">*</span>
+										验证码：
+									</label>
+									<div class="col-sm-5">
+										<input type="text" 
+																				id="checkCode2" name="checkCode" class="col-sm-12"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="oldPassword" class="col-sm-3 control-label no-padding-right"></label>
+									<div class="col-sm-5">
+										<img width="78" height="38" title="点击刷新验证码" alt="点击刷新验证码" src="code/getCode.ajax" id="checkCodeImg2"></div>
+								</div>
+								<div class="clearfix">
+									<button id="forgotPwdSubmitBtn" type="submit" class="width-35 pull-right btn btn-sm btn-primary" type="button"> <i class="ace-icon fa fa-lightbulb-o"></i>
+										<span class="bigger-110">提交</span>
+									</button>
+								</div>
+							</form>
+							<div class="space-4"></div>
+							<div class="social-login center">
+								<div class="red" id="errorDisplayArea2"></div>
+							</div>
+						</div>
+						<!-- /.widget-main -->
+					</div>
+					<!-- /.widget-body -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		var validator = $('#forgotPwdForm').validate({
+					rules: {
+						loginName: {
+							required: true
+						},
+						email: {
+							required: true,
+							email:true
+						},
+						checkCode: {
+							required: true
+						}
+					},
+					submitHandler: function (form) {
+						$.ajaxSubmit(ctxPaths + "/resetPwd!email.ajax",$('#forgotPwdForm').serializeArray(),function(data){
+							if(data.success){
+								$("#forgot-box").modal('hide'); 
+								Q_Alert('重置密码链接已经发送到您的邮箱中');
+							}else{
+								if(data.data && data.data.msg){
+									$('#errorDisplayArea2').html(data.data.msg);
+								}else{
+									$('#errorDisplayArea2').html("未知错误");
+								}
+								refreshCheckCode($('#checkCodeImg2'));
+							}
+						});
+						return false;		
+					}
+				});
+			$('#checkCodeImg2').on('click',function(){
+				refreshCheckCode($('#checkCodeImg2'));
+			});
+			$("#forgetPwdBtn").on('click', function() {
+				 $("#forgot-box").modal('show'); 
+				 refreshCheckCode($('#checkCodeImg2'));
+				 validator.resetForm();
+				 jQuery('#forgotPwdForm')[0].reset();
+				 jQuery('#forgotPwdForm').find('.form-group').removeClass('has-error');
+			});
+		});
+	</script>

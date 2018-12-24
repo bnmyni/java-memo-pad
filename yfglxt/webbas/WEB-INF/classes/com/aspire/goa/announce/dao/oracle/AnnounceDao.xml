@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	类名:     AnnounceSql
+	描述:     数据访问语句
+	作者:     王磊
+	时间:     2015-05-30 16:52:21
+ -->
+<mapper namespace="com.aspire.goa.announce.dao.AnnounceDao">
+
+	<resultMap type="com.aspire.goa.announce.entity.Announce" id="baseResultMap">
+		<result property="announceId" column="ANNOUNCE_ID" jdbcType="VARCHAR"/>
+		<result property="title" column="TITLE" jdbcType="VARCHAR"/>
+		<result property="content" column="CONTENT" jdbcType="VARCHAR"/>
+		<result property="status" column="STATUS" jdbcType="VARCHAR"/>
+		<result property="cat" column="CAT" jdbcType="VARCHAR"/>
+		<result property="creator" column="CREATOR" jdbcType="VARCHAR"/>
+		<result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+		<result property="lastUpdateTime" column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP"/>
+		<result property="attachGroupId" column="ATTACH_GROUP_ID" jdbcType="VARCHAR"/>
+		<result property="domain" column="DOMAIN" jdbcType="VARCHAR"/>
+		
+		<!-- 额外字段 -->
+		<result property="creatorDesc" column="CREATOR_DESC" jdbcType="VARCHAR"/>
+		
+		<!-- ofType指定students集合中的对象类型 -->
+		<collection property="announceObjList" ofType="com.aspire.goa.announce.entity.AnnounceObj"
+				column="announce_id" select="listAnnounceObj">
+		</collection>
+		
+		
+	</resultMap>
+	
+	<sql id="baseWhereClause">
+		<where>
+			<!--
+			1 = 1
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				EXAMPLE_NAME like '%${params.keyword}%'
+			</if>
+			-->
+			1 = 1
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				AND TITLE like '%${params.keyword}%'
+			</if>
+			<if test="params['domain'] != null and  params['domain'] != ''">
+				AND domain = #{params.domain}
+			</if>
+			<if test="params['status'] != null and  params['status'] != ''">
+				AND status = #{params.status}
+			</if>
+			<if test="params['cat'] != null and  params['cat'] != ''">
+				AND cat = #{params.cat}
+			</if>
+			<if test="params['toDomain'] != null and  params['toDomain'] != ''">
+				AND announce_id in
+				(select t.announce_id from g_announce_obj t1 where t.announce_id=t1.announce_id and t1.to_domain=#{params.toDomain})
+			</if>
+		</where>
+	</sql>
+	<sql id="baseColumnList">
+		ANNOUNCE_ID,TITLE,CONTENT,STATUS,CAT,CREATOR,CREATE_TIME,LAST_UPDATE_TIME,ATTACH_GROUP_ID,DOMAIN,
+		(select real_name from sec_staff where staff_id = CREATOR) as CREATOR_DESC
+	</sql>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="com.aspire.goa.announce.entity.Announce">
+		insert into 
+			g_announce(ANNOUNCE_ID,TITLE,CONTENT,STATUS,CAT,CREATOR,CREATE_TIME,LAST_UPDATE_TIME,ATTACH_GROUP_ID,DOMAIN) 
+		values(
+			#{announceId,jdbcType=VARCHAR} ,
+			#{title,jdbcType=VARCHAR} ,
+			#{content,jdbcType=VARCHAR} ,
+			#{status,jdbcType=VARCHAR} ,
+			#{cat,jdbcType=VARCHAR} ,
+			#{creator,jdbcType=VARCHAR} ,
+			#{createTime,jdbcType=TIMESTAMP} ,
+			#{lastUpdateTime,jdbcType=TIMESTAMP} ,
+			#{attachGroupId,jdbcType=VARCHAR} ,
+			#{domain,jdbcType=VARCHAR} 
+		)
+	</insert>
+	
+	<!-- 列表 -->
+	<select id="list" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" resultMap="baseResultMap">
+		select
+		<include refid="baseColumnList" />
+		from g_announce t
+		<if test="params != null">
+			<include refid="baseWhereClause" />
+		</if>
+	</select>
+	
+	<!-- 发布对象列表 -->
+	<select id="listAnnounceObj" parameterType="String" resultType="com.aspire.goa.announce.entity.AnnounceObj">
+		select 
+		obj_id as objId,
+		obj_type as objType,
+		to_domain as toDomain,
+		announce_id as announceId
+		from g_announce_obj where announce_id = #{id}
+	</select>
+	
+	<!-- 详情 -->
+	<select id="get" parameterType="String" resultMap="baseResultMap">
+		select 
+		<include refid="baseColumnList"/>
+		from g_announce t
+		where t.ANNOUNCE_ID = #{announceId}
+	</select>
+	
+	<!-- 修改 -->
+	<update id="mod" parameterType="com.aspire.goa.announce.entity.Announce">
+		update g_announce set ANNOUNCE_ID = #{announceId}
+		<if test="title != null">
+			, TITLE = #{title}
+		</if>
+		<if test="content != null">
+			, CONTENT = #{content}
+		</if>
+		<if test="status != null">
+			, STATUS = #{status}
+		</if>
+		<if test="cat != null">
+			, CAT = #{cat}
+		</if>
+		<if test="creator != null">
+			, CREATOR = #{creator}
+		</if>
+		<if test="createTime != null">
+			, CREATE_TIME = #{createTime}
+		</if>
+		<if test="lastUpdateTime != null">
+			, LAST_UPDATE_TIME = #{lastUpdateTime}
+		</if>
+		<if test="attachGroupId != null">
+			, ATTACH_GROUP_ID = #{attachGroupId}
+		</if>
+		<if test="domain != null">
+			, DOMAIN = #{domain}
+		</if>
+		where ANNOUNCE_ID = #{announceId}
+	</update> 
+	
+	<!-- 删除 -->
+	<update id="del" parameterType="string">
+		delete from g_announce where ANNOUNCE_ID = #{announceId}
+	</update>
+</mapper>

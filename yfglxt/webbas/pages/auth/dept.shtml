@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<!--#include virtual="/root.jsp"  -->
+    <!--#include virtual="/include.html"  -->
+	<title>组织管理</title>
+	<style type="text/css">
+	.margin-left4 {
+	    margin-left:4px;
+	}
+	.margin-right32 {
+	    margin-right:51px;
+	}
+	.margin-left-32 {
+	    margin-left:-51px;
+	}
+	/*模拟对角线*/
+	.out{
+	   border-top:120px #F5FFFA solid;/*上边框宽度等于表格第一行行高*/
+	   width:0px;/*让容器宽度为0*/
+	   height:0px;/*让容器高度为0*/
+	   border-left:180px #F5F5DC solid;/*左边框宽度等于表格第一行第一格宽度*/ 
+	   position:relative;/*让里面的两个子容器绝对定位*/
+	}
+	.th_1{
+		width:20px;
+	    height:100px;
+	    text-align:center;
+	    overflow:hidden;
+	}
+	b{font-style:normal;display:block;position:absolute;top:-80px;left:-55px;width:35px;}
+	em{font-style:normal;display:block;position:absolute;top:-40px;left:-130px;width:55x;}
+	.t1{background:#BDBABD;}
+	.tree-folder{
+		white-space:nowrap;
+	}
+</style>
+<script src="js/dept.js"></script>
+<script type="text/javascript" src="servlet/facade.script?action=listCity"></script>
+</head>
+<body>
+<div class="page-content">
+	<!-- 新增活动按钮 -->
+
+	<div class="table-responsive">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="widget-box widget-color-blue2">
+					<div class="widget-header">
+						<h4 class="widget-title lighter smaller">组织列表</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<div id="tree1" class="tree" style="height:522px;width:100%;overflow:auto;"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-sm-8">
+
+				<div class="widget-box widget-color-blue2">
+					<div class="widget-header">
+						<h4 class="widget-title lighter smaller" id="departmentName"><i class="ace-icon fa fa-arrow-left icon-on-left"></i>请先选择组织</h4>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main">
+							<div>
+								<label for="form-field-8">组织角色</label>
+								<input id="departmentId" type="hidden">
+								<textarea id="dept-roles" class="form-control" rows="6" readonly></textarea>
+							</div>
+							<hr />
+							<div>
+								<label for="form-field-8">组织用户</label>
+								<textarea id="dept-staffs" class="form-control" rows="6" readonly></textarea>
+							</div>
+
+							<div class="clearfix form-actions">
+								<div class="col-md-offset-3 col-md-9" id="authBtnGrp">
+									<button id="add-role-btn" class="btn btn-info disabled" type="button" style="display:none" permCheck="auth_admin_sys_dept_deptManage,ROLE2DEPT,hide"> <i class="ace-icon fa fa-users bigger-110"></i>
+										添加角色
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-info disabled" type="button" id="add-staff-btn" style="display:none"  permCheck="auth_admin_sys_dept_deptManage,STAFF2DEPT,hide">
+										<i class="ace-icon glyphicon glyphicon-user bigger-110"></i>
+										添加用户
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-info disabled" type="button" id="auth-staff-btn" style="display:none"  permCheck="auth_admin_sys_dept_deptManage,AUTH2STAFF,hide">
+										<i class="ace-icon glyphicon glyphicon-lock bigger-110"></i>
+										对成员授权
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!--  新增部门  -->
+	<div id="add-dept-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<form id="add-dept-form" class="form-horizontal" role="form" onsubmit="return false;">
+			<input type="hidden" name="departmentId"/>
+			<input type="hidden" name="parentId"/>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">新增组织</h4>
+				</div>
+
+				<div class="modal-body">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="add-dept-form-departmentName"><span class="red">*</span>组织名称:</label>
+
+							<div class="col-sm-6">
+								<input type="text" name="departmentName" id="add-dept-form-departmentName" placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="add-dept-form-departmentDesc">组织描述:</label>
+
+							<div class="col-sm-6">
+								<textarea name="departmentDesc" id="add-dept-form-departmentDesc" rows="3" class="form-control input-sm"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="add-dept-form-departmentDesc">管理域:</label>
+							<div class="col-sm-6">
+								<select name="domain" class="form-control input-sm">
+									<option value="SYS_ADMIN">ADMIN</option>
+									<option value="SP">SP</option>
+								  </select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="add-dept-form-email">Email:</label>
+
+							<div class="col-sm-6">
+								<input type="text" name="email" id="add-dept-form-email" placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="add-dept-form-address">地址:</label>
+
+							<div class="col-sm-6">
+								<input type="text" name="address" id="add-dept-form-address"  placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						取消
+					</button>
+
+					<button id="save-dept-btn" type="submit" class="btn btn-sm btn-success">
+						<i class="ace-icon fa fa-check"></i>
+						保存
+					</button>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+
+<!--  新增用户到组织  -->
+	<div id="add-staff-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+		<form class="form-horizontal" role="form" onsubmit="return false;" id="add-staff-form">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">选择用户</h4>
+				</div>
+				<div class="modal-body">
+						<div class="form-group">
+							<div class="col-sm-4">
+								<label>
+								<input type="radio" value="0" name="searchType" id="searchType0"  class="ace" />
+									<span class="lbl">所有可选用户</span>
+								</label>
+								<label>
+									<input type="radio"  value="1" name="searchType" id="searchType1" class="ace" checked="checked"/>
+									<span class="lbl">检索</span>
+							</label>
+							</div>
+							<div class="col-sm-8">
+								<div class="row"  id="staff-list-seach-area">
+									<div class="col-sm-8">
+										<input type="text" placeholder="用户名/真实姓名" class="form-control input-sm" id="searchText2" name="searchtxt">
+									</div>
+									<div class="col-sm-4">
+										<button class="btn btn-purple btn-sm" type="button" id="staff-list-seach-btn">
+											查找
+										<i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+										 </button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-5">
+								<label for="staffList">用户列表</label>
+									<select multiple="multiple" id="staff-list" class="form-control" style="height:200px;"></select>
+							</div>
+							<div class="col-sm-2">
+									<div style="height:200px;padding:48px 8px">
+										<button class="btn btn-xs btn-white btn-primary margin-top-8" id="staff-list-add-btn" type="button">
+											&nbsp;添加
+											<i class="ace-icon fa fa-arrow-right icon-on-right"></i>&nbsp;
+										</button>
+										<button class="btn btn-xs  btn-white btn-warning margin-top-8" id="staff-list-del-btn" type="button">
+											&nbsp;<i class="ace-icon fa fa-arrow-left icon-on-left"></i>
+											删除&nbsp;
+										</button>
+										<button class="btn btn-xs btn-white btn-primary margin-top-8" id="staff-list-addall-btn" type="button">
+											全部添加
+										</button>
+										<button class="btn btn-xs btn-white btn-warning margin-top-8" id="staff-list-delall-btn" type="button">
+											全部删除
+										</button>
+									</div>
+							</div>
+							<div class="col-sm-5">
+									<label for="selectedStaffList">已选列表</label>
+									<select multiple="multiple" id="selected-staff-list" class="form-control" style="height:200px;"></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div id="staff-list-selected-tip" class="col-sm-6 green"></div>
+						</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						取消
+					</button>
+					<button id="save-staff-btn" type="button" class="btn btn-sm btn-success">
+						<i class="ace-icon fa fa-check"></i>
+						确定
+					</button>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+
+	<!--  选择要授权的用户  -->
+	<div id="auth-staff-selected-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<form class="form-horizontal" role="form" onsubmit="return false;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">选择要进行授权的用户<span class="red" id="selected-auth-staff-tip"></span></h4>
+				</div>
+				<div class="modal-body">
+						<div class="form-group">
+							<div class="col-sm-5">
+								<label for="staffList">用户列表</label>
+									<select multiple="multiple" id="auth-staff-list" class="form-control" style="height:200px;"></select>
+							</div>
+							<div class="col-sm-2">
+									<div style="height:200px;padding:48px 8px">
+										<button class="btn btn-xs btn-white btn-primary margin-top-8" id="auth-staff-list-add-btn" type="button">
+											&nbsp;添加
+											<i class="ace-icon fa fa-arrow-right icon-on-right"></i>&nbsp;
+										</button>
+										<button class="btn btn-xs btn-white btn-warning margin-top-8" id="auth-staff-list-del-btn" type="button">
+											&nbsp;<i class="ace-icon fa fa-arrow-left icon-on-left"></i>
+											删除&nbsp;
+										</button>
+										<button class="btn btn-xs btn-white btn-primary margin-top-8" id="auth-staff-list-addall-btn" type="button">
+											全部添加
+										</button>
+										<button class="btn btn-xs btn-white btn-warning margin-top-8" id="auth-staff-list-delall-btn" type="button">
+											全部删除
+										</button>
+									</div>
+							</div>
+							<div class="col-sm-5">
+									<label for="selectedStaffList">已选列表<span class="red">[最多不能超过10个]</span></label>
+									<select multiple="multiple" id="selected-auth-staff-list" class="form-control" style="height:200px;"></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div id="auth-staff-list-selected-tip" class="col-sm-6 green"></div>
+						</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						取消
+					</button>
+					<button id="save-selected-auth-staff-btn" type="submit" class="btn btn-sm btn-success">
+						<i class="ace-icon fa fa-check"></i>
+						确定
+					</button>
+				</div>
+			</div>
+		   </form>
+		</div>
+	</div>
+
+	<!--  对用户进行授权 -->
+	<div id="auth-staff-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<form class="form-horizontal" role="form" onsubmit="return false;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">对组织【<span class="green txt-overflow-hidden" style="max-width:320px;" id="auth-staff-department"></span>】内成员授权</h4>
+				</div>
+				<div class="modal-body">
+						<table class="table table-bordered table-striped" id="auth-staff-table" style="width:auto;"></table>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						取消
+					</button>
+					<button id="save-auth-staff-btn" type="submit" class="btn btn-sm btn-success">
+						<i class="ace-icon fa fa-check"></i>
+						确定
+					</button>
+				</div>
+			</div>
+		   </form>
+		</div>
+	</div>
+
+	<!-- 添加角色窗口 -->
+	<div id="role-to-dept" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content col-xs-8">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">
+						【
+						<span name="departmentName" class="green txt-overflow-hidden" style="max-width:180px;"></span>
+						】角色分配
+					</h4>
+				</div>
+
+				<div class="modal-body">
+					<input type="hidden" name="departmentId"/>
+					<table id="role-table"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--  新增用户  -->
+	<div id="addnewstaff-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<form class="form-horizontal" id="addForm" role="form" onSubmit="return false;">
+			<input type="hidden" name="departmentId" id="addstaff-departmentId"/>
+			<input type="hidden" name="others['roles']" id="addstaff-roles"/>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">新增用户</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+					   <div class="col-sm-6">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right text-right" for="loginName"> <span class="red">*</span>用户名: </label>
+								<div class="col-sm-5">
+									<input type="text" name="loginName" id="loginName" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="addForm-realName"> <span class="red">*</span>真实姓名: </label>
+
+							<div class="col-sm-5">
+								<input type="text" name="realName" id="addForm-realName" placeholder="不能超过50个汉字" class="form-control input-sm" />
+							</div>
+						</div>
+						</div>
+						</div>
+						<div class="row">
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label class="control-label col-sm-3 no-padding-right">性别：</label>
+							<div class="col-sm-5">
+								<label for="addForm-male">
+									 <input type="radio" value="MALE" name="sex" id="addForm-male"  class="ace"  checked/><span class="lbl"> 男 </span>
+									</label>
+									<label for="addForm-female">
+									 <input type="radio"  value="FEMALE" name="sex" id="addForm-female" class="ace"/> <span class="lbl"> 女 </span>
+								</label>
+							</div>
+						</div>
+						</div>
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="addForm-mobile"> <span class="red">*</span>手机: </label>
+
+							<div class="col-sm-5">
+								<input type="text" name="mobile" id="addForm-mobile" placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+						</div>
+						</div>
+						<div class="row">
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="addForm-telephone"> 固定电话: </label>
+
+							<div class="col-sm-5">
+								<input type="text" name="telephone" id="addForm-telephone" placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+						</div>
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="addForm-email"> <span class="red">*</span>邮箱: </label>
+
+							<div class="col-sm-5">
+								<input type="text" name="email" id="addForm-email"  placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+						</div>
+						</div>
+						<div class="row">
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="password"> <span class="red">*</span>初始密码: </label>
+
+							<div class="col-sm-5">
+								<input type="password" name="password" id="password" placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+						</div>
+						<div class="col-sm-6">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="addForm-pwdConfirm"> <span class="red">*</span>密码确认: </label>
+
+							<div class="col-sm-5">
+								<input type="password" name="pwdConfirm" id="addForm-pwdConfirm" placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+				  	</div>
+				  	</div>
+				  	<div  class="row  hide" id="cityArea">
+				  		  <div class="col-sm-6" >
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right text-right" for="addForm-pwdConfirm"> 所属城市: </label>
+								<div class="col-sm-9">
+									<select name="cityId" id="staff-cityid">
+									</select>
+								</div>
+							</div>
+				  		</div>
+				  	</div>
+					<div class="row">
+				  	<div class="col-sm-12">
+				  		<h4 class="header smaller lighter blue">角色分配</h4>
+						<div class="form-group">
+							<div class="col-sm-10" id="staff-roleList">
+							</div>
+						</div>
+				  	</div>
+				  	</div>
+				</div>
+				</div>
+					   
+
+				<div class="modal-footer" style="margin-top:-1px;">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						取消
+					</button>
+
+					<button id="save-staff-btn" type="submit" class="btn btn-sm btn-success">
+						<i class="ace-icon fa fa-check"></i>
+						保存
+					</button>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+	<!-- page specific plugin scripts -->
+	<script type="text/javascript" src="assets/js/fuelux/fuelux.tree.min.js"></script>
+	<script type="text/javascript" src="js/custom/mult-select2.js"></script>
+	<!--#include virtual="/include_footer.html"-->
+  
+
+	<script>
+	 document.write('<script type="text/javascript" src="pages/auth/js/dept.js?'+(new Date()).getTime()+'"><\/script>');
+	</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aspire.webbas.portal.common.dao.PendTaskSettingMapper" >
+  <resultMap id="BaseResultMap" type="com.aspire.webbas.portal.common.entity.PendTaskSetting" >
+    <id column="STAFFID" property="staffid" jdbcType="VARCHAR" />
+    <result column="SENDEMAIL" property="sendemail" jdbcType="VARCHAR" />
+    <result column="SENDSMS" property="sendsms" jdbcType="VARCHAR" />
+    <result column="EMAILSENDTIME" property="emailsendtime" jdbcType="VARCHAR" />
+    <result column="SMSSENDTIME" property="smssendtime" jdbcType="VARCHAR" />
+    <result column="EMAILSENDTYPE" property="emailsendtype" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <!--例子:<if test="params['name'] != null and  params['name'] != ''">and name=#{params.name}</if>-->
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    STAFFID, SENDEMAIL, SENDSMS, EMAILSENDTIME, SMSSENDTIME, EMAILSENDTYPE
+  </sql>
+  <select id="pageQuery" resultMap="BaseResultMap" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" >
+    select
+    <include refid="Base_Column_List" />
+    from PEND_TASK_SETTING
+    <if test="params != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from PEND_TASK_SETTING
+    where STAFFID = #{staffid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from PEND_TASK_SETTING
+    where STAFFID = #{staffid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.aspire.webbas.portal.common.entity.PendTaskSetting" >
+    insert into PEND_TASK_SETTING (STAFFID, SENDEMAIL, SENDSMS, 
+      EMAILSENDTIME, SMSSENDTIME, EMAILSENDTYPE
+      )
+    values (#{staffid,jdbcType=VARCHAR}, #{sendemail,jdbcType=VARCHAR}, #{sendsms,jdbcType=VARCHAR}, 
+      #{emailsendtime,jdbcType=VARCHAR}, #{smssendtime,jdbcType=VARCHAR}, #{emailsendtype,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aspire.webbas.portal.common.entity.PendTaskSetting" >
+    insert into PEND_TASK_SETTING
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="staffid != null" >
+        STAFFID,
+      </if>
+      <if test="sendemail != null" >
+        SENDEMAIL,
+      </if>
+      <if test="sendsms != null" >
+        SENDSMS,
+      </if>
+      <if test="emailsendtime != null" >
+        EMAILSENDTIME,
+      </if>
+      <if test="smssendtime != null" >
+        SMSSENDTIME,
+      </if>
+      <if test="emailsendtype != null" >
+        EMAILSENDTYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="staffid != null" >
+        #{staffid,jdbcType=VARCHAR},
+      </if>
+      <if test="sendemail != null" >
+        #{sendemail,jdbcType=VARCHAR},
+      </if>
+      <if test="sendsms != null" >
+        #{sendsms,jdbcType=VARCHAR},
+      </if>
+      <if test="emailsendtime != null" >
+        #{emailsendtime,jdbcType=VARCHAR},
+      </if>
+      <if test="smssendtime != null" >
+        #{smssendtime,jdbcType=VARCHAR},
+      </if>
+      <if test="emailsendtype != null" >
+        #{emailsendtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aspire.webbas.portal.common.entity.PendTaskSetting" >
+    update PEND_TASK_SETTING
+    <set >
+      <if test="sendemail != null" >
+        SENDEMAIL = #{sendemail,jdbcType=VARCHAR},
+      </if>
+      <if test="sendsms != null" >
+        SENDSMS = #{sendsms,jdbcType=VARCHAR},
+      </if>
+      <if test="emailsendtime != null" >
+        EMAILSENDTIME = #{emailsendtime,jdbcType=VARCHAR},
+      </if>
+      <if test="smssendtime != null" >
+        SMSSENDTIME = #{smssendtime,jdbcType=VARCHAR},
+      </if>
+      <if test="emailsendtype != null" >
+        EMAILSENDTYPE = #{emailsendtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where STAFFID = #{staffid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aspire.webbas.portal.common.entity.PendTaskSetting" >
+    update PEND_TASK_SETTING
+    set SENDEMAIL = #{sendemail,jdbcType=VARCHAR},
+      SENDSMS = #{sendsms,jdbcType=VARCHAR},
+      EMAILSENDTIME = #{emailsendtime,jdbcType=VARCHAR},
+      SMSSENDTIME = #{smssendtime,jdbcType=VARCHAR},
+      EMAILSENDTYPE = #{emailsendtype,jdbcType=VARCHAR}
+    where STAFFID = #{staffid,jdbcType=VARCHAR}
+  </update>
+</mapper>

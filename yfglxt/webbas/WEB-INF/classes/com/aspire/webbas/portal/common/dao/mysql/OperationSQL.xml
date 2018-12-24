@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.OperationDao">
+    
+	<resultMap type="com.aspire.webbas.portal.common.entity.Operation" id="operationMap">		
+		<result property="resourceId" column="RESOURCE_ID" />
+		<result property="operationKey" column="OPERATION_KEY" />
+		<result property="dependKey" column="DEPEND_KEY" />		
+		<result property="operationName" column="OPERATION_NAME" />
+		<result property="operationDesc" column="OPERATION_DESC" />
+		<result property="metadataId" column="METADATA_ID" />
+		<result property="dependByKey" column="DEPEND_BY_KEY" />
+		<result property="orderKey" column="ORDER_KEY" javaType="int" jdbcType="NUMERIC"/>  
+		<result property="domain" column="DOMAIN"/>
+	</resultMap>
+	
+	<resultMap type="com.aspire.webbas.portal.common.entity.Operation" id="operationKeyMap">		
+		<result property="resourceId" column="RESOURCE_ID" />
+		<result property="operationKey" column="OPERATION_KEY" />
+	</resultMap>
+	
+	<insert id="insertOperation" parameterType="com.aspire.webbas.portal.common.entity.Operation"
+	    useGeneratedKeys="true" keyProperty="operationId">
+		<![CDATA[
+		INSERT  INTO SEC_OPERATION	(
+		        OPERATION_ID,
+			    RESOURCE_ID     ,
+		        OPERATION_KEY   ,
+		        DEPEND_KEY   ,		        
+		        OPERATION_NAME	,
+		        OPERATION_DESC 	,
+		        METADATA_ID 	,
+		        DEPEND_BY_KEY   ,
+		        ORDER_KEY,
+		        DOMAIN           )
+        VALUES (#{operationId},
+                #{resourceId}  	,
+		        #{operationKey}  ,
+		        #{dependKey,jdbcType=VARCHAR}  ,		        
+		        #{operationName}	,
+		        #{operationDesc,jdbcType=VARCHAR}	,
+		        #{metadataId,jdbcType=VARCHAR},
+		        #{dependByKey,jdbcType=VARCHAR},
+		        #{orderKey,jdbcType=NUMERIC},
+		        #{domain,jdbcType=VARCHAR} )
+		]]>	
+	</insert>
+	
+	<update id="updateOperation" parameterType="com.aspire.webbas.portal.common.entity.Operation">
+        UPDATE SEC_OPERATION
+	        SET OPERATION_NAME = #{operationName},
+	        OPERATION_DESC = #{operationDesc},
+	        DEPEND_KEY = #{dependKey,jdbcType=VARCHAR},
+	        METADATA_ID = #{metadataId,jdbcType=VARCHAR}
+        WHERE 
+        	RESOURCE_ID = #{resourceId} AND OPERATION_KEY = #{operationKey}
+    </update>
+    
+	<delete id="deleteOperation" parameterType="com.aspire.webbas.portal.common.entity.Operation">
+        DELETE FROM SEC_OPERATION
+        WHERE RESOURCE_ID = #{resourceId} AND OPERATION_KEY = #{operationKey}
+    </delete>
+
+      <!--根据Id得到一个Role-->
+     <select id="findOperation" resultMap="operationMap"  parameterType="com.aspire.webbas.portal.common.entity.Operation">
+	  	 <![CDATA[
+			SELECT	
+				    RESOURCE_ID     ,
+			        OPERATION_KEY   ,
+			        DEPEND_KEY   ,
+			        OPERATION_NAME	,
+			        OPERATION_DESC 	,
+			        METADATA_ID 	,
+			        DEPEND_BY_KEY,
+			        ORDER_KEY,
+			        DOMAIN
+			FROM	SEC_OPERATION
+			WHERE
+				RESOURCE_ID = #{resourceId}
+				AND OPERATION_KEY = #{operationKey}
+			]]>	
+      </select>
+	
+	  <select id="listOperation" resultMap="operationMap"  parameterType="com.aspire.webbas.portal.common.entity.Operation">    
+		<![CDATA[
+		SELECT	OPERATION_ID,
+			    RESOURCE_ID     ,
+		        OPERATION_KEY   ,
+		        DEPEND_KEY   ,
+		        OPERATION_NAME	,
+		        OPERATION_DESC 	,
+		        METADATA_ID 	,
+		        DEPEND_BY_KEY,
+		        ORDER_KEY,
+		        DOMAIN
+		FROM	SEC_OPERATION
+		]]>	
+		<where>
+		    1=1
+			<if test="resourceId != null">
+				and RESOURCE_ID = trim(#{resourceId})
+			</if>
+			<if test="operationKey != null">
+				and OPERATION_KEY = trim(#{operationKey})
+			</if>
+			<if test="operationName != null">
+				and OPERATION_NAME like CONCAT(CONCAT('%',trim(#{operationName}),)'%')  
+			</if>
+			<if test="operationDesc != null">
+				and  OPERATION_DESC like CONCAT(CONCAT('%',trim(#{operationDesc})),'%')  
+			</if>
+			<if test="dependKey != null">
+				and DEPEND_KEY = #{dependKey}
+			</if>
+			<if test="dependByKey != null">
+				and DEPEND_BY_KEY = #{dependByKey}
+			</if>
+			<if test="metadataId != null">
+				and METADATA_ID = #{metadataId}
+			</if>
+		</where>
+          order by ORDER_KEY,OPERATION_ID
+    </select>
+    
+    
+    <select id="listResourceOperationByStaffId" resultMap="operationKeyMap" parameterType="long">    
+        <![CDATA[
+				SELECT  RESOURCE_ID, OPERATION_KEY
+                FROM    SEC_ROLE_RESOURCE_OPERATION
+                WHERE   ROLE_ID IN
+                        (SELECT ROLE_ID
+                        FROM    SEC_STAFF_DEPARTMENT_ROLE
+                        WHERE   STAFF_ID =  #{value}
+                        UNION ALL
+                        SELECT ROLE_ID FROM SEC_ROLE WHERE AUTO_ASSIGN = 1
+                        )
+        ]]>
+    </select>
+    
+    <select id="listOperationByRoleId" resultMap="operationMap" parameterType="java.lang.String">
+        SELECT  O.OPERATION_ID,
+			    O.RESOURCE_ID     ,
+		        O.OPERATION_KEY   ,
+		        O.DEPEND_KEY   ,
+		        O.OPERATION_NAME	,
+		        O.OPERATION_DESC 	,
+		        O.METADATA_ID 	,
+		        O.DEPEND_BY_KEY,
+		        O.ORDER_KEY,
+		        O.DOMAIN
+        FROM SEC_OPERATION O, SEC_ROLE_RESOURCE_OPERATION R
+        WHERE 
+        	O.RESOURCE_ID=R.RESOURCE_ID 
+        	AND O.OPERATION_KEY=R.OPERATION_KEY 
+        	AND R.ROLE_ID = #{roleId}
+    </select>
+    
+    
+</mapper> 

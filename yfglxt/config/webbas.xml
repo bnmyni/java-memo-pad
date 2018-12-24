@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<webbas>
+	<portal>
+		<!-- 系统名称 -->
+		<system-name>研发部门管理平台</system-name>
+
+		<!-- 用于登陆前后首页系统名称展示的title -->
+		<title>研发部门管理平台</title>
+
+		<!-- 为了兼容老WEBBAS的加密算法，特加此配置项，默认不配置为关闭 
+		      on 为开启  
+			  off 为关闭
+		-->
+		
+		<old-password-crypt-support>on</old-password-crypt-support>
+		<!--是否检查检验码true/false-->
+    	<checkCode>false</checkCode>
+		<email_host_name>szmail.aspire-tech.com</email_host_name>
+		<email_user_name>servfeeapp</email_user_name>
+		<email_pwd>2014$aspire</email_pwd>
+		<email_smtp_port>25</email_smtp_port>
+		<email_default_from>servfeeapp@aspirecn.com</email_default_from>
+		<sleepTime>60000</sleepTime>
+    </portal>
+	<email>
+	</email>
+	<BpmxUrl>http://10.1.26.126:8080/bpmx1/service/ProcessService?wsdl</BpmxUrl>
+	<SysUrl>http://10.12.12.155:8089/webbas/</SysUrl>
+</webbas>

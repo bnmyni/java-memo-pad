@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+			<!--#include virtual="/root.jsp"  -->
+<title></title>
+<!--#include virtual="/include.html"  -->
+	</head>
+<link type="text/css" rel="stylesheet" href="pages/css/common.css">
+<body style="margin:auto">
+	<div class="page-content">
+		<div style="padding: 0px" class="page-header">
+
+			<!-- input type="button" class="btn btn-success" value="同意" disabled/> <input
+				type="button" class="btn btn-success" value="退回" disabled/> <input
+				type="button" class="btn btn-success" value="打印" /-->
+		</div>
+
+		<!-- #section:settings.box -->
+		<div id="ace-settings-container">
+
+			   <form name="businessform" id="businessform" class="businessform form-horizontal" 
+				style="margin: auto; padding:2px; " role="form" method="post"
+				action="">
+				<input type="hidden" name="appDate" id="appDate">
+				<div id="titleDiv"
+					>
+					<strong>卓望公司业务招待申请单</strong>				 <span	
+					id="appDateShow"></span></div>
+				<table 
+					 border="1"  id="buessiontable">
+					<tr>
+						<td class="tdleft textbg" colspan="2"><strong>负责接待的部门</strong></td>
+						<td colspan="3"> 
+							<select  name="servOrg" id="servOrg">
+								<option value="系统事业部-市场产品部-市场产品部">系统事业部-市场产品部-市场产品部</option>
+								<option value="系统事业部-市场销售部-市场销售部">系统事业部-市场销售部-市场销售部</option>
+								<option value="系统事业部-应用研发部-应用研发部">系统事业部-应用研发部-应用研发部</option>
+								<option value="系统事业部-平台研发部-平台研发部">系统事业部-平台研发部-平台研发部</option>
+								<option value="系统事业部-服务支撑部-服务支撑部">系统事业部-服务支撑部-服务支撑部</option>
+								<option value="系统事业部-综合管理部-管理层人员">系统事业部-综合管理部-管理层人员</option>
+								<option value="系统事业部-综合管理部-综合管理部">系统事业部-综合管理部-综合管理部</option>								
+							</select>
+						</td>					
+					</tr>
+					<tr>
+						<td class="tdleft textbg" colspan="2"><strong>招待类型</strong></td>
+						<td colspan="3"><strong> <label> <input
+									type="radio" name="servType" value="out"/>
+							</label> 外事
+						</strong><strong>    <input type="radio" name="servType"
+								value="biz" checked/>
+						</strong></span><strong>商务</strong><strong>    <input type="radio"
+								name="servType" value="other"/>
+						</strong></span><strong>其他公务</strong></td>
+					</tr>
+					
+					  <tr style="display: none;" id="accountSubjectRow">
+				        <td class="tdleft textbg" colspan="2"><strong>科目归属</strong></td>
+						<td colspan="3"> 
+							<strong> 
+								<label> 
+								<input type="radio" name="accountSubject" value="1"/>
+								</label> 安全业务线
+							</strong>
+							<strong> 
+							   <input type="radio" name="accountSubject" value="2"/>
+								非安全业务线
+							</strong>
+						</td>	
+				      </tr>
+				       <tr  style="display: none;" id="coastAimRow">
+				        <td class="tdleft textbg" colspan="2"><strong>费用目的</strong></td>
+						<td colspan="3"> 
+							
+							<strong> 
+							   <input type="radio" name="coastAim" value="2" />
+								日常业务招待费
+							</strong>
+						</td>	
+				      </tr>
+					
+					<tr>
+						<td class="tdleft textbg" colspan="2"><strong>来宾单位</strong></td>
+						<td colspan="3"><input placeholder="来宾单位" name="guestOrg"
+								id="guestOrg" type="text"/></td>				
+					</tr>
+					<tr>
+						<td class="tdleft textbg" colspan="2"><strong>接待事由</strong></td>
+						<td colspan="3"><textarea placeholder="接待事由"
+								style="resize: none" id="servReason" name="servReason" ></textarea></td>
+					</tr>
+					<tr>
+						<td class="tdleft textbg" colspan="2"><strong>接待日期</strong></td>
+					  <td><input placeholder="接待日期" type="text"
+								name="servDate" id="servDate" /></td>
+							<td class="textbg tdleft" width="147"><strong>接待地点</strong></td>
+						<td width="223"><input   placeholder="接待地点" type="text" name="servLoc"
+							id="servLoc"/></td>
+				</tr>
+					<tr>
+						<td class="tdleft textbg" colspan="2"><strong>来宾人数</strong></td>
+						<td><input placeholder="来宾人数"  type="text" id="guestNum" name="guestNum" maxlength="3"/></td>
+						<td class="textbg tdleft"><strong>陪同人数</strong></td>
+						<td><input  placeholder="陪同人数" style="width:100%"  type="text" id="servNum"  name="servNum" maxlength="3"/></td>
+					</tr>
+					<tr>
+						<td class="tdleft textbg grid-title" rowspan="2"><strong>接待标准</strong></td>
+						<td class="textbg tdleft grid-title"><strong>宴请(元/人)</strong></td>
+						<td><input placeholder="人均标准" id="dishFee"							
+							type="text"  name="dishFee" maxlength="4"/></td>
+						<td class="textbg tdleft grid-title" rowspan="2"><strong>预计支出金额（元）</strong></td>
+						<td rowspan="2">
+							<span style='display:inline-block;display:-moz-inline-box;width:190px'>
+								<label placeholder="预计支出金额"  id="sumFee"  >￥0</label>						  
+							</span> 							<input type="hidden" id="hideSumFee" name="sumFee">
+						  </td>
+					</tr>
+					<tr>
+						<td class="textbg tdleft grid-title" height="34"><strong>纪念品(元/人)</strong></td>
+						<td><input type="text" placeholder="人均标准"  name="giftFee" id="giftFee" maxlength="4"/></td>
+					</tr>
+					<tr>
+						<td class="tdleft textbg" colspan="2" ><strong>备注</strong></td>
+						<td colspan="3"><textarea placeholder="备注"
+								style="resize: none" id="servRemark" name="servRemark" ></textarea></td>
+					</tr>
+				</table>
+				<div id="buttonarea">
+				
+			<input type="button"  class="btn btn-success" style="text-align:right; font-weight:bold; "  value="提交" id="save" />
+			<input type="button" style="text-align:right;font-weight:bold " class="btn btn-danger" value="取消" id="cancel" />
+				<!--div align="left">
+					<strong>经办人：</strong><strong>                           </strong></span>				</div>
+				<div align="left">
+					<strong>三级部门负责人：</strong>				</div>
+				<div align="left">
+					<strong>分管的二级部门负责人：</strong>					</div>
+				</div-->
+				</div>
+				<p>&nbsp;</p>
+				<input type="hidden" name="from_page" id="from_page">
+			</form>
+		</div>
+	</div>
+	<!--#include virtual="/include_footer.html"  --> 	
+<script src="pages/serv/js/servapp.js"></script>
+<script src="pages/serv/js/Businessreception_apply.js"></script>
+</body>
+</html>

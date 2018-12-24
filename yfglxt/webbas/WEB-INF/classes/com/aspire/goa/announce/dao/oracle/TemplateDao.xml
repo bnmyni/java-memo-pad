@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	类名:     AnnounceSql
+	描述:     数据访问语句
+	作者:     王磊
+	时间:     2015-05-30 16:52:21
+ -->
+<mapper namespace="com.aspire.goa.announce.dao.TemplateDao">
+
+	<resultMap type="com.aspire.goa.announce.entity.Template" id="baseResultMap">
+		<result property="tmplId" column="TMPL_ID" jdbcType="VARCHAR"/>
+		<result property="tmplName" column="TMPL_NAME" jdbcType="VARCHAR"/>
+		<result property="title" column="TITLE" jdbcType="VARCHAR"/>
+		<result property="content" column="CONTENT" jdbcType="VARCHAR"/>
+		<result property="cat" column="CAT" jdbcType="VARCHAR"/>
+		<result property="creator" column="CREATOR" jdbcType="VARCHAR"/>
+		<result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+		<result property="lastUpdateTime" column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP"/>
+		<result property="attachGroupId" column="ATTACH_GROUP_ID" jdbcType="VARCHAR"/>
+		<result property="domain" column="DOMAIN" jdbcType="VARCHAR"/>
+		<!-- 额外字段 -->
+		<result property="creatorDesc" column="CREATOR_DESC" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="baseWhereClause">
+		<where>
+			<!--
+			1 = 1
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				EXAMPLE_NAME like '%${params.keyword}%'
+			</if>
+			-->
+			1 = 1
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				AND TITLE like '%${params.keyword}%'
+			</if>
+			<if test="params['domain'] != null and  params['domain'] != ''">
+				AND domain = #{params.domain}
+			</if>
+			<if test="params['tmplName'] != null and  params['tmplName'] != ''">
+				AND tmplName = #{params.tmplName}
+			</if>
+			<if test="params['cat'] != null and  params['cat'] != ''">
+				AND cat = #{params.cat}
+			</if>
+		</where>
+	</sql>
+	<sql id="baseColumnList">
+		TMPL_ID,TMPL_NAME,TITLE,CONTENT,CAT,CREATOR,CREATE_TIME,LAST_UPDATE_TIME,ATTACH_GROUP_ID,DOMAIN,
+		(select real_name from sec_staff where staff_id = CREATOR) as CREATOR_DESC
+	</sql>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="com.aspire.goa.announce.entity.Template">
+		insert into 
+			g_announce_tmpl(TMPL_ID,TMPL_NAME,TITLE,CONTENT,CAT,CREATOR,CREATE_TIME,LAST_UPDATE_TIME,ATTACH_GROUP_ID,DOMAIN) 
+		values(
+			#{tmplId,jdbcType=VARCHAR} ,
+			#{tmplName,jdbcType=VARCHAR} ,
+			#{title,jdbcType=VARCHAR} ,
+			#{content,jdbcType=VARCHAR} ,
+			#{cat,jdbcType=VARCHAR} ,
+			#{creator,jdbcType=VARCHAR} ,
+			#{createTime,jdbcType=TIMESTAMP} ,
+			#{lastUpdateTime,jdbcType=TIMESTAMP} ,
+			#{attachGroupId,jdbcType=VARCHAR} ,
+			#{domain,jdbcType=VARCHAR} 
+		)
+	</insert>
+	
+	<!-- 列表 -->
+	<select id="list" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" resultMap="baseResultMap">
+		select
+		<include refid="baseColumnList" />
+		from g_announce_tmpl
+		<if test="params != null">
+			<include refid="baseWhereClause" />
+		</if>
+	</select>
+	
+	<!-- 详情 -->
+	<select id="get" parameterType="String" resultMap="baseResultMap">
+		select 
+		<include refid="baseColumnList"/>
+		from g_announce_tmpl t where TMPL_ID = #{tmplId}
+	</select>
+	
+	<!-- 修改 -->
+	<update id="mod" parameterType="com.aspire.goa.announce.entity.Template">
+		update g_announce_tmpl set TMPL_ID = #{tmplId}
+		<if test="tmplName != null">
+			, TMPL_NAME = #{tmplName}
+		</if>
+		<if test="title != null">
+			, TITLE = #{title}
+		</if>
+		<if test="content != null">
+			, CONTENT = #{content}
+		</if>
+		<if test="cat != null">
+			, CAT = #{cat}
+		</if>
+		<if test="creator != null">
+			, CREATOR = #{creator}
+		</if>
+		<if test="createTime != null">
+			, CREATE_TIME = #{createTime}
+		</if>
+		<if test="lastUpdateTime != null">
+			, LAST_UPDATE_TIME = #{lastUpdateTime}
+		</if>
+		<if test="attachGroupId != null">
+			, ATTACH_GROUP_ID = #{attachGroupId}
+		</if>
+		<if test="domain != null">
+			, DOMAIN = #{domain}
+		</if>
+		where TMPL_ID = #{tmplId}
+	</update> 
+	
+	<!-- 删除 -->
+	<update id="del" parameterType="string">
+		delete from g_announce_tmpl where TMPL_ID = #{tmplId}
+	</update>
+</mapper>

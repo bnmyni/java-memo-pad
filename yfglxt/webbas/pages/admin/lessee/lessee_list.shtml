@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<!--#include virtual="/root.jsp"  -->
+	<title>Lessee</title>
+	<!--#include virtual="/include.html"  -->
+	<!--  -->
+	<script type="text/javascript" src="codeDict/queryScript.ajax?codeType=lessee_device"></script>
+	
+</head>
+<body>
+	<!--div class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}</script>
+
+		<ul class="breadcrumb">
+			<li class="active"> <i class="ace-icon fa fa-home home-icon"></i>
+				Lessee
+			</li>
+		</ul>
+		
+
+	</div-->
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->
+			<form role="form" id="queryForm" onsubmit="return false;">
+				<div class="form-inline">
+					<button id="addBtn" class="btn btn-sm btn-success" type="button"> <i class="ace-icon fa fa-hand-o-right white"></i>
+						新增
+					</button>
+					&nbsp;&nbsp;
+					<input id="searchText" name="params['keyword']" type="text" class="form-control search-query" placeholder="输入关键字" />
+
+					<button id="seachBtn" type="button" class="btn btn-purple btn-sm">
+						查找
+						<i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+					</button>
+
+				</div>
+			</form>
+			<div class="space-6"></div>
+			<table id="grid-table"></table>
+			<div id="grid-pager"></div>
+			<!-- PAGE CONTENT ENDS -->
+		</div>
+	</div>
+
+	<!--  新增form  -->
+	<div id="add-form-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<form class="form-horizontal" role="form" id="add-form" onsubmit="return false;">
+				<input type="hidden" name="lesseeId"  id="lesseeId"/>
+				<!-- <input type="hidden" name="updId"  id="updId"/> -->
+				<div class="modal-content" >
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="blue bigger">新增/修改</h4>
+					</div>
+					<div class="modal-body" >
+					
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="lesseeName">
+							<span class="red">*</span>
+						集团名称:
+						</label>
+						<div class="col-sm-5">
+							<input type="text" name="lesseeName" id="lesseeName" placeholder="集团名称" class="form-control input-sm" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="unit">
+						<span class="red">*</span>
+						系统名称:
+						</label>
+						<div class="col-sm-5">
+							<input type="text" name="unit" id="unit" placeholder="系统名称" class="form-control input-sm" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="style">
+							<span class="red">*</span>
+						样式:
+						</label>
+						<div class="col-sm-5">
+							<!-- 
+							<input type="text" name="style" id="style" placeholder="样式" class="form-control input-sm" />
+							 -->
+							 <input type="hidden" name="style" id="style"/>
+							 <div style="padding:5px 0px 0px 0px">
+								 <input type="checkbox" name="styleCheckbox" value="red"><span>红色主题</span></input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								 <input type="checkbox" name="styleCheckbox" value="blue"><span>蓝色主题</span></input>&nbsp;<br>
+								 <input type="checkbox" name="styleCheckbox" value="green"><span>绿色主题</span></input>
+							 </div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="module">
+							<span class="red">*</span>
+						模块:
+						</label>
+						<div class="col-sm-5">
+							<!--
+							<input type="text" name="module" id="module" placeholder="模块" class="form-control input-sm" />
+							-->
+							<input type="hidden" name="module" id="module"/>
+							<div style="padding:5px 0px 0px 0px">
+								 <input type="checkbox" name="moduleCheckbox" value="admin_announce"><span>信息发布</span></input>&nbsp;&nbsp;
+								 <input type="checkbox" name="moduleCheckbox" value="admin_process"><span>流程管理</span></input>&nbsp;&nbsp;
+								 <input type="checkbox" name="moduleCheckbox" value="admin_search"><span>搜索</span></input>
+							 </div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="device">
+							<span class="red">*</span>
+						设备:
+						</label>
+						<div class="col-sm-5">
+							<input type="hidden" name="device" id="device"/>
+							<div style="padding:5px 0px 0px 0px">
+								 <input type="checkbox" name="deviceCheckbox" value="1"><span>设备1 Intel-i7 8G 1T</span></input><br>
+								 <input type="checkbox" name="deviceCheckbox" value="2"><span>设备2 Intel-i7 16G 2T</span></input><br>
+								 <input type="checkbox" name="deviceCheckbox" value="3"><span>设备3 Intel-i7 32G 15T</span></input>
+							 </div>
+							<!-- <select name="device" id="device" class="form-control input-sm" ></select> -->
+							<!-- <input type="text" name="device" id="device" placeholder="设备" class="form-control input-sm" />
+							 -->
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="adminLoginName">
+							<span class="red">*</span>
+						管理员账号名称:
+						</label>
+						<div class="col-sm-5">
+							<input type="text" name="adminLoginName" id="adminLoginName" placeholder="管理员账号名称" class="form-control input-sm" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="password">
+							<span class="red">*</span>
+						密码:
+						</label>
+						<div class="col-sm-5">
+							<input type="password" name="password" id="password" placeholder="密码" class="form-control input-sm" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="repassword">
+							<span class="red">*</span>
+						确认密码:
+						</label>
+						<div class="col-sm-5">
+							<input type="password" name="repassword" id="repassword" placeholder="确认密码" class="form-control input-sm" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right text-right" for="remark">
+						备注:
+						</label>
+						<div class="col-sm-5">
+							<textarea  name="remark" id="remark" placeholder="备注" class="form-control input-sm" ></textarea>
+						</div>
+					</div>
+					
+					</div>
+
+					<div class="modal-footer">
+						<button class="btn btn-sm" type="button"  data-dismiss="modal">
+							<i class="ace-icon fa fa-times"></i>
+							取消
+						</button>
+
+						<button id="save-role-btn" class="btn btn-sm btn-success" type="submit">
+							<i class="ace-icon fa fa-check"></i>
+							保存
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!--  详情查看  -->
+	<div id="view-form-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">详情</h4>
+				</div>
+
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+					
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							租户名称:
+						</label>
+						<div class="col-sm-7">
+							<p name="lesseeName" class="form-control-static"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							系统名称:
+						</label>
+						<div class="col-sm-7">
+							<p name="unit" class="form-control-static"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							样式:
+						</label>
+						<div class="col-sm-7">
+							<p name="style" class="form-control-static">33333333333</p>
+						</div>
+					</div>
+					<!-- 
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							当前租户设置的样式:
+						</label>
+						<div class="col-sm-7">
+							<p name="styleConfig" class="form-control-static"></p>
+						</div>
+					</div> -->
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							模块:
+						</label>
+						<div class="col-sm-7">
+							<p name="module" class="form-control-static"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							设备:
+						</label>
+						<div class="col-sm-7">
+							<p name="device" class="form-control-static"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							管理员账号名称:
+						</label>
+						<div class="col-sm-7">
+							<p name="adminLoginName" class="form-control-static"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							创建人:
+						</label>
+						<div class="col-sm-7">
+							<p name="creatorDesc" class="form-control-static"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							创建时间:
+						</label>
+						<div class="col-sm-7">
+							<p name="createTime" class="form-control-static"></p>
+						</div>
+					</div>
+					
+					<!-- 
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							最后修改时间:
+						</label>
+						<div class="col-sm-7">
+							<p name="lastUpdateTime" class="form-control-static"></p>
+						</div>
+					</div>
+					 -->
+					 
+					 <div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							备注:
+						</label>
+						<div class="col-sm-7">
+							<p name="remark" class="form-control-static"></p>
+						</div>
+					</div>
+					</form>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						确定
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--#include virtual="/include_footer.html"  -->
+
+	<script type="text/javascript">
+	/* 试题类型下拉框数据加载  */
+	$("#device").localRender(CodeDict['lessee_device'],{
+		//firstOption:{text:'请选择分类',value:''},
+		keyValue:{text:'value',value:'key'}
+	});
+	
+	var list_url  = ctxPaths+ '/lessee/lessee/list.ajax';
+	var add_url   = ctxPaths+ '/lessee/lessee/add.ajax';
+	var mod_url   = ctxPaths+ '/lessee/lessee/mod.ajax';
+	var del_url   = ctxPaths+ '/lessee/lessee/del.ajax';
+	var view_url 	 = ctxPaths+ '/lessee/lessee/get.ajax';
+	var grid_selector = "#grid-table";
+	var pager_selector = "#grid-pager";
+	$(function($) {
+				jqGrid_init($(grid_selector),pager_selector,{
+					url: list_url,
+					sortable : true,
+					
+					
+						sortname : 'LESSEE_NAME',
+					
+					
+					sortorder:'desc',
+					colNames:[
+					
+						'序列号',
+						'集团名称',
+						'系统名称',
+						//'样式',
+						//'当前租户设置的样式',
+						//'模块',
+						//'设备',
+						'管理员账号',
+						//'备注',
+						'创建时间',
+						'创建人',
+						//'最后修改时间',
+					
+					''
+					],
+					colModel:[
+					
+					{name:'lesseeId',index:'lesseeId', hidden:true},
+						   						   
+					{name:'lesseeName',index:'lesseeName', sortable:true,sortname : 'LESSEE_NAME',width:100,formatter:formatName},
+							
+						   						   
+					{name:'unit',index:'unit', sortable:true,sortname : 'UNIT',width:100},
+							
+						   						   
+					//{name:'style',index:'style', sortable:true,sortname : 'STYLE',width:100},
+							
+						   						   
+					//{name:'styleConfig',index:'styleConfig', sortable:true,sortname : 'STYLE_CONFIG',width:100},
+							
+						   						   
+					//{name:'module',index:'module', sortable:true,sortname : 'MODULE',width:100},
+							
+						   						   
+					//{name:'device',index:'device', sortable:true,sortname : 'DEVICE',width:100},
+							
+						   						   
+					{name:'adminLoginName',index:'adminLoginName', sortable:true,sortname : 'ADMIN_LOGIN_NAME',width:100},
+							
+						   						   
+					//{name:'remark',index:'remark', sortable:true,sortname : 'REMARK',width:100},
+							
+						   						   
+					{name:'createTime',index:'createTime', sortable:true,sortname : 'CREATE_TIME',width:100},
+							
+						   						   
+					{name:'creatorDesc',index:'creatorDesc', sortable:false,sortname : 'CREATOR',width:100},
+							
+						   						   
+					//{name:'lastUpdateTime',index:'lastUpdateTime', sortable:true,sortname : 'LAST_UPDATE_TIME',width:100},
+							
+					   
+					{name:'myac',index:'', width:120, fixed:true, sortable:false, resize:false,formatter:actionButtons}					
+					]
+				});
+				function formatName(cellvalue, options, rowObject){
+					return '<a href="javascript:;" onclick="viewEvent(\''+rowObject['lesseeId']+'\')">' + cellvalue + '</a>';
+				}
+				function actionButtons(cellvalue, options, rowObject){
+					return '<div >' + 
+								//'<button onclick=\"editEvent(\''+rowObject['lesseeId']+'\')\" class=\"btn btn-xs btn-info\" data-rel=\"tooltip\" title=\"编辑\" >' +
+									//'<i class=\"ace-icon fa fa-pencil bigger-120\"></i>' +
+								//'</button>' + 
+								'<button onclick=\"deleteEvent(\''+rowObject['lesseeId']+'\')\" class=\"btn btn-xs btn-danger\" data-rel=\"tooltip\" title=\"删除\" >' +
+									'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i>' +
+								'</button>'  + 
+							'</div>';
+				}
+				
+			});
+
+			function editEvent(id){
+				$.ajaxSubmit(view_url,{'id': id}, function(data){
+				    if(data.success == true){
+						resetForm($('#add-form'),add_validator);
+						$('#add-form').json2Form2(data.data);
+						//$('#updId').val($('#lesseeId').val());
+						$('#add-form-modal').modal2({backdrop:"static",show:true});
+					}else{
+						Q_Alert_Fail(data.message);
+					}
+				});
+			};
+			function viewEvent(id){
+				$.ajaxSubmit(view_url,{'id' : id}, function(data){
+					$.dataInput($('#view-form-modal').find('.form-control-static'),data.data);
+					$('#view-form-modal').modal2({backdrop:"static",show:true});	
+					
+					//加载样式描述
+					var styleDisplay = '';
+					var styleCheckboxArr = $('input[name="styleCheckbox"]');
+					var styleArr = data.data['style'].split(',');
+					for(var i=0; i < styleArr.length; i++){
+						for(var j=0; j < styleCheckboxArr.length; j++){
+							if($(styleCheckboxArr[j]).attr('value') == styleArr[i] ){
+								//alert($(styleCheckboxArr[j]).next().text());
+								styleDisplay += $(styleCheckboxArr[j]).next().text() + ',';
+							}
+						}
+					}
+					$('p[name="style"]').text(styleDisplay.substr(0,styleDisplay.length-1));
+					
+					//加载模块描述
+					var moduleDisplay = '';
+					var moduleCheckboxArr = $('input[name="moduleCheckbox"]');
+					var moduleArr = data.data['module'].split(',');
+					for(var i=0; i < moduleArr.length; i++){
+						for(var j=0; j < moduleCheckboxArr.length; j++){
+							if($(moduleCheckboxArr[j]).attr('value') == moduleArr[i] ){
+								//alert($(moduleCheckboxArr[j]).next().text());
+								moduleDisplay += $(moduleCheckboxArr[j]).next().text() + ',';
+							}
+						}
+					}
+					$('p[name="module"]').text(moduleDisplay.substr(0,moduleDisplay.length-1));
+					
+					//加载设备描述
+					var deviceDisplay = '';
+					var deviceCheckboxArr = $('input[name="deviceCheckbox"]');
+					var deviceArr = data.data['device'].split(',');
+					for(var i=0; i < deviceArr.length; i++){
+						for(var j=0; j < deviceCheckboxArr.length; j++){
+							if($(deviceCheckboxArr[j]).attr('value') == deviceArr[i] ){
+								//alert($(deviceCheckboxArr[j]).next().text());
+								deviceDisplay += $(deviceCheckboxArr[j]).next().text() + '<br>';
+							}
+						}
+					}
+					$('p[name="device"]').html(deviceDisplay);
+				});
+			};
+			function deleteEvent(id){
+				Q_Confirm("是否要删除？",function(result) {
+					if(result){
+						$.ajaxSubmit(del_url,{'id' : id}, function(data){
+							$(grid_selector).trigger("reloadGrid");
+						});
+					}
+				});
+			};
+			
+			add_validator = $('#add-form').validate({
+					rules: {
+					
+						'lesseeName' : {
+							required:true,
+							maxlength: 100
+						},
+						'unit' : {
+							required:true,
+							maxlength: 30
+						},
+						'style' : {
+							required:true,
+							maxlength: 2000
+						},
+						'styleConfig' : {
+							required:true,
+							maxlength: 100
+						},
+						'module' : {
+							required:true,
+							maxlength: 2000
+						},
+						'device' : {
+							required:true,
+							maxlength: 1000
+						},
+						'adminLoginName' : {
+							required:true,
+							maxlength: 30
+						},
+						'password' : {
+							required:true,
+							minlength:6,
+							maxlength: 30
+						},
+						'repassword' : {
+							required:true,
+							minlength:6,
+							maxlength: 30
+						},
+						'remark' : {
+							maxlength: 4000
+						},
+						'createTime' : {
+							required:true,
+							maxlength: 19
+						},
+						'creator' : {
+							required:true,
+							maxlength: 50
+						},
+						'lastUpdateTime' : {
+							maxlength: 19
+						}
+	 				
+					},
+					submitHandler: function (form) {
+						var url = add_url;
+						if($('#lesseeId').val() != ''){
+							url = mod_url;
+						}
+						
+						//组装样式、模块、设备请求值
+						var style = '';
+						$('input[name="styleCheckbox"]:checked').each(function(){
+							if(style == ''){
+								style += $(this).val();
+							}else{
+								style += ',' + $(this).val();
+							}
+						});
+						if(style == ''){
+							Q_Alert_Fail('请选择样式'); 
+							return;
+						}
+						$('#style').val(style);
+						var module = '';
+						$('input[name="moduleCheckbox"]:checked').each(function(){
+							if(module == ''){
+								module += $(this).val();
+							}else{
+								module += ',' + $(this).val();
+							}
+						});
+						if(module == ''){
+							Q_Alert_Fail('请选择模块'); 
+							return;
+						}
+						$('#module').val(module);
+						var device = '';
+						$('input[name="deviceCheckbox"]:checked').each(function(){
+							if(device == ''){
+								device += $(this).val();
+							}else{
+								device += ',' + $(this).val();
+							}
+						});
+						if(device == ''){
+							Q_Alert_Fail('请选择设备'); 
+							return;
+						}
+						$('#device').val(device);
+						
+						//确认密码效验
+						
+						if($('#password').val() != ''
+								&& $('#repassword').val() != ''
+								&& $('#password').val() != $('#repassword').val()){
+							Q_Alert_Fail('密码与确认密码必须相同'); 
+							return;
+						}
+						
+						
+						$.ajaxSubmit(url,$(form).serializeJson(),function(data){
+								if(data.success == true){
+								    $('#add-form-modal').modal2('hide');
+									$(grid_selector).trigger("reloadGrid");
+								}else{
+									Q_Alert_Fail(data.message); 
+								}
+						});
+						return false;		
+					}
+			});
+			
+			$('#addBtn').on('click', function(){
+			    resetForm($('#add-form'),add_validator);
+				$('#lesseeId').val('');
+				$('#add-form-modal').modal2({backdrop:"static",show:true});
+			});
+			
+			$('#seachBtn').on('click', function(){
+				$(grid_selector).jqGrid('setGridParam',{postData: $('#queryForm').serializeJson()}).trigger("reloadGrid");
+			});
+			
+		</script>
+</body>
+</html>

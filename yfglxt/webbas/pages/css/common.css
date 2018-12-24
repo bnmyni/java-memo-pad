@@ -1,0 +1,30 @@
+@charset 'utf-8';
+/* CSS Document */
+
+*{margin:auto; font-family:"微软雅黑";}
+.buessiontable{width:80%; min-width:500px; max-width:none; margin-left: 10%; border:1px solid;table-layout:fixed;}
+ .tdleft{min-width:90px; max-width:none; text-align:left; padding-right:20px; max-height:none;}
+ .textbg{background:#ccc;}
+ .field-danwei:after {
+ 	content: '（元/人）';
+ }
+input[type='text'],textarea{width:100%; font-size:14px;   font-family:"微软雅黑"; border:none;   min-width:120px; }
+#buessiontable{width:80%; min-width:500px; max-width:none; margin-left: 10%; border:1px solid;table-layout:fixed;}
+#buessiontable td,.buessiontable td{padding-left:8px; border:1px solid;word-break:break-all;height:34px}
+#buessiontable textarea,.buessiontable textarea {
+	max-width: 98%;
+}
+#sumFee{color:red; font-weight:bold; font-size:28px;}
+#showdate,.showdate{font-size:14px; margin-top:10px;}
+#buttonarea{width:800px;margin:auto; text-align:center; margin-top:15px; }
+#buttonarea1{width:800px;margin:auto; text-align:center; margin-top:10px; }
+#servOrgSelect{border:none;}
+#titleDiv,.titleDiv{width: 800px; font-size: 24px; text-align: center; margin-bottom:10px;}
+#appDateShow{float: right; margin-right: 0; font-size:14px;  padding-top:15px;width:120px;position:relative;right:-50px;}
+#footerDiv{width:80%;  float:left ; margin-left:10%;}
+#servRemark,.servRemark{ width:668px; overflow:hidden; height:auto; }
+#servReason,.servReason{width:668px; overflow:hidden; height:auto;}
+.grid-title{
+	width: 150px;
+	max-width: 150px;
+}

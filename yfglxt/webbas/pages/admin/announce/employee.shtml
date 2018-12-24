@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title>Announce</title>
+<!--#include virtual="/include.html"  -->
+<link type="text/css" rel="stylesheet" src="assets/js/plugin/datepicker/css/redmond/jquery-ui-1.10.3.custom.css">
+<script src="assets/js/plugin/datepicker/jquery-ui-1.10.3.custom.js"></script>
+<script src="assets/js/plugin/datepicker/jquery.ui.datepicker-zh-CN.js"></script>
+</HEAD>
+<BODY >
+<div class="page-content">
+<div style="width:100%; height:10px;"></div>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 widget-container-col"> 
+    <!-- #section:custom/widget-box -->
+    <div class="widget-box transparent">
+      <div class="widget-body">
+        <div class="widget-main no-padding">
+          <div style="height:auto; " class="alert alert-info">
+            <FORM  class="form-horizontal margin-top-10" role="form"  method="post">
+              <TABLE cellSpacing=3 cellPadding=3 width="90%" align=center border=0>
+                <TBODY>
+                  <TR>
+                    <TD class="center"><h2>2015-06-06【日常加班】8小时的加班申请</h2></TD>
+                  </TR>
+                </TBODY>
+              </TABLE>
+              <TABLE   style="background:#d9edf7" width="662" height="175" class="table  " >
+                <TBODY>
+                  <TR>
+                    <TD align="left" colSpan=4 ><h4 style="margin-left:30px;">申请信息区</h4></TD>
+                  </TR>
+                  <TR >
+                    <td  align="right">加班类型 </td>
+                    <TD colSpan=3> 周末加班 </TD>
+                  </TR>
+                  <TR>
+                    <td align="right">加班事由 </td>
+                    <TD colSpan=3 align=left> 紧急工作需要处理</TD>
+                  </TR>
+                  <TR align=left>
+                    <td align="right">加班地点类型 </td>
+                    <TD>公司办公区</TD>
+                    <td align="right">加班地点名称 </td>
+                    <TD>中国北京中国移动</TD>
+                  </TR>
+                  <TR align=left>
+                    <td align="right">实际加班开始时间</td>
+                    <TD><input name="starttime" type="text" style="width:260px" id="starttime"></TD>
+                    <td align="right">实际加班结束时间</td>
+                    <TD><input name="endtime" type="text" style="width:260px" id="endtime"></TD>
+                  </TR>
+                  <TR align=left>
+                    <td align="right">上班打卡时间</td>
+                    <TD>2015/6/6 8:23:31</TD>
+                    <td align="right">下班打卡时间</td>
+                    <TD>2015/6/6 18:23:31</TD>
+                  </TR>
+                </TBODY>
+              </TABLE>
+              <TABLE style="background:#d9edf7" width="662" height="179" class="table" >
+                <TBODY>
+                  <TR>
+                    <TD  align="left" colSpan=4><h4 style="margin-left:30px;">单据基本信息项</h4></TD>
+                  </TR>
+                  <TR>
+                    <td align="right">申请主题 </td>
+                    <TD colSpan=3 align=left>2015-06-06【日常加班】8小时的加班申请(平台研发部)</TD>
+                  </TR>
+                  <TR>
+                    <td align="right">申请单编号 </td>
+                    <TD align=left>JBSQ20150606304975</TD>
+                    <td align="right">申请日期 </td>
+                    <TD align=left>2015-06-06</TD>
+                  </TR>
+                  <TR>
+                    <td align="right">项目名称：</td>
+                    <TD align=left></TD>
+                    <td align="right">负责人姓名：</td>
+                    <TD align=left>曾宪国(zengxg)</TD>
+                  </TR>
+                  <TR>
+                    <td align="right">申请部门 </td>
+                    <TD colSpan=3 align=left> 平台研发部 </TD>
+                  </TR>
+                  <TR>
+                    <td align="right">申请人 </td>
+                    <TD align=left> 曾宪国 </TD>
+                    <td></td>
+                    <TD align=left></TD>
+                  </TR>
+                  <TR>
+                    <td align="right">当前处理状态 </td>
+                    <TD align=left>员工实际加班情况</TD>
+                    <td align="right">员工工号 </td>
+                    <TD align=left></TD>
+                  </TR>
+                </TBODY>
+              </TABLE>
+              <TABLE  style="background:#d9edf7; border:none; border:#999"  class="table "  >
+                <TBODY align="center">
+                  <TR>
+                    <TD  align="left" colSpan=4><h4 style="margin-left:30px;">审批日志列表</h4></TD>
+                  </TR>
+                  <TR class=tr1>
+                    <td  align="center">提交时间</td>
+                    <td align="center">流程角色</td>
+                    <td >日志</td>
+                  </TR>
+                  <TR>
+                    <TD  style="WIDTH: 20%">2015/6/7 8:23:31</TD>
+                    <TD  style="WIDTH: 40%" vAlign=middle align=left>【领导审批】</TD>
+                    <TD  align=left>同意</TD>
+                  </TR>
+                  <TR>
+                    <TD  style="WIDTH: 20%">2015/6/7 8:23:31</TD>
+                    <TD  style="WIDTH: 40%" vAlign=middle align=left>【项目负责人审批】曾宪国</TD>
+                    <TD  align=left>审批通过。同意</TD>
+                  </TR>
+                  <TR>
+                    <TD  style="WIDTH: 20%">2015/6/7 14:39:39</TD>
+                    <TD  style="WIDTH: 40%" vAlign=middle align=left>【提交申请】彭汉国</TD>
+                    <TD  align=left>提交申请。</TD>
+                  </TR>
+                </TBODY>
+              </TABLE>
+            </FORM>
+            <div style="width:100%" class="clearfix form-actions">
+              <div class="center">
+                <button class="btn btn-success" type="button" id="submitButton"> 同意 </button>
+                <button class="btn btn-danger" type="button" > 驳回 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /section:custom/widget-box --> 
+</div>
+<script>
+$(document).ready(function(e) {
+    $("#starttime").datepicker({
+		 dateFormat:"yy/mm/dd ",
+		 showButtonPanel:true,
+		 buttonText:"日历按钮",
+		 
+		});
+	$("#endtime").datepicker({
+		 dateFormat:"yy/mm/dd ",
+		 showButtonPanel:true,
+		 buttonText:"日历按钮" 
+	});
+});
+</script>
+</BODY>
+</HTML>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aspire.goa.servapp.dao.SecApprovalDao" >
+  <resultMap id="ApprovalMap" type="com.aspire.goa.servapp.entity.SecApproval" >
+    <result property="approvalID" column="APPROVALID" />
+    <result property="staffID" column="STAFF_ID"/>
+    <result property="upLeader" column="UPLEADER"/>
+    <result property="endLeader" column="ENDLEADER"/>
+    <result property="departLeader" column="DEPARTLEADER"/>
+  </resultMap>
+    
+    <select id="findSecApproval"
+    		resultMap="ApprovalMap" 
+            parameterType="long">
+        <![CDATA[
+		SELECT *
+		FROM   SEC_APPROVAL             
+		WHERE  STAFF_ID = #{staffID}
+		]]>
+    </select>
+    
+</mapper>

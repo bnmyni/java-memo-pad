@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aspire.goa.servapp.dao.EmailSendDao" >
+  <resultMap id="EmailSendPojoMap" type="com.aspire.goa.servapp.entity.EmailSendPojo" >
+    <result property="emailId" column="EMAIL_ID" />
+    <result property="emailFrom" column="EMAIL_FROM" />
+    <result property="emailTo" column="EMAIL_TO" />
+    <result property="emailCc" column="EMAIL_CC" />
+    <result property="emailBcc" column="EMAIL_BCC" />
+    <result property="subject" column="SUBJECT" />
+    <result property="message" column="MESSAGE" />
+    <result property="createDate" column="CREATE_DATE" />
+    <result property="sendDate" column="SEND_DATE" />
+    <result property="status" column="STATUS" />
+    <result property="dealTimes" column="DEAL_TIMES" />
+    <result property="type" column="TYPE" />
+    <result property="errorMessage" column="ERROR_MESSAGE" />
+  </resultMap>
+  
+  <insert id="insertEmailSend" 
+	        parameterType="com.aspire.goa.servapp.entity.EmailSendPojo">
+        <![CDATA[
+		INSERT INTO servfee_email_send  (
+		       EMAIL_ID     ,
+		       EMAIL_FROM     ,
+		       EMAIL_TO    ,
+		       EMAIL_CC   ,
+		       EMAIL_BCC   ,
+		       SUBJECT ,
+		       MESSAGE   ,
+		       CREATE_DATE    ,
+		       SEND_DATE   ,
+		       STATUS    ,
+		       DEAL_TIMES    ,
+		       TYPE    ,
+		       ERROR_MESSAGE)
+		VALUES(#{emailId,jdbcType=NUMERIC},
+		       #{emailFrom,jdbcType=VARCHAR},
+		       #{emailTo,jdbcType=VARCHAR},
+		       #{emailCc,jdbcType=VARCHAR},
+		       #{emailBcc,jdbcType=VARCHAR},
+		       #{subject,jdbcType=VARCHAR},
+		       #{message,jdbcType=VARCHAR},
+		       SYSDATE,
+		       #{sendDate,jdbcType=DATE},
+		       #{status,jdbcType=VARCHAR},
+		       #{dealTimes,jdbcType=NUMERIC},
+		       #{type,jdbcType=VARCHAR},
+		       #{errorMessage,jdbcType=VARCHAR}
+               )
+		]]>
+    </insert>
+    
+    <insert id="insertEmailSendHistory" 
+	        parameterType="com.aspire.goa.servapp.entity.EmailSendPojo">
+        <![CDATA[
+		INSERT INTO servfee_email_send_history  (
+		       EMAIL_ID     ,
+		       EMAIL_FROM     ,
+		       EMAIL_TO    ,
+		       EMAIL_CC   ,
+		       EMAIL_BCC   ,
+		       SUBJECT ,
+		       MESSAGE   ,
+		       CREATE_DATE    ,
+		       SEND_DATE   ,
+		       STATUS    ,
+		       DEAL_TIMES    ,
+		       TYPE    ,
+		       ERROR_MESSAGE)
+		VALUES(#{emailId,jdbcType=NUMERIC},
+		       #{emailFrom,jdbcType=VARCHAR},
+		       #{emailTo,jdbcType=VARCHAR},
+		       #{emailCc,jdbcType=VARCHAR},
+		       #{emailBcc,jdbcType=VARCHAR},
+		       #{subject,jdbcType=VARCHAR},
+		       #{message,jdbcType=VARCHAR},
+		       #{createDate,jdbcType=DATE},
+		       #{sendDate,jdbcType=DATE},
+		       #{status,jdbcType=VARCHAR},
+		       #{dealTimes,jdbcType=NUMERIC},
+		       #{type,jdbcType=VARCHAR},
+		       #{errorMessage,jdbcType=VARCHAR}
+               )
+		]]>
+    </insert>
+    
+    <update id="updateEmailSend" 
+            parameterType="com.aspire.goa.servapp.entity.EmailSendPojo">
+		UPDATE servfee_email_send     
+		SET ERROR_MESSAGE 	= #{errorMessage,jdbcType=VARCHAR}        
+		       <if test="status != null and status != ''">      
+		     	 	,STATUS 		= #{status,jdbcType=VARCHAR}  
+		       </if> 
+		       <if test="dealTimes != null and dealTimes != ''">      
+		     	 	,DEAL_TIMES 	= #{dealTimes,jdbcType=NUMERIC} 
+		       </if> 
+		WHERE  EMAIL_ID       = #{emailId,jdbcType=VARCHAR}
+    </update>
+    
+    <select id="listEmailSendPojo" resultMap="EmailSendPojoMap" parameterType="java.util.HashMap">
+		select * from (
+			select t.*,rownum rn from   servfee_email_send t
+			where rownum > 0
+			  <if test="status != null and status != ''">      
+		     	 	and STATUS = #{status}
+		       </if> 
+		       <if test="unstatus != null and unstatus != ''">      
+		     	 	and STATUS != #{unstatus}
+		       </if> 
+		       <if test="dealTime != null and dealTime != ''">      
+		     	 	and DEAL_TIMES &lt;  #{dealTime,jdbcType=NUMERIC} 
+		       </if> 
+		       
+			order by CREATE_DATE desc
+		) y where y.rn &lt; 3   
+    </select>
+    
+    <select id="findEmailSend" resultMap="EmailSendPojoMap" parameterType="java.lang.String">
+        <![CDATA[
+			SELECT * FROM   servfee_email_send WHERE  EMAIL_ID = #{emailId}
+		]]>
+    </select>
+    
+    <delete id="deleteEmailSend" parameterType="java.lang.String">
+    	delete from servfee_email_send WHERE  EMAIL_ID = #{emailId} 
+    </delete>
+</mapper>

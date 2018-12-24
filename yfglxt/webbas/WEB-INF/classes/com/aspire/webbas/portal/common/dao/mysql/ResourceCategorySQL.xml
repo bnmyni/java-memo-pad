@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.ResourceCategoryDao">
+	<resultMap type="com.aspire.webbas.portal.common.entity.ResourceCategory" id="ResourceCategoryMap">		
+		<result property="categoryId" column="CATEGORY_ID"/>   
+		<result property="parentId" column="PARENT_ID"/>       
+		<result property="categoryName" column="CATEGORY_NAME"/> 
+		<result property="categoryDesc" column="CATEGORY_DESC"/> 
+		<result property="metadataId" column="METADATA_ID"/>   
+		<result property="categoryKey" column="CATEGORY_KEY"/>
+		<result property="orderKey" column="ORDER_KEY" javaType="int" jdbcType="NUMERIC"/>  
+		<result property="domain" column="DOMAIN"/>
+	</resultMap>
+	
+	<insert id="insertResourceCategory" parameterType="com.aspire.webbas.portal.common.entity.ResourceCategory"
+		useGeneratedKeys="true" keyProperty="categoryId">
+	   	<![CDATA[
+		INSERT  INTO SEC_RESOURCE_CATEGORY (
+		        CATEGORY_ID            ,
+		        PARENT_ID              ,
+		        CATEGORY_NAME          ,
+		        CATEGORY_DESC          ,
+		        METADATA_ID            ,
+		        CATEGORY_KEY           ,
+		        ORDER_KEY,
+		        DOMAIN           )
+		VALUES (#{categoryId},
+		        #{parentId,jdbcType=NUMERIC}     ,
+		        #{categoryName,jdbcType=VARCHAR} ,
+		        #{categoryDesc,jdbcType=VARCHAR} ,
+		        #{metadataId,jdbcType=VARCHAR}   ,
+		        #{categoryKey,jdbcType=VARCHAR}  ,
+		        #{orderKey,jdbcType=NUMERIC},
+		        #{domain,jdbcType=VARCHAR} )
+		]]>       
+  	</insert>
+	
+	<update id="updateResourceCategory" parameterType="com.aspire.webbas.portal.common.entity.ResourceCategory">
+        <![CDATA[
+		    UPDATE SEC_RESOURCE_CATEGORY 
+		    SET
+		            CATEGORY_NAME = #{categoryName},
+		            CATEGORY_DESC = #{categoryDesc},
+		            PARENT_ID     = #{parentId,jdbcType=NUMERIC},
+		            CATEGORY_KEY  = #{categoryKey,jdbcType=VARCHAR},
+		            METADATA_ID   = #{metadataId,jdbcType=VARCHAR},
+		            ORDER_KEY     = #{orderKey,jdbcType=NUMERIC},
+		            domain        = #{domain,jdbcType=VARCHAR}            
+		    WHERE CATEGORY_ID = #{categoryId}
+		]]>
+    </update>
+    
+	<delete id="deleteResourceCategoryById" parameterType="long">
+  		<![CDATA[
+  		DELETE 	FROM SEC_RESOURCE_CATEGORY
+  		WHERE	category_id = #{value}
+  		]]>
+  	</delete>
+  	
+  	<delete id="deleteResourceCategoryByMetadataId" parameterType="string">
+  		<![CDATA[
+  		DELETE 	FROM SEC_RESOURCE_CATEGORY
+  		WHERE	METADATA_ID = #{value}
+  		]]>
+  	</delete>
+  	
+	<select id="findResourceCategory" resultMap="ResourceCategoryMap" parameterType="com.aspire.webbas.portal.common.entity.ResourceCategory">
+        SELECT *
+        FROM SEC_RESOURCE_CATEGORY
+        WHERE CATEGORY_ID = #{resourceCategoryId}
+    </select>
+    
+    <select id="findResourceCategoryByKey" resultMap="ResourceCategoryMap" parameterType="string">
+        SELECT *
+        FROM SEC_RESOURCE_CATEGORY
+        WHERE CATEGORY_KEY = #{resourceCategoryKey}
+    </select>
+    
+    <select id="listRootResourceCategory" resultMap="ResourceCategoryMap" parameterType="com.aspire.webbas.portal.common.entity.ResourceCategory">    
+		<![CDATA[
+		SELECT *
+		FROM   SEC_RESOURCE_CATEGORY   
+		where
+		CATEGORY_KEY not like '%exclude%' 
+		]]>   
+        order by ORDER_KEY         
+	</select>
+    <select id="listResourceCategory" resultMap="ResourceCategoryMap" parameterType="com.aspire.webbas.portal.common.entity.ResourceCategory">    
+		<![CDATA[
+		SELECT *
+		FROM   SEC_RESOURCE_CATEGORY   
+		]]>   
+		<where>
+		    1=1
+			<if test="parentId != null">
+				and PARENT_ID = #{parentId}
+			</if>
+			<if test="categoryName != null">
+				 and CATEGORY_NAME like CONCAT(CONCAT('%', TRIM(#{categoryName})),'%') 
+			</if>
+			<if test="categoryDesc != null"> 
+				 and CATEGORY_DESC like CONCAT(CONCAT('%', TRIM(#{categoryDesc})),'%') 
+			</if>
+			<if test="metadataId != null">
+				and METADATA_ID = #{metadataId}
+			</if>
+			<if test="categoryKey != null">
+				and CATEGORY_KEY = #{categoryKey}
+			</if>
+			<if test="domain != null">
+				and domain = #{domain}
+			</if>
+		</where> 
+		
+        order by ORDER_KEY         
+	</select>
+	
+	<select id="listResourceCategoryByParentId" resultMap="ResourceCategoryMap" parameterType="string">
+      	SELECT *
+		FROM   SEC_RESOURCE_CATEGORY
+        WHERE  PARENT_ID = #{parentId} 
+         AND CATEGORY_KEY not like '%exclude%'
+        ORDER BY ORDER_KEY
+    </select>
+</mapper> 

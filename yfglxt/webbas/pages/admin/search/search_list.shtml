@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title>Search</title>
+<!--#include virtual="/include.html"  -->
+<link rel="stylesheet" href="assets/js/plugin/datepicker/css/redmond/jquery-ui-1.10.3.custom.css" />
+<script src="assets/js/plugin/datepicker/jquery-ui-1.10.3.custom.js"></script>
+
+<script type="text/javascript" src="codeDict/queryScript.ajax?codeType=search_tag"></script>
+</head>
+<style>
+.search {
+	margin: auto;
+	padding: inherit;
+}
+#hotword {
+	width: 100%;
+	height: 45px;
+	line-height: 45px;
+	background: #F6F6F6;
+}
+#result-items ul li {
+	list-style: none;
+}
+#hotword ul li {
+	width: 80px;
+	height: 45px;
+	list-style: none;
+	float: left;
+}
+#searchtool {
+	display: none;
+	background: #FFF;
+	background-attachment: fixed;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	border-top: 1px solid #CCC;
+	border: 1px solid #ccc;
+	width: 580px;
+	height: 90px;
+	overflow: hidden;
+	list-style: none;
+	position: absolute;
+	top: 43px;
+	left: -5px;
+}
+#searchtool li {
+	width: 100%;
+	padding-left:10px;
+}
+#searchtool li:hover {
+	background: #CCC;
+}
+#hotword a {
+	width: auto;
+	font-size: 18px;
+}
+</style>
+
+<body>
+<div > 
+  <!-- <div style="width:100%; height:40px; color:#FFF; line-height:40px; font-size:20px;" class="navbar">文件搜索 > 搜索结果</div>--> 
+  <!--<div style="width:100%; height:30px;"></div>-->
+  <div id="searchkeyword"  style="margin-top:10px;" class="search">
+    <div   style="padding-left:20px;">
+      <form class="form-horizontal margin-top-10">
+        <div class="form-inline">
+          <input type="text" value="" placeholder=""  class="col-xs-30 col-sm-6 "  name="searchKey" id="searchKey" />
+          <ul  id="searchtool" >
+          </ul>
+          <button id="searchbtn" type="button" class="btn btn-info btn-sm"> 搜索 <i class="ace-icon fa fa-search icon-on-right bigger-110 white"></i> </button>
+          <span><a id="seninorlink" style="font-size:16px; margin-left:20px;" >高级搜索</a></span>
+          <div class="btn btn-info" style="width:80px; height:30px; float:right" id="showhistory">查看历史</div>
+          <div id="showhistorydetail" style="width:100%;  height:600px; background:#FFF; border:1px solid #999; display:none">
+          <dl>
+          <dt>今天</dt>
+          	<dd><input type="checkbox" />中国</dd>
+            <dd><input type="checkbox" />中海油等央企三名局级干部被检察机关立案侦查</dd>
+            <dd><input type="checkbox" />中国移动通信集团公司</dd>
+            <dd><input type="checkbox" />中国移动通信集团深圳分公司</dd>
+           </dl>
+           <div style="width:100%" class="clearfix form-actions">
+            <div class="center">
+              <button class="btn btn-danger" type="button" id="closehistory">
+              <i class="ace-icon fa fa-check bigger-110"></i> 关闭
+              </button>
+           
+          </div>
+          </div>
+          </div>
+          <div  id="hotword">
+            <ul id="statistic">
+            	<ul>
+                	<!--li><a href="javascript:;"  num="1" title="公告">公告</a><small><span id="gonggao" class="badge badge-success">0</span></small></li>
+                    <li><a href="javascript:;"  num="2" title="信息">信息</a><small><span id="xinxi" class="badge badge-success">0</span></small></li>
+					<li><a href="javascript:;"  num="3" title="新闻">新闻</a><small><span id="xinwen" class="badge badge-success">0</span></small></li>
+                    <li><a href="javascript:;" num="4"  title="收文">收文</a><small><span id="shouwen" class="badge badge-success">0</span></small></li>
+                    <li><a href="javascript:;"  num="5" title="会议">会议</a><small><span id="huiyi" class="badge badge-success">0</span></small></li>
+                    <li><a href="javascript:;"  num="6" title="合同">合同</a><small><span id="hetong" class="badge badge-success">0</span></small></li>
+                    <li><a href="javascript:;"  num="7" title="其他">其他</a><small><span id="qita" class="badge badge-success">0</span></small></li-->
+                </ul>
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="senior" style="display:none" class="search">
+    <h4 >基本条件:</h4>
+    </dt>
+    <form  class="form-horizontal" onSubmit="return false">
+      <div class="form-group">
+        <label  class="col-sm-3 control-label no-padding-right"><span class="red">*</span>包含关键字：</label>
+        <div class="col-sm-8">
+          <input type="text"  class="col-sm-5"    name="includeKey" id="includeKey" />
+          多个关键字用空格 </div>
+      </div>
+      <div class="form-group">
+        <label  class="col-sm-3 control-label no-padding-right"><span class="red">*</span>排除关键字：</label>
+        <div class="col-sm-8">
+          <input type="text"     name="paichu" id="paichu" />
+          多个关键字用空格 </div>
+      </div>
+      <div class="form-group">
+        <label  class="col-sm-3 control-label no-padding-right"><span class="red">*</span>模块：</label>
+        <div class="col-sm-4">
+          <select   name="modul" id="modul" >
+            <option selected="selected">请选择</option>
+            <option  value="1">公告</option>
+            <option  value="2">信息</option>
+            <option  value="3">新闻</option>
+			<option  value="4">收文</option>
+			<option  value="5">会议</option>
+			<option  value="6">合同</option>
+			<option  value="7">其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label  class="col-sm-3 control-label no-padding-right"><span class="red">*</span>作者：</label>
+        <div class="col-sm-4">
+          <input type="text"     name="author" id="author" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label  class="col-sm-3 control-label no-padding-right"><span class="red">*</span>日期范围：</label>
+        <div class="col-sm-4">
+          <input name="startTime" id="startTime" type="text" class="input-append date" />
+          至
+          <input id="endTime" name="endTime" type="text" class="input-append date"  />
+        </div>
+      </div>
+      <div class="form-group">
+        <label  class="col-sm-3 control-label no-padding-right"></label>
+        <div class="col-sm-4">
+          <input type="button" value="搜索" class="btn btn-success" id="searchbtn1" />
+          <a  id="jiandan">返回简单搜索</a> </div>
+      </div>
+    </form>
+    
+  </div>
+  <!--select name="params['cat']" id="catName">
+					  <option>请选择</option>
+			      </select-->
+  <div class="result">
+    <div style="display:none" id="allnum" >
+      <div  id="result">为您找到相关的结果0个</div>
+      <div style="width:680px; float:left;">
+        <div style="width:100%; height:30px;">&nbsp;&nbsp;&nbsp;</div>
+      </div>
+      <div  class="fr" align="right" style="text-align:right; display:none">按时间排序&#8595; </div>
+    </div>
+    <span id="result-items">
+    <ul id="resultul">
+    </ul>
+    </span>
+    <div style="text-align:center;"  id="pager" >
+      <ul  class="pagination">
+      </ul>
+    </div>
+    
+    <!--<div class="sponsor sponsor-list" id="sponsor-bottom">--> 
+  </div>
+</div>
+</div>
+
+<!--#include virtual="/include_footer.html"  --> 
+<script type="text/javascript" src="pages/search.js"></script>
+</body>
+</html>

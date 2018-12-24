@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aspire.goa.empovertime.dao.SmtUserDao">
+
+	<sql id="whereClomun">
+		<if test="userNo != null and userNo != ''">
+			and t.user_no = #{userNo}
+		</if>
+		<if test="serviceCode != null and serviceCode != ''">
+			and service_code = #{serviceCode}
+		</if>
+		<if test="code != null and code != ''">
+		and a.CODE_ = #{code}
+		</if>
+		<if test="realName != null and realName != ''">
+		and REAL_NAME = #{realName}
+		</if>
+		<if test="department3 != null and department3 != ''">
+		and department3 in (${department3}) 
+		</if>
+		<if test="department4 != null and department4 != ''">
+		and department4 = #{department4}
+		</if>
+		<if test="type_ != null and type_ != ''">
+		and type_ = #{type_}
+		</if>
+	</sql>
+	
+	<sql id="whereParams">
+		<if test="params['userNo'] != null and params['userNo'] != ''">
+		and a.user_no = #{params.userNo}
+		</if>
+		<if test="params['code'] != null and params['code'] != ''">
+		and a.code_ = #{params.code}
+		</if>
+		<if test="params['serviceName'] != null and params['serviceName'] != ''">
+		and service_code = #{params.serviceName}
+		</if>
+		<if test="params['realName'] != null and params['realName'] != ''">
+		and REAL_NAME = #{params.realName}
+		</if>
+		<if test="params['department3'] != null and params['department3'] != ''">
+		and department3 in (${params.department3}) 
+		</if>
+		<if test="params['department4'] != null and params['department4'] != ''">
+		and department4 = #{params.department4}
+		</if>
+		<if test="params['type_'] != null and params['type_'] != ''">
+		and type_ = #{params.type_}
+		</if>
+	</sql>
+	
+	
+	<insert id="insertUser" parameterType="java.util.List" >
+		insert into T_SMT_USER (REAL_NAME,DEPARTMENT3,DEPARTMENT4,TYPE_,USER_NO) 
+		select REAL_NAME,DEPARTMENT3,DEPARTMENT4,TYPE_,USER_NO from (
+		<foreach collection="list" item="item" index="index" separator="UNION ALL">
+		SELECT 
+		   #{item.realName,jdbcType=VARCHAR} REAL_NAME,
+		   #{item.department3,jdbcType=VARCHAR} DEPARTMENT3,
+		   #{item.department4,jdbcType=DOUBLE} DEPARTMENT4,
+		   #{item.type_,jdbcType=VARCHAR} TYPE_,
+		   #{item.userNo,jdbcType=VARCHAR} USER_NO
+		FROM dual
+		</foreach>
+		) a
+	</insert>
+	
+	<update id="updateUser" parameterType="com.aspire.goa.empovertime.entity.SmtUser">
+		update T_SMT_USER set user_no = #{userNo} 
+			<if test="code != null and code != ''">
+				, code_ = #{code}
+			</if>
+		
+			<if test="realName != null and realName != ''">
+				, REAL_NAME = #{realName}
+			</if>
+			<if test="department3 != null and department3 != ''">
+				 ,DEPARTMENT3 = #{department3}
+			</if>
+			<if test="department4 != null and department4 != ''">
+				,DEPARTMENT4 = #{department4}
+			</if>
+			<if test="ratio_ != null and ratio_ != ''">
+				, RATIO_ = #{ratio_}
+			</if>
+			<if test="type_ != null and type_ != ''">
+				, TYPE_ = #{type_}
+			</if>
+			<if test="deleteStatus != null and deleteStatus != ''">
+				, IS_DELETE = #{deleteStatus}
+			</if>
+		where user_no = #{userNo}
+			<if test="realName != null and realName != ''">
+				and REAL_NAME = #{realName}
+			</if>
+			<if test="department4 != null and department4 != ''">
+				 and DEPARTMENT4 = #{department4}
+			</if>
+			<if test="type_ != null and type_ != ''">
+				 and TYPE_ = #{type_}
+			</if>
+	</update>
+	
+	<select id="queryUser" parameterType="com.aspire.goa.empovertime.entity.SmtUser" resultType="com.aspire.goa.empovertime.entity.SmtUser">
+		select t.user_no userNo,REAL_NAME realName, department3, department4,a.code_ code,decode(a.ratio_, null, '0',trunc(a.ratio_*100,2) || '%')  RATIO,TYPE_,service_code serviceCode,service_name serviceName 
+		from T_SMT_USER t left join (
+	         select r.code_,r.user_no,r.ratio_, p.service_code,p.service_name from t_project p inner join  t_user_project_relation r on p.code_ = r.code_ 
+	         ) a on  t.user_no = a.user_no
+			where 1=1 <include refid="whereClomun" />
+	</select>
+	
+	<select id="getList" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" resultType="com.aspire.goa.empovertime.entity.SmtUser">
+		select t.user_no userNo,REAL_NAME realName, department3, department4,a.code_ code,decode(a.ratio_, null, '100',trunc(a.ratio_*100,2))  RATIO,TYPE_, service_code serviceCode,service_name serviceName 
+	    from T_SMT_USER t left join (
+	         select r.code_,r.user_no,r.ratio_, p.service_code,p.service_name from t_project p inner join  t_user_project_relation r on p.code_ = r.code_ 
+	         ) a on  t.user_no = a.user_no
+			where 1=1 and is_delete = '0' <include refid="whereParams" />
+	</select>
+	
+	<insert id="addBackUp" parameterType="java.lang.String">
+		create table ${value} as select * from T_SMT_USER
+	</insert>
+	
+	<delete id="delProjectInfo">
+		delete from delUser
+	</delete>
+	
+	<insert id="addRecover" parameterType="java.lang.String">
+		insert into T_SMT_USER select * from ${value}
+	</insert>
+</mapper>

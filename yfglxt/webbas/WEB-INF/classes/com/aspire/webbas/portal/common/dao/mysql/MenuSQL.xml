@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.MenuDao">
+	
+	<resultMap  type="com.aspire.webbas.portal.common.entity.Menu" id="menuMap">
+        <result property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="menuKey" column="menu_key"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="url" column="url"/>
+        <result property="menuOrder" column="menu_order"/>
+        <result property="subsystem" column="subsystem"/>
+        <result property="domain" column="domain"/>
+    </resultMap>
+	
+
+	
+	  <select id="listMenu" resultMap="menuMap"  parameterType="com.aspire.webbas.portal.common.entity.Menu">    
+		<![CDATA[
+		SELECT	*
+		FROM	MENU
+		]]>	
+		<where>
+		    1=1
+			<if test="menuName != null">
+				and menu_name = trim(#{menuName})
+			</if>
+			<if test="parentId != null">
+				and parent_id = #{parentId}
+			</if>
+		</where>
+        order by menu_order
+    </select>
+    
+    
+    
+</mapper> 

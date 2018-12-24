@@ -1,0 +1,96 @@
+* {
+	font:16px '仿宋','宋体';
+	font-weight: bold;	
+}
+form {
+	margin-top: 100px;
+}
+.print-form {
+	page-break-after: always;
+	padding: 0 20px;
+}
+.print-form:last-child {
+	page-break-after: auto;
+}
+#titleDiv, .titleDiv {
+	width: 100%;
+	font-size: 16px;
+}
+.titleDiv {
+	position: relative;
+	text-align: center;
+	margin-bottom: 50px;
+}
+.appDateShow {
+	position: absolute;
+	right: -35px;
+	bottom: -45px;
+	width: auto; 
+}
+strong,
+#sumFee,
+.sumFee{
+	font-size: inherit;
+}
+#footerDiv,
+#buessiontable,
+.footerDiv,
+.buessiontable {
+	margin-left: 0;
+	letter-spacing: 1px;
+}
+#titleDiv strong,
+.titleDiv strong,
+#appDateShow,
+.appDateShow{
+	font-size: 16px !important;
+	font-weight: 700;
+	font-family: '华文中宋','宋体';
+}
+#titleDiv strong,
+.titleDiv strong {
+	display: block;
+	margin: 15px 0;
+}
+#appDateShow,
+.appDateShow {
+	width: 180px;
+	margin-bottom: 10px;
+}
+#buessiontable,
+.buessiontable {
+	clear:both;
+	table-layout: fixed;
+	border-spacing: 0;
+	width: auto;
+}
+#buessiontable td,
+.buessiontable td {
+	width: 180px;
+	min-width: auto !important;
+}
+#buessiontable .tdleft,
+.buessiontable .tdleft {
+	text-align: center;
+}
+#buessiontable .grid-title-small,
+.buessiontable .grid-title-small {
+	width: 150px;
+}
+#buessiontable .grid-title-large,
+.buessiontable .grid-title-large {
+	width: 180px;
+}
+#sumFee,
+.sumFee {
+	color: inherit;
+}
+.field-danwei:after {
+	display: block;
+	text-align: center;
+}
+#footerDiv div,
+.footerDiv div {
+	margin-top: 5px;
+	margin-bottom: 30px;
+}

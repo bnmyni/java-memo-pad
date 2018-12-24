@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.SubSystemDao">
+	
+	<resultMap  type="com.aspire.webbas.portal.common.entity.SubSystem" id="subSystemMap">
+        <result property="subSystemId" column="sub_System_Id"/>
+        <result property="subSystemName" column="sub_System_Name"/>
+        <result property="subSystemDesc" column="sub_System_Desc"/>
+        <result property="hopDomain" column="hop_Domain"/>
+        <result property="interfaceDomain" column="interface_Domain"/>
+        <result property="deployMode" column="deploy_Mode"/>
+        <result property="domain" column="domain"/>
+    </resultMap>
+	
+
+	
+	  <select id="listSubSystem" resultMap="subSystemMap"  parameterType="com.aspire.webbas.portal.common.entity.SubSystem">    
+		<![CDATA[
+		SELECT	*
+		FROM	sub_system
+		]]>	
+    </select>
+    
+    
+    
+</mapper> 

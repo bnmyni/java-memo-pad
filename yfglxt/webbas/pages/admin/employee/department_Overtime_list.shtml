@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<!--#include virtual="/root.jsp"  -->
+	<title>Lessee</title>
+	<!--#include virtual="/include.html"  -->
+	<!--  -->
+	<!-- <script type="text/javascript" src="codeDict/queryScript.ajax?codeType=lessee_device"></script> -->
+	<style>
+		html {
+			overflow-x: hidden;
+		}
+		*{font-family:"微软雅黑"; font-size:14px}
+		td {white-space: nowrap;}
+		#queryForm1 td input {
+			width: 95px !important;
+		}
+		
+        #tableModel{border-collapse: collapse;
+            border: 1px solid #aaa;
+            font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif}
+        #tableModel thead td{padding: 12px 15px 12px 6px;
+            background-image: -webkit-linear-gradient(top,#f8f8f8 0,#ececec 100%);
+            background-image: linear-gradient(to bottom,#f8f8f8 0,#ececec 100%);
+            background-repeat: repeat-x;}
+        #tableModel td{vertical-align: text-top;
+            padding: 6px 15px 6px 6px;
+            background-color: #FFFFFF;
+            border: 1px solid #aaa;}
+        #tableModel td.first{vertical-align:middle;background:#dddddd}
+        #tableModel .subtotal td{background:#dddddd;}
+        #tableModel .end{ font-weight:bold; background-color: rgb(142,169,219); } 
+        
+		.form-inline .lab-hand{width:8%;text-align: right;}
+		.form-inline .lab-body{width:16%;}
+		.form-inline .lab-body select{width:98%;}
+		.form-inline .lab-body-half{width:36%;}
+		.form-inline .lab-body input{width:98%;}
+		.form-inline .lab-body-half select{width:68%;}
+	</style>
+	<link type="text/css" rel="stylesheet" href="pages/css/app.css">
+</head>
+<body>
+
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->
+			<form id="queryForm" onsubmit="return false;" style="font-family:">
+				<div class="form-inline">
+					<label class="lab-hand">时间：</label>
+					<label class="lab-body-half" >
+						<input type="text" name="params['startDate']"  id="startDate" placeholder="开始时间"  autocomplete="off" />
+						&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;<input type="text" name="params['endDate']"  id="endDate" placeholder="结束时间" autocomplete="off" />
+					</label>
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('0')"> 近一周 </a> 
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('1')"> 近一月 </a> 
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('3')"> 近一季度 </a>
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('6')"> 近半年 </a>
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('12')"> 近一年 </a>
+				</div>
+				
+				<div class="form-inline">
+					<label class="lab-hand">三级部门：</label>
+					<label class="lab-body-half" style="width: 24%;">
+					 	<input class="serviceCode" name="params['department3']" type="checkbox" value="00" style="margin-left: 10px;"/>&nbsp;应用研发部
+						<input class="serviceCode" name="params['department3']" type="checkbox" value="01" style="margin-left: 20px;" />&nbsp;平台研发二部				
+					</label>
+					<label class="lab-hand">四级部门：</label>
+					<label class="lab-body">
+						<select name="params['department4']" id="department4">
+							<option value="" >全部</option>
+							<option value="安全系统部" class="serviceCode serviceCode_00">安全系统部</option>
+							<option value="运维系统部" class="serviceCode serviceCode_00">运维系统部</option>
+							<option value="运营系统部" class="serviceCode serviceCode_00">运营系统部</option>
+							<option value="平台开发一部" class="serviceCode serviceCode_01">平台开发一部</option>
+							<option value="平台开发二部" class="serviceCode serviceCode_01">平台开发二部</option>
+							<option value="测试部" class="serviceCode serviceCode_01">测试部</option>
+							<option value="需求部" class="serviceCode serviceCode_01">需求部</option>
+							<option value="架构部" class="serviceCode serviceCode_01">架构部</option>
+						</select>
+					</label>
+					<!-- <label class="lab-hand">人员类型：</label>
+					<label class="lab-hand" >
+						<select name="params['type_']" id="type_" style="width:100%">
+							<option value="" >全部</option>
+							<option value="0" >自有</option>
+							<option value="1" >外包</option>
+						</select>
+					</label> -->
+					<label style="width:4%;"></label>
+					<input type="button" class="btn btn-success" value="查询" id="seachBtn"/>
+					<input type="button" class="btn btn-success" value="导出" id="exportBtn"/>
+					<input type="reset" class="btn " value="重置" />
+				</div>
+						
+			</form>
+			<div class="space-6"></div>
+			<!-- <table id="grid-table"></table> -->
+			<!--div id="grid-pager"></div> -->
+			<!-- PAGE CONTENT ENDS -->
+			
+			<div>
+		        <table id="tableModel" width="100%">
+		            <thead>
+		            <tr>
+		                <td>三级部门</td>
+		                <td>四级部门</td>
+		                <td>自有人数</td>
+		                <td>外包人数</td>
+		                <td>标准工时（小时）</td>
+		                <td>加班时长（小时）</td>
+		                <td>人均加班时长（小时）</td>
+		                <td>加班率</td>
+		            </tr>
+		            </thead>
+		            <tbody>
+		            </tbody>
+		        </table>
+		    </div>
+		</div>
+		
+	</div>
+
+	<!--#include virtual="/include_footer.html"  -->
+ <script src="pages/serv/js/servapp.js"></script>
+ <script src="pages/admin/employee/js/department_overtime.js"></script> 
+
+</body>
+</html>

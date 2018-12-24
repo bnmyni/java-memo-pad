@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<!--#include virtual="/root.jsp"  -->
+		<title>角色管理</title>
+		<!--#include virtual="/include.html"  -->
+  </head>
+  <body>
+	<div class="page-content">	
+      <!-- 新增活动按钮 -->
+	  
+      
+      
+	  
+	  <div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->
+			<div class="form-inline">
+	      
+				  <button id="addNewRoleBtn" class="btn btn-sm btn-success" style="display:none"  permCheck="auth_admin_sys_role_roleManage,ADD,hide">
+					<i class="ace-icon fa fa-hand-o-right white"></i>
+					新增角色
+				  </button>
+				  
+				  &nbsp;&nbsp;
+				  <input id="searchText" type="text" class="form-control search-query" placeholder="输入关键字" />
+						
+					<button id="seachBtn" type="button" class="btn btn-purple btn-sm">
+						查找
+						<i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+					</button>
+						
+				  
+			</div>	
+			
+			<div class="space-6"></div>
+			
+			<table id="role-table"></table>
+
+			<div id="grid-pager"></div>
+
+			<!-- PAGE CONTENT ENDS -->
+	  </div>
+    </div>
+	
+	<!--  新增角色  -->
+	<div id="addnewrole-form" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<form class="form-horizontal" role="form" id="add-role-form" onsubmit="return false;">
+			<input type="hidden" name="roleId" id="roleId"/>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">新增角色</h4>
+				</div>
+
+				<div class="modal-body">
+					
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="roleKey"> <span class="red">*</span>角色助记码: </label>
+							<div class="col-sm-5">
+								<input type="text" name="roleKey" id="roleKey" placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="roleName"> <span class="red">*</span>角色名称: </label>
+
+							<div class="col-sm-5">
+								<input type="text" name="roleName" id="roleName" placeholder="" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="roleDesc"> 角色描述: </label>
+
+							<div class="col-sm-5">
+								<textarea name="roleDesc" id="roleDesc" cols="10" rows="3" class="form-control input-sm"></textarea>
+							</div>
+						</div>
+				  		
+				</div>
+					   
+
+				<div class="modal-footer">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						取消
+					</button>
+
+					<button id="save-role-btn" class="btn btn-sm btn-success" type="submit">
+						<i class="ace-icon fa fa-check"></i>
+						保存
+					</button>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+	
+	<!--  角色权限设置  -->
+	<div id="role-auth-form" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">角色[<span id="role-auth-form-rolename" class="green txt-overflow-hidden" style="max-width:400px;"></span>]权限设置</h4>
+				</div>
+
+				<div id="roleTree" class="modal-body">
+				        <!--
+						<div  class="dd">
+						</div>
+						-->
+				</div>
+					   
+
+				<div class="modal-footer">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						取消
+					</button>
+
+					<button id="save-auth-btn" class="btn btn-sm btn-success">
+						<i class="ace-icon fa fa-check"></i>
+						保存
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- page specific plugin scripts -->
+	<script src="assets/js/jquery.nestable.min.js"></script>
+	<!--#include virtual="/include_footer.html"  -->		
+    <script type="text/javascript" src="pages/auth/js/role.js"></script>
+  </body>
+  </html>

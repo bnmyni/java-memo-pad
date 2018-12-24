@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aspire.goa.servapp.dao.StaffDepartmentRealDao" >
+  
+    <select id="findStaffDepartmentInfo" resultType="java.lang.String" parameterType="java.lang.Long">
+    	SELECT T.Department_Name FROM SERVAPP_STAFF_DEPARTMENT_REAL T WHERE t.staff_id=#{staff_id}
+    </select>
+    
+</mapper>

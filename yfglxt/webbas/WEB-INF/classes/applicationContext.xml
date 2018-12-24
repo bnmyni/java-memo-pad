@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="
+                    http://www.springframework.org/schema/beans
+                    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                    http://www.springframework.org/schema/tx 
+                    http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+                    http://www.springframework.org/schema/aop 
+                    http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+                    http://www.springframework.org/schema/context      
+                    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                    http://www.springframework.org/schema/cache 
+                    http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+
+	<!-- ==========注解支持========== -->
+	<context:annotation-config />      
+
+	<!-- ==========启动组件扫描，排除@Controller组件，该组件由SpringMVC配置文件扫描 ========== -->
+	<context:component-scan base-package="com.aspire">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+                    
+     
+	<!-- ==========属性文件位置 ========== -->
+	<context:property-placeholder
+		location="file:${configPath}/jdbc.properties"
+		ignore-unresolvable="true" />
+	
+	<!-- ==========数据源 ========== -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		  
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	   
+	    <property name="initialPoolSize" value="${cpool.initialPoolSize}"/>
+	    <property name="minPoolSize" value="${cpool.minPoolSize}"/>
+	    <property name="maxPoolSize" value="${cpool.maxPoolSize}"/>
+	    <property name="maxIdleTime" value="${cpool.maxIdleTime}"/>
+	    <property name="acquireIncrement" value="${cpool.acquireIncrement}"/>
+	    <property name="acquireRetryAttempts" value="${cpool.acquireRetryAttempts}"/>
+	    <property name="acquireRetryDelay" value="${cpool.acquireRetryDelay}"/>
+	    <property name="maxStatements" value="${cpool.maxStatements}"/>
+	    <property name="maxStatementsPerConnection" value="${cpool.maxStatementsPerConnection}"/>
+	    <property name="numHelperThreads" value="${cpool.numHelperThreads}"/>
+	    <property name="maxConnectionAge" value="${cpool.maxConnectionAge}"/>
+	    <property name="maxIdleTimeExcessConnections" value="${cpool.maxIdleTimeExcessConnections}"/>
+	    <property name="breakAfterAcquireFailure" value="${cpool.breakAfterAcquireFailure}"/>
+	    <property name="idleConnectionTestPeriod" value="${cpool.idleConnectionTestPeriod}"/>
+	    <property name="testConnectionOnCheckin" value="${cpool.testConnectionOnCheckin}" />
+		
+		<!--<property name="checkoutTimeout" value="10000" /> -->
+	</bean>
+	<bean class="com.aspire.webbas.core.util.SpringContextHolder" lazy-init="false"/>
+	<bean id="myInterceptor" class="com.aspire.webbas.core.pagination.mybatis.interceptor.PaginationInterceptor" >
+		<property name="databaseType" value="${jdbc.type}"/> 
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 配置 Annotation 驱动，定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/aspire/**/${jdbc.type}/*.xml" />
+		<property name="typeAliasesPackage" value="com.aspire.*.entity" />
+		
+		<property name="plugins">
+			<list>
+				<ref bean="myInterceptor" />
+			</list>
+		</property>
+	</bean> 
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.aspire.**.dao" />
+	</bean>		
+	
+	<bean id="staffRatioService" class="com.aspire.goa.empovertime.service.impl.StaffRatioServiceImpl" />
+	<bean id="projectService" class="com.aspire.goa.empovertime.service.impl.ProjectServiceImpl" />
+	<bean id="codeDictService" class="com.aspire.webbas.codedict.service.CodeDictService" />
+	
+	 
+	<bean id="doImportService" class="com.aspire.goa.empovertime.service.impl.DoImportServiceImpl" />
+	
+</beans>

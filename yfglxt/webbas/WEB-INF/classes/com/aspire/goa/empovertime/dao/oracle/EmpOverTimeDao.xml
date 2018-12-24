@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aspire.goa.empovertime.dao.EmpOverTimeDao">
+
+	<sql id="whereComnul">
+		 <if test="code != null and  code != ''">
+	     	and a.code_ = #{code}
+	     </if>
+	     <if test="startDate != null and  startDate != ''">
+	     	<![CDATA[ and a.work_date >= to_date(#{startDate},'YYYY-MM-DD') ]]>
+	     </if>
+	     <if test="endDate != null and  endDate != ''">
+	     	<![CDATA[ and a.work_date <= to_date(#{endDate},'YYYY-MM-DD') ]]>
+	     </if>
+	     <if test="serviceCode != null and  serviceCode != ''">
+	    	and b.service_code =  #{serviceCode} 
+	    </if>
+	</sql>    
+	<select id="list" parameterType="com.aspire.goa.empovertime.entity.OverTimeSummaryVo" resultType="com.aspire.goa.empovertime.entity.OverTimeSummaryVo">
+	 select decode(service_name,null,'总计',service_name) serviceName,
+         decode(code_,null,'小计',code_) code,
+         sum(tp) totalPeople,
+         sum(work_time) worktime,
+         sum(over_time) overtime,
+         trunc(decode(sum(tp),0 ,0 ,sum(over_time)/sum(tp)), 2)  averageTime ,
+         decode(code_,null,decode(sum(work_time),0,0,trunc(100*sum(over_time)/sum(work_time),2)), trunc( sum(rd_),2)) rate,           
+         decode(service_name, null, 3, decode(code_,null, 1, 2)) order_
+    from (select f3.service_name,
+                 f3.code_,
+                 nvl(f2.tp,0) tp,
+                 nvl(f1.work_time,0) work_time,
+                 nvl(f1.over_time,0) over_time,
+                 nvl(decode(f2.tp, 0, '0', f1.over_time / f2.tp),0) tpt,
+                 nvl(decode(work_time, 0, '0', f1.over_time / f1.work_time * 100),0) rd_
+            from t_project f3 left join (select sum(a.work_time) work_time,
+                         sum(case  when a.over_time > 0 then a.over_time else 0 end ) over_time,
+                         a.code_
+                    from t_stat_data_4project a
+                   where 1=1
+                  <if test="startDate != null and  startDate != ''">
+              <![CDATA[ and a.work_date >= to_date(#{startDate},'YYYY-MM-DD') ]]>
+             </if>
+             <if test="endDate != null and  endDate != ''">
+              <![CDATA[ and a.work_date <= to_date(#{endDate},'YYYY-MM-DD') ]]>
+             </if>
+             <if test="code != null and  code != ''">
+              and a.code_ = #{code}
+             </if>
+                   group by a.code_) f1 on f3.code_ = f1.code_
+                 right join (select sum(a.ratio_) tp, a.code_
+                    from t_user_project_relation a
+                   group by a.code_) f2 on f3.code_ = f2.code_               
+           where 1=1
+             <if test="code != null and  code != ''">
+            and f3.code_ = #{code}
+           </if>
+           <if test="serviceCode != null and  serviceCode != ''">
+            and f3.service_code =  #{serviceCode} 
+          </if>
+             ) fins
+   group by rollup(service_name, code_)
+   order by order_, rate  desc   
+	 
+	</select>
+	
+	<select id="queryInfoCount" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" resultType="java.lang.Integer">
+	<!-- select count(1) from (
+    select  *
+	  from  t_project p ,t_overtime_summary os 
+     where  p.code_ = os.project_code 
+     <include refid="whereComnul" />
+  	group by  os.project_code ,p.name_ ,p.service_code,p.service_name  ) e
+  	 -->
+	</select>
+</mapper>

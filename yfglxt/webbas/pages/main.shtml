@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<!--#include virtual="/root.jsp"  -->
+	<title>研发部门管理平台</title>
+	<!-- bootstrap & fontawesome -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+	<!-- text fonts -->
+	<link rel="stylesheet" href="assets/css/ace-fonts.css" />
+	<!-- ace styles -->
+	<link id="skin" rel="stylesheet" href="assets/css/ace.min.css" />
+	<!--[if lte IE 9]>
+	<link rel="stylesheet" href="assets/css/ace-part2.min.css" />
+	<![endif]-->
+	<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+	<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+	<link rel="stylesheet" href="pages/css/app.css" />
+	<!--[if lte IE 9]>
+	<link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+	<![endif]-->
+	<!-- inline styles related to this page -->
+	<!-- ace settings handler -->
+	<script src="assets/js/ace-extra.min.js"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lte IE 8]>
+	<script src="assets/js/html5shiv.js"></script>
+	<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
+	<!-- 
+	<link title="index" name="styleTag" rel="stylesheet" type="text/css" href="css/default/css/Aqua/css/ligerui-all.css"></link>
+	<link title="index" name="styleTag" rel="stylesheet" type="text/css" href="css/default/css/index.css"></link>
+	<link title="index" name="styleTag" rel="stylesheet" type="text/css" href="css/default/css/select.css"></link>
+	<link title="index" name="styleTag" rel="stylesheet" type="text/css" href="css/default/css/tree/zTreeStyle.css"></link>
+	<script src='bpmxJs/jquery.js'></script>
+	
+	<script src='bpmxJs/lang/common/zh_CN.js'></script>
+	<script src='bpmxJs/lang/js/zh_CN.js'></script>
+	<script type="text/javascript" src="bpmxJs/util/util.js"></script>
+   	<script type="text/javascript" src="bpmxJs/util/util.js"></script>
+	<script type="text/javascript" src="bpmxJs/util/form.js"></script>
+    <script type="text/javascript" src="bpmxJs/lg/base.js"  ></script>
+    <script type="text/javascript" src="bpmxJs/lg/plugins/ligerDialog.js"  ></script>
+    <script type="text/javascript" src="bpmxJs/lg/plugins/ligerDrag.js"  ></script>
+    <script type="text/javascript" src="bpmxJs/lg/plugins/ligerLayout.js"  ></script>
+    <script type="text/javascript" src="bpmxJs/lg/plugins/ligerMenu.js"></script>
+    <script type="text/javascript" src="bpmxJs/lg/plugins/ligerTab.js"  ></script>
+    <script type="text/javascript" src="bpmxJs/lg/plugins/ligerAccordion.js"  ></script>
+    <script type="text/javascript" src="bpmxJs/tree/jquery.ztree.js"  ></script>
+    <script type="text/javascript" src="bpmxJs/hotent/platform/system/sysPopupRemind/SysPopupRemindUtil.js"></script>
+    
+    
+
+    
+    
+    <script type="text/javascript" src="bpmxJs/tree/jquery.ztree.js"  ></script>
+	<script type="text/javascript" src="bpmxJs/hotent/formdata.js"></script>
+		<script type="text/javascript" src="bpmxJs/hotent/platform/form/GlobalType.js"></script>
+		<script type="text/javascript" src="bpmxJs/hotent/platform/system/GlobalMenu.js"></script>
+<script type="text/javascript" src="bpmxJs/fullcalendar/moment.min.js"></script>
+<script type="text/javascript" src="bpmxJs/fullcalendar/fullcalendar.min.js"></script>
+<script type="text/javascript" src="bpmxJs/lang/fullcalendar/zh_CN.js"></script>
+<script type="text/javascript" src="bpmxJs/jqGrid/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="bpmxJs/jqGrid/i18n/grid.locale-cn.js"></script>
+<script type="text/javascript" src="bpmxJs/util/util.js"></script>
+
+<script type="text/javascript" src="bpmxJs/hotent/foldBox.js" ></script>
+<script type="text/javascript" src="bpmxJs/hotent/absoulteInTop.js" ></script>
+
+	<script type="text/javascript" src="bpmxJs/hotent/platform/system/SysDialog.js"></script>
+	<script type="text/javascript" src="bpmxJs/hotent/platform/system/BpmDefinitionDialog.js"></script>
+<script type="text/javascript" src="bpmxJs/jquery/plugins/jquery.qtip.js" ></script>
+
+<script type="text/javascript" src="bpmxJs/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/system/SysDialog.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/rule.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/CustomValid.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/SelectorInit.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/CustomForm.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/system/FlexUploadDialog.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/system/HtmlUploadDialog.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/AttachMent.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/SubtablePermission.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/ReadOnlyQuery.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/OfficeControl.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/OfficePlugin.js"></script>
+<script type="text/javascript" src="bpmxJs/ntkoWebSign/NtkoAddSecSign.js"></script>
+<script type="text/javascript" src="bpmxJs/ntkoWebSign/NtkoWebSign.js"></script>
+<script type="text/javascript" src="bpmxJs/ntkoWebSign/WebSignPlugin.js"></script>
+<script type="text/javascript" src="bpmxJs/pictureShow/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="bpmxJs/pictureShow/PictureShowControl.js"></script>
+<script type="text/javascript" src="bpmxJs/pictureShow/PictureShowPlugin.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/CommonDialog.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/FormMath.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/FormDate.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/FormUtil.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/FormExcel.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/system/ShowExeInfo.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/system/SysAuditLink.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/Cascadequery.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/system/ImageQtip.js" ></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/FormInit.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/RunAliasScript.js"></script>
+	<script type="text/javascript" src="bpmxJs/util/tableHeadFix.js"></script>
+
+<script type="text/javascript" src="bpmxJs/hotent/platform/form/bpmFormDialogCombinate/CombinateDialogUtil.js"></script>
+<script type="text/javascript" src="bpmxJs/hotent/platform/system/Share.js"></script>
+
+
+    <script type="text/javascript" src="bpmxJs/hotent/platform/system/sysPopupRemind/SysPopupRemindUtil.js"></script>
+	 -->
+	
+	<script type="text/javascript" src="servlet/facade.script?action=getStaffInfo"></script>
+	
+	<style>
+		html { 
+			position: relative;
+		}
+		body {
+			font-family: "微软雅黑",Helvetica, Georgia, Arial,sans-serif;
+			font-size: 14px;
+		}
+		.closeitem{
+			float: left;
+			height: 18px;
+			line-height: 8px;
+			position: absolute;
+			right: 0;
+			top: -1px;
+			width: 18px;
+			z-index: 99;
+			cursor:pointer;
+		}
+	</style>
+	<script>
+	if (self != top) top.location.reload();
+	document.title=title;
+	var cache = {
+		caches : {},
+		getCache : function(key){
+			return this.caches[key];
+		},
+		setCache : function(key,value){
+			this.caches[key] = value;
+		}
+	}
+	</script>
+</head>
+
+<body class="no-skin">
+	<!-- #section:basics/navbar.layout -->
+	<div id="navbar" class="navbar navbar-default">
+		<script type="text/javascript">try{ace.settings.check('navbar' , 'fixed')}catch(e){}</script>
+
+		<div class="navbar-container" id="navbar-container">
+			<!-- #section:basics/sidebar.mobile.toggle -->
+			<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
+				<span class="sr-only">Toggle sidebar</span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+			</button>
+			<!-- /section:basics/sidebar.mobile.toggle -->
+			<div class="navbar-header pull-left">
+				<!-- #section:basics/navbar.layout.brand -->
+				<a href="javascript:;" class="navbar-brand">
+					<small><img style="width:135px; height:32px;" alt="" src="pages/image/top_logo.png">
+						<span id="unit" name="unit">研发部门管理平台</span>
+					</small>
+                    
+				</a>
+
+				<!-- /section:basics/navbar.layout.brand -->
+
+				<!-- #section:basics/navbar.toggle -->
+
+				<!-- /section:basics/navbar.toggle -->
+			</div>
+
+			<!-- #section:basics/navbar.dropdown -->
+			<div class="navbar-buttons navbar-header pull-right" role="navigation">
+				<ul class="nav ace-nav">
+					
+						
+
+					<!-- #section:basics/navbar.user_menu -->
+					<li class="light-blue">
+						<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+							<img class="nav-user-photo" src="assets/avatars/9_s.png" alt="管理员头像" />
+							<span class="user-info">
+								<small>欢迎您,</small>
+								<script>document.write(realName);</script>
+							</span>
+
+							<i class="ace-icon fa fa-caret-down"></i>
+						</a>
+
+						<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<li  permCheck="auth_admin_sys_individual_modifyPwd,QUERY,hide">
+								<a url="pages/auth/individual/modifyPwd.shtml" id="modifyPwdBtn" href="javascript:;">
+									<i class="ace-icon fa fa-cog"></i>
+									修改密码
+								</a>
+							</li>
+
+							<li  permCheck="auth_admin_sys_individual_modifyInfo,QUERY,hide">
+								<a url="pages/auth/individual/modifyInfo.shtml" id="modifyUserBtn" href="javascript:;">
+									<i class="ace-icon fa fa-user"></i>
+									修改帐号信息
+								</a>
+							</li>
+
+							<li class="divider"></li>
+
+							<li>
+								<a href="javascript:;" id="logout">
+									<i class="ace-icon fa fa-power-off"></i>
+									退出系统
+								</a>
+							</li>
+						</ul>
+					</li>
+
+					<!-- /section:basics/navbar.user_menu -->
+				</ul>
+			</div>
+
+			<!-- /section:basics/navbar.dropdown -->
+		</div>
+		<!-- /.navbar-container -->
+	</div>
+
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+		<!-- #section:basics/sidebar -->
+		<div id="sidebar" class="sidebar responsive">
+			<script type="text/javascript">try{ace.settings.check('sidebar' , 'fixed')}catch(e){}</script>
+
+			<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+				
+			</div>
+			<!-- /.sidebar-shortcuts -->
+
+			<ul class="nav nav-list" id="menu"></ul>
+			<!-- /.nav-list -->
+
+			<!-- #section:basics/sidebar.layout.minimize -->
+			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+				<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+			</div>
+
+			<!-- /section:basics/sidebar.layout.minimize -->
+			<script type="text/javascript">try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}</script>
+		</div>
+
+		<!-- /section:basics/sidebar -->
+		<div class="main-content">
+			<div class="tabbable">
+				
+				<ul style="height:42px;padding-top:6px;padding-left:16px;" class="nav nav-tabs background-blue">					
+					<li class="active" style="display:none;">
+						<a href="javascript:;" title="首页"><i class="fa fa-star "></i>首页</a>
+					</li>
+				</ul>
+
+				<div class="tabcontent">
+					<div class="tab-pane active">
+						<iframe width="100%" height="700" frameborder="no" style="overflow:hidden;display:none;" src="pages/index.shtml" name="mainFrame" id="mainFrame" allowtransparency="true"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="text" id="focus_input_iframe" style="width: 1px;height:1px;background:transparent;border:none;position:fixed;left:0;top:0;">
+		<div class="footer" style="padding-top: 32px;">
+			<div class="footer-inner">
+				<!-- #section:basics/footer -->
+				<div class="footer-content" style="padding :0px">
+					<span class="text-muted">卓望公司版权所有</span>
+				</div>
+
+				<!-- /section:basics/footer -->
+			</div>
+		</div>
+
+		<a href="javascript:;" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+
+	<!-- basic scripts -->
+	<!--[if !IE]> -->
+<script type="text/javascript">
+	window.jQuery || document.write("<script src='assets/js/jquery.min.js'>"+"<"+"/script>");
+</script>
+<!-- <![endif]-->
+<!--[if IE]>
+<script type="text/javascript">
+	window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+<script type="text/javascript">
+	if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+</script>
+<script src="assets/js/bootstrap.min.js"></script>	
+<script src="assets/js/jquery.validate.min.js"></script>
+<script src="assets/js/additional-methods.min.js"></script>
+<script src="assets/js/bootbox.min.js"></script>
+<script src="assets/js/jquery.maskedinput.min.js"></script>
+<!-- ace scripts -->
+<script src="assets/js/ace-elements.min.js"></script>
+<script src="assets/js/ace.min.js"></script>
+<script>
+	document.write('<script type="text/javascript" src="js/custom/jquery.common-1.0.js?'+(new Date()).getTime() + '"><\/script>');
+	document.write('<script type="text/javascript" src="js/custom/biz.js?'+(new Date()).getTime() + '"><\/script>');
+</script>
+<script src="pages/main.js"></script>	
+<script type="text/javascript">
+	//var domain = console.log(domain);
+	
+	$(document).ready(function(e){
+		
+		$.ajaxSubmit(window.ctxPaths + "/lessee/lessee/getLessee.ajax", {},
+					function(rtn) {
+						if (rtn.success) {
+							var data = rtn.data;
+							//console.log(data);
+							$("#unit").text("研发部门管理平台");
+							$("#skin").attr("href","assets/css/"+data['styleConfig']+".css");
+							//$("#skin").attr("href","assets/css/green.css");
+							//return ;
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+
+		});
+	})
+</script>	
+</body>
+</html>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.RoleDao">
+	<resultMap type="com.aspire.webbas.portal.common.entity.Role" id="RoleMap">		
+		<result property="roleId" column="ROLE_ID" />
+		<result property="roleKey" column="ROLE_KEY" />	
+		<result property="roleName" column="ROLE_NAME" />
+		<result property="roleDesc" column="ROLE_DESC" />
+		<result property="createUser" column="CREATE_USER" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="canModify" column="CAN_MODIFY" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+		<result property="autoAssign" column="AUTO_ASSIGN" />
+		<result property="visible" column="VISIBLE" />
+	</resultMap>
+	
+	
+	<insert id="insertRole" 
+	        parameterType="com.aspire.webbas.portal.common.entity.Role"
+	    useGeneratedKeys="true" keyProperty="roleId">
+		<![CDATA[
+		INSERT  INTO SEC_ROLE   (
+		        ROLE_ID         ,
+		        ROLE_KEY		,
+		        ROLE_NAME       ,
+		        ROLE_DESC       ,
+		        CREATE_USER     ,
+		        CREATE_DATE     ,
+		        CAN_MODIFY     ,
+		        LAST_UPDATE_DATE,
+		        AUTO_ASSIGN,
+		        VISIBLE)
+		VALUES (#{roleId,jdbcType=NUMERIC}             ,
+				#{roleKey}			 ,
+		        #{roleName}           ,
+		        #{roleDesc,jdbcType=VARCHAR}   ,
+		        #{createUser}         ,
+		        SYSDATE()		   ,
+		        #{canModify,jdbcType=NUMERIC}          ,
+		        #{lastUpdateDate,jdbcType=DATE},
+		        #{autoAssign,jdbcType=NUMERIC},
+		        #{visible,jdbcType=NUMERIC})
+		]]>	
+	</insert>
+	
+	<update id="updateRole" 
+	        parameterType="com.aspire.webbas.portal.common.entity.Role">
+		<![CDATA[
+		UPDATE  SEC_ROLE
+		SET     ROLE_NAME       = #{roleName}        ,
+			    ROLE_KEY        = #{roleKey}         ,
+		        ROLE_DESC       = #{roleDesc,jdbcType=VARCHAR},
+		        CAN_MODIFY      = #{canModify},
+		        AUTO_ASSIGN     = #{autoAssign},
+		        LAST_UPDATE_DATE= SYSDATE(),
+		        VISIBLE = #{visible}
+		WHERE   ROLE_ID         = #{roleId}
+		]]>	
+	</update>	
+	
+	<delete id="deleteRole" parameterType="string">
+        DELETE FROM SEC_ROLE
+        WHERE
+        	CAN_MODIFY = 1
+            and ROLE_ID = #{roleId}
+    </delete>
+
+      <!--根据Id得到一个Role-->
+     <select id="findRole" resultMap="RoleMap"  parameterType="string">
+	  	 <![CDATA[
+		  	 SELECT *
+	          FROM  sec_role 
+	        where  role_id = #{roleId}
+          ]]>
+      </select>
+	  
+	  <select id="findRoleByKey" 
+	          resultMap="RoleMap" 
+	          parameterType="string">
+		<![CDATA[
+		SELECT
+				ROLE_ID         ,
+		        ROLE_KEY		,
+		        ROLE_NAME       ,
+		        ROLE_DESC       ,
+		        CREATE_USER     ,
+		        CREATE_DATE     ,
+		        CAN_MODIFY      ,
+		        LAST_UPDATE_DATE,
+		        AUTO_ASSIGN,
+		        VISIBLE 
+		FROM	SEC_ROLE
+		WHERE   ROLE_KEY = #{value}
+		]]>	
+	</select>
+	
+	<select id="findRoleByName" 
+	        resultMap="RoleMap" 
+	        parameterType="string">
+		<![CDATA[
+		SELECT	
+				ROLE_ID         ,
+		        ROLE_KEY		,
+		        ROLE_NAME       ,
+		        ROLE_DESC       ,
+		        CREATE_USER     ,
+		        CREATE_DATE     ,
+		        CAN_MODIFY      ,
+		        LAST_UPDATE_DATE,
+		        AUTO_ASSIGN,
+		        VISIBLE
+		FROM	SEC_ROLE
+		WHERE   ROLE_NAME = #{value}
+		]]>	
+	</select>
+	
+	<select id="listRole"
+	        resultMap="RoleMap" 
+	        parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page">
+		<![CDATA[
+			SELECT * FROM SEC_ROLE   
+		]]>  
+		<where>
+		    VISIBLE = '1'
+			<if test="params['roleKey'] != null and  params['roleKey'] != ''">
+				and ROLE_KEY = #{params.roleKey}
+			</if>
+			<if test="params['roleName'] != null and  params['roleName'] != ''">
+				 and ROLE_NAME like CONCAT(CONCAT('%', TRIM(#{params.roleName})),'%')  
+			</if>
+			<if test="params['roleDesc'] != null and  params['roleDesc'] != ''">
+				 and ROLE_DESC like CONCAT(CONCAT('%', TRIM(#{params.roleDesc})),'%') 
+			</if>
+			<if test="params['departmentId'] != null and  params['departmentId'] != ''">
+				 and ROLE_ID  in (select ROLE_ID from SEC_DEPARTMENT_ROLE where department_id=#{params.departmentId}) 
+			</if>
+			<!--  
+			<if test="autoAssign != null">
+				and auto_assign = #{autoAssign}
+			</if>
+			<if test="visible != null">
+				and visible = #{visible}
+			</if>
+			-->
+		</where>  
+	</select>
+	
+	<select id="listStaffRoles" 
+	        resultMap="RoleMap" 
+	        parameterType="string">
+		<![CDATA[
+		SELECT 	ROLE.*
+		FROM   	SEC_ROLE	ROLE,
+			   	SEC_STAFF_DEPARTMENT_ROLE	SDR
+		WHERE  	ROLE.ROLE_ID 	  = SDR.ROLE_ID
+		AND		SDR.STAFF_ID 	  = #{staffId}
+		UNION
+		SELECT *
+		FROM SEC_ROLE WHERE AUTO_ASSIGN = '1'
+		]]>
+  	</select>  
+  	
+  	<select id="listDepartmentRoles" 
+  	        resultMap="RoleMap" 
+  	        parameterType="string">
+		<![CDATA[
+		SELECT  ROLE.*
+		FROM	SEC_ROLE	ROLE,
+				SEC_DEPARTMENT_ROLE DR
+		WHERE	DR.ROLE_ID = ROLE.ROLE_ID
+		AND		DEPARTMENT_ID = #{value}
+		ORDER BY CONVERT(ROLE_NAME USING GBK)
+		]]>       
+  	</select>   
+  	
+  	<insert id="insertRoleResourceOperation" 
+  	        parameterType="com.aspire.webbas.portal.common.entity.RoleResourceOperation">
+		<![CDATA[
+		INSERT  INTO SEC_ROLE_RESOURCE_OPERATION 
+			(
+		        ROLE_ID         	   ,
+		        RESOURCE_ID			   ,
+		        OPERATION_KEY		   )
+		VALUES (#{roleId,jdbcType=NUMERIC} ,
+				#{resourceId}  ,
+				#{operationKey})
+		]]>	
+	</insert>
+	
+	<delete id="deleteRoleResourceOperation" 
+	        parameterType="hashmap">
+		<![CDATA[
+		DELETE	FROM SEC_ROLE_RESOURCE_OPERATION
+		WHERE	ROLE_ID     = #{roleId}
+		]]>
+		<if test="resourceId != null">
+				and RESOURCE_ID = #{resourceId}
+		</if>
+		<if test="operationKey != null">
+			and OPERATION_KEY = #{operationKey}
+		</if>
+	</delete>	
+	
+	<delete id="deleteRoleResourceOperationById" 
+	        parameterType="string">
+		<![CDATA[
+		DELETE	FROM SEC_ROLE_RESOURCE_OPERATION
+		WHERE	ROLE_ID     = #{roleId}
+		]]>	
+	</delete>	
+  	
+</mapper> 

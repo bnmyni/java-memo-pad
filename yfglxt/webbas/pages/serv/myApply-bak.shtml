@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--#include virtual="/root.jsp"  -->
+<title>Announce</title>
+<!--#include virtual="/include.html"  -->
+</head>
+<link
+	href="assets/js/plugin/datepicker/css/redmond/jquery-ui-1.10.3.custom.css"
+	type="css/text" rel="stylesheet">
+<script src="assets/js/plugin/datepicker/jquery-ui-1.10.3.custom.js"></script>
+<link type="text/css" rel="stylesheet" href="pages/css/app.css">
+</head>
+<body>
+<div class="page-content">
+<div style="border:none" class="page-header" >
+  <form id="serarchform" style="float:left;"  >
+    <table width="auto" border="0">
+      <tr>
+        <td> 申请时间：
+          <input type="text" name="fromdatetime"  id="startDate" placeholder="开始时间"   style="width:120px;" autocomplete="off" />
+        </td>
+        <td>&nbsp;&nbsp;到&nbsp;&nbsp;
+          <input type="text" name="todatetime"  id="endDate" placeholder="结束时间"   style="width:120px;" autocomplete="off" /></td>        
+        <td>&nbsp;&nbsp;客户名称：
+          <input type="text"  name="name" id="guestOrg" placeholder="客户名称"   style="width:120px;" autocomplete="off" /></td>
+		  <td>&nbsp;&nbsp;当前状态：        
+		   
+		    <select name="select" id="bizStatus">
+				<option value="">请选择</option>
+		      <option value="app">待审批</option>
+		      <option value="success">已完成</option>
+		      <option value="res">已驳回</option>
+	        </select>
+	      </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" class="btn btn-success" value="查询" id="btn_search"/>
+		  <input type="reset" class="btn " value="重置" />
+		  </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<!-- /.page-header -->
+<div style="width:100%; height:30px; " ></div>
+<div class="row">
+<div class="col-xs-12">
+  <!-- PAGE CONTENT BEGINS -->
+  <div class="row">
+    <div class="col-xs-12">
+      <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th class="center"> 序号 </th>
+            <th>申请人</th>
+            <th>申请时间</th>
+            <th class="hidden-480">金额</th>
+            <th> 客户名称</th>
+            <th class="hidden-480">当前状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id='table_info'>
+          <!--<tr>
+            <td class="center"><label class="position-relative"> <span class="lbl"></span> </label>
+            </td>
+            <td><a href="#">ace.com</a> </td>
+            <td>$45</td>
+            <td class="hidden-480">3,330</td>
+            <td>Feb 12</td>
+            <td class="hidden-480"><span class="label label-sm label-warning">Expiring</span> </td>
+            <td>
+                 <a href="Businessreception_examine.shtml">审批</a> 
+            </td>
+          </tr>
+          <tr>
+            <td class="center"><label class="position-relative"> <span class="lbl"></span> </label>
+            </td>
+            <td><a href="#">base.com</a> </td>
+            <td>$35</td>
+            <td class="hidden-480">2,595</td>
+            <td>Feb 18</td>
+            <td class="hidden-480"><span class="label label-sm label-success">Registered</span> </td>
+            <td><a href="Businessreception_examine.shtml">审批</a> </td>
+          </tr>-->
+        </tbody>
+      </table>
+    </div>
+    <!-- /.span -->
+  </div>
+  <!-- /.row -->
+  <!--/aaaa-->
+</div>
+<!--#include virtual="/include_footer.html"  -->
+<script src="assets/js/date-time/bootstrap-datepicker.min.js"></script>
+<script src="assets/js/bootstrap-tag.min.js"></script>
+<script src="assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="assets/js/jqGrid/i18n/grid.locale-cn.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/jquery.validate.min.js"></script>
+<script src="assets/js/additional-methods.min.js"></script>
+<script src="assets/js/bootbox.min.js"></script>
+<!---------------------------------------------------------------------------------------------------------->
+<!-- ace scripts -->
+<script type="text/javascript" src="assets/js/ace-elements.min.js"></script>
+<script src="pages/serv/js/servapp.js"></script>
+<script src="pages/serv/js/myApply.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title></title>
+<!--#include virtual="/include.html"  -->
+</head>
+
+<body>
+<form class="form-horizontal margin-top-10">
+<table width="1116" height="187"  class="table table-striped table-bordered table-hover">
+  <caption><h2><strong>卓望公司（规范类公文）发文稿纸</h2></strong></caption>
+  <tr>
+    <td>拟稿部门</td>
+    <td><input type="text" name="textfield" id="textfield" /></td>
+    <td>拟稿日期</td>
+    <td><input type="text" name="textfield2" id="textfield2" /></td>
+  </tr>
+  <tr>
+    <td>拟稿人</td>
+    <td><input type="text" name="textfield3" id="textfield3" /></td>
+    <td>联系方式</td>
+    <td><input type="text" name="textfield4" id="textfield4" /></td>
+  </tr>
+  <tr>
+    <td>阅读权限</td>
+    <td colspan="3"><label for="textfield5"></label></td>
+    </tr>
+  <tr>
+    <td>关键字</td>
+    <td><input type="text" name="textfield8" id="textfield8" /></td>
+    <td>发文类型</td>
+    <td><input type="text" name="textfield9" id="textfield9" /></td>
+  </tr>
+  <tr>
+    <td>会签部门</td>
+    <td colspan="3"><input name="textfield7" type="text" id="textfield7" size="100" /></td>
+    </tr>
+  <tr>
+    <td>标题</td>
+    <td colspan="3"><label for="textfield6"></label>
+      <input name="textfield6" type="text" id="textfield6" size="100" /></td>
+    </tr>
+  <tr>
+    <td>公司领导</td>
+    <td colspan="3"><label for="textarea"></label>
+      <textarea name="textarea" id="textarea" cols="130" rows="5"></textarea></td>
+    </tr>
+  <tr>
+    <td>本部门意见</td>
+    <td colspan="3"><p>
+      <textarea name="textarea2" id="textarea2" cols="130" rows="5"></textarea>
+    </p>
+      <p>
+        <textarea name="textarea5" id="textarea5" cols="130" rows="5"></textarea>
+      </p></td>
+    </tr>
+  <tr>
+    <td>相关部门</td>
+    <td colspan="3"><p>
+      <textarea name="textarea3" id="textarea3" cols="130" rows="5"></textarea>
+    </p>
+      <p>
+        <textarea name="textarea6" id="textarea6" cols="130" rows="5"></textarea>
+      </p>
+      <p>
+        <textarea name="textarea7" id="textarea7" cols="130" rows="5"></textarea>
+      </p></td>
+    </tr>
+  <tr>
+    <td>公文办理</td>
+    <td colspan="3"><textarea name="textarea4" id="textarea4" cols="130" rows="5"></textarea></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td colspan="3"><input  class="btn btn-success" type="submit" name="button" id="button" value="提交" />
+      <input type="button" class="btn btn-info" name="button2" id="button2" value="返回" /></td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

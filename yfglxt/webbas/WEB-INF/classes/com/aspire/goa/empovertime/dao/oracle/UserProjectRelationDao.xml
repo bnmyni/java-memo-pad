@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aspire.goa.empovertime.dao.UserProjectRelationDao">
+
+	<select id="query" parameterType="com.aspire.goa.empovertime.entity.UserProjectRelation" resultType="com.aspire.goa.empovertime.entity.UserProjectRelation">
+		select user_no userNo,code_ , ratio_ ratio from  t_user_project_relation where user_no = #{userNo}
+		<if test="code_ != null and code_ != ''">
+		and code_ = #{code_}
+		</if>
+		<if test="ratio != null and ratio != ''">
+		and ratio_ = #{ratio}
+		</if>
+	</select>
+ 	
+	<delete id="delete"  parameterType="com.aspire.goa.empovertime.entity.UserProjectRelation">
+		delete t_user_project_relation where  user_no = #{userNo}
+		<if test="code_ != null and code_ != ''">
+		and code_ = #{code_}
+		</if>
+		<if test="ratio != null and ratio != ''">
+		and ratio_ = #{ratio}
+		</if>
+	</delete>
+
+	<insert id="insert" parameterType="java.util.List">
+		insert into t_user_project_relation
+		select user_no ,code_ , ratio_ from (
+		<foreach collection="list" item="item" index="index" separator="UNION ALL">
+		SELECT 
+		   #{item.userNo,jdbcType=VARCHAR} user_no,
+		   #{item.code_,jdbcType=VARCHAR} code_,
+		   #{item.ratio,jdbcType=DOUBLE} ratio_
+		FROM dual
+		</foreach>
+		) a
+	</insert>
+	
+	<update id="update" parameterType="com.aspire.goa.empovertime.entity.UserProjectRelation">
+		update t_user_project_relation set ratio_ = #{ratio}
+		where user_no = #{userNo} and code_ = #{code_}
+	</update>
+	
+	<insert id="addBackUp" parameterType="java.lang.String">
+		create table ${value} as select * from t_user_project_relation
+	</insert>
+	
+	<delete id="delRelation">
+		delete from t_user_project_relation
+	</delete>
+	
+	<insert id="addRecover" parameterType="java.lang.String">
+		insert into t_user_project_relation select * from ${value}
+	</insert>
+</mapper>

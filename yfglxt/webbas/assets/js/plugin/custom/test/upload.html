@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>upload test</title>
+<script type="text/javascript">
+    window.BIZCTX_PATH="/server";
+    window.ctxPaths="/admin";
+    window.DOMAIN="admin";
+</script>
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/css/css.css"/>
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/plugin/datagird/themes/gray/datagrid.css"/>
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/plugin/datagird/themes/gray/pagination.css"/>
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/plugin/datagird/themes/gray/panel.css"/>
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/plugin/datagird/themes/gray/linkbutton.css"/>
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/plugin/datagird/themes/icon.css"/>
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/plugin/jqueryui/css/redmond/jquery-ui-1.10.3.custom.min.css"/>
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/plugin/Validform/css/style.css"/> 
+  <link rel="stylesheet" type="text/css" href="/admin/jquery/plugin/custom/css/css.css"/> 
+  <script type="text/javascript" src="/admin/jquery/jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="/admin/jquery/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/datagird/jquery.resizable.js"></script>	
+  <script type="text/javascript" src="/admin/jquery/plugin/datagird/jquery.parser.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/datagird/jquery.panel.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/datagird/jquery.pagination.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/datagird/jquery.linkbutton.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/datagird/jquery.datagrid.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/datagird/easyui-lang-zh_CN.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/jqueryui/js/jquery-ui-1.10.3.custom.min.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/datepicker/jquery.ui.datepicker-zh-CN.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/Validform/Validform_v5.3.2.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/tmpl/jquery.tmpl.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/plupload/plupload.full.min.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/plupload/zh_CN.js"></script>
+  <script type="text/javascript" src="/admin/jquery/jquery.bgiframe.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/blockui/jquery.blockUI.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/custom/jquery.common-1.0.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/custom/datatype.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/custom/jquery.biz-1.0.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/custom/jquery.webbas-1.0.js"></script>
+  <script type="text/javascript" src="/admin/jquery/plugin/custom/cache.js"></script>
+  
+</head>
+<body>
+<p><Strong>单附件测试</Strong></p>
+<form id="singleform">
+<p><div id="upload_single"></div></p>
+<div style="clear:both;"></div>
+<input type="button" value="提交" id="single_submit"/>
+</form>
+<p><Strong>多附件测试</Strong></p>
+<form id="mutilform">
+<p><div id="upload_mutil"></div></p>
+<div style="clear:both;"></div>
+<input type="button" value="提交" id="mutil_submit"/>
+</form>
+</body>
+<script type="text/javascript">
+$().ready(function() {
+	//单附件
+	var singleAttache = new PlUploaderObj('upload_single');
+	singleAttache.init({'btnName':'上传文件(10M)','hiddenName':'accountApply.company.orgCodeAttachId','attachTypeId':'orgCodeAtt','max_file_size':'10M',hiddenAttr :{'nullmsg':'请上传附件','tipType':'right','datatype':'*'}});
+	
+							
+	//多附件
+	var mutilAttache = new PlUploaderObj('upload_mutil');
+	mutilAttache.init({
+		'btnName':'上传文件(10M)',  //上传按钮名称
+		'hiddenName':'accountApply.company.orgCodeAttachId',//业务对象中存放附件组ID的属性名称
+		'attachTypeId':'orgCodeAtt',//附件类型ID，对应attachment_type表中的附件ID，通过此ID系统可以找到与这个附件相关的配置，比如上传文件的大小，数量
+		'max_file_size':'10M',//允许的最大文件大小
+		'max_file':2,//允许上传的文件数量
+		'hiddenAttachId':"finalAttachFileIds",//附件id，如果有多个以英文逗号分割，如果是附件内容修改的场景，此属性必须设置，业务模块根据这个值调用附件组件提供的API：formalAttachmentGroup对修改内容进行生效操作
+		hiddenAttr :{'nullmsg':'请上传附件','tipType':'right','datatype':'*'}//如果此文件必须上传，需要设置这个属性
+	});
+	
+	
+	
+	//提交
+	var singleValidation = $("#singleform").Validform(getValidformDefaultConfig());
+	$('#single_submit').bind('click',function(){
+		singleValidation.config({
+					beforeSubmit:function(curform){
+				    	$.ajaxSubmit(window.BIZCTX_PATH+"/authprm/createAccountApply.action",curform.serializeArray(),function(data){
+							alert('成功');
+						});
+						return false;
+					}
+				});
+		singleValidation.submitForm();
+	});
+	
+	var mutilValidation = $("#mutilform").Validform(getValidformDefaultConfig());
+	$('#mutil_submit').bind('click',function(){
+		mutilValidation.config({
+					beforeSubmit:function(curform){
+				    	$.ajaxSubmit(window.BIZCTX_PATH+"/authprm/createAccountApply.action",curform.serializeArray(),function(data){
+							alert('成功');
+						});
+						return false;
+					}
+				});
+		mutilValidation.submitForm();
+	});
+	
+
+
+});
+
+</script>
+</html>

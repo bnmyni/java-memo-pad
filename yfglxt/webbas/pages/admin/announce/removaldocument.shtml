@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title></title>
+<!--#include virtual="/include.html"  -->
+</head>
+
+<body>
+<div class="page-content">
+  <div style="width:100%; height:10px;"></div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 widget-container-col"> 
+      <!-- #section:custom/widget-box -->
+      <div class="widget-box transparent">
+        <div class="widget-body">
+          <div class="widget-main no-padding">
+            <div style="height:auto; " class="alert alert-info">
+            <form  style="width:100%;  margin:auto" class="form-horizontal margin-top-10">
+              <TABLE  class="table">
+                <TBODY>
+                  <TR>
+                    <TD class="center"><h2>关于开展企业文化内训师培训招募活动的通知</h2></TD>
+                  </TR>
+                </TBODY>
+              </TABLE>
+              <table  class="table  "  style="background:#FFF;   height:auto;">
+                <tr>
+                  <td width="15%" align="center">拟稿部门</td>
+                  <td colspan="2">&nbsp;</td>
+                  <td width="18%">人力资源部 </td>
+                  <td width="12%">拟稿日期</td>
+                  <td width="29%">2015-06-23 </td>
+                </tr>
+                <tr>
+                  <td align="center">拟稿人</td>
+                  <td colspan="2">&nbsp;</td>
+                  <td>李北丹 ></td>
+                  <td>联系方式</td>
+                  <td>010-53264062 </td>
+                </tr>
+                <tr>
+                  <td align="center">关键字</td>
+                  <td colspan="2">&nbsp;</td>
+                  <td>内训师 培训</td>
+                  <td>发文类型</td>
+                  <td>公司发文</td>
+                </tr>
+                <tr>
+                  <td align="center">标题</td>
+                  <td colspan="5">关于开展企业文化内训师培训招募活动的通知</td>
+                </tr>
+                <tr>
+                  <td align="center">公司领导</td>
+                  <td colspan="5"><p>
+                      <label for="textarea"></label>
+                      <textarea name="textarea" cols="80" rows="5" disabled="disabled" id="textarea"> 同意 
+             王勃  2015/6/24 17:43:06  
+      </textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">相关部门</td>
+                  <td colspan="5"><p>
+                      <textarea name="textarea3" cols="80" rows="5" disabled="disabled" id="textarea3">审核通过。 
+             李玲 (综合部) 2015/6/25 13:47:51 </textarea>
+                    </p>
+                    <p>&nbsp;</p></td>
+                </tr>
+                <tr>
+                  <td align="center">会签意见</td>
+                  <td colspan="5"><textarea name="textarea4" cols="80" rows="5" id="textarea4"></textarea></td>
+                </tr>
+                <tr>
+                  <td colspan="5">中国移动任【2015】11号</td>
+                </tr>
+                <tr>
+                  <td>  密级:一般</td>
+                  <td width="14%">&nbsp;</td>
+                  <td width="12%">&nbsp;</td>
+                  <td>签发人:王勃</td>
+                </tr>
+              </table>
+              <div style="width:100%" class="clearfix form-actions">
+                <div class="center">
+                  <button class="btn btn-success" type="button" id="submitButton"> 审批通过 </button>
+                  <button class="btn btn-danger" type="button" > 驳回 </button>
+                </div>
+              </div>
+              </div>
+            </form>
+            <div style="width:100%; ">
+              <div style="width:1100px; margin:auto">
+                <p align="left"><strong><span lang="EN-US" xml:lang="EN-US"> </span></strong></p>
+                <p style="text-align: center"> <span style="font-size: 21px;font-family: 黑体">关于开展企业文化内训师培训</span> </p>
+                <p style="text-align: center"> <span style="font-size: 21px;font-family: 黑体">招募活动的通知</span> </p>
+                <p> <span style="font-size: 19px;font-family: 仿宋">&nbsp;</span> </p>
+                <p> <span style="font-size: 19px;font-family: 仿宋">各党支部：</span> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">根据2015年企业文化建设工作计划，公司将于6月底开展企业文化培训。现面向全公司开展企业文化内训师培训招募活动，具体通知如下：</span> </p>
+                <p> <strong><span style="font-size: 19px;font-family: 仿宋">&nbsp;&nbsp;&nbsp; </span></strong><strong><span style="font-size: 19px;font-family: 仿宋">一、招募条件</span></strong> </p>
+                <p class="MsoListParagraph" style="margin-left: 66px"> <span style="font-size: 19px;font-family: 仿宋">1.<span style="font-stretch: normal;font-size: 9px;font-family: &#39;Times New Roman&#39;">&nbsp; &nbsp;</span></span><span style="font-size: 19px;font-family: 仿宋">卓望公司</span><span style="font-size: 19px;font-family: 仿宋">正式员工</span> </p>
+                <p class="MsoListParagraph" style="margin-left: 66px"> <span style="font-size: 19px;font-family: 仿宋">2.<span style="font-stretch: normal;font-size: 9px;font-family: &#39;Times New Roman&#39;">&nbsp; &nbsp;</span></span><span style="font-size: 19px;font-family: 仿宋">担任管理岗位或业务核心骨干员工，有带领团队的工作经验</span> </p>
+                <p class="MsoListParagraph" style="margin-left: 66px"> <span style="font-size: 19px;font-family: 仿宋">3.<span style="font-stretch: normal;font-size: 9px;font-family: &#39;Times New Roman&#39;">&nbsp; &nbsp;</span></span><span style="font-size: 19px;font-family: 仿宋">当选过公司或部门优秀员工/优秀管理者优先</span> </p>
+                <p class="MsoListParagraph" style="margin-left: 66px"> <span style="font-size: 19px;font-family: 仿宋">4.<span style="font-stretch: normal;font-size: 9px;font-family: &#39;Times New Roman&#39;">&nbsp; &nbsp;</span></span><span style="font-size: 19px;font-family: 仿宋">近两年绩效考核为良好以上</span> </p>
+                <p class="MsoListParagraph" style="margin-left: 66px"> <span style="font-size: 19px;font-family: 仿宋">5.<span style="font-stretch: normal;font-size: 9px;font-family: &#39;Times New Roman&#39;">&nbsp; &nbsp;</span></span><span style="font-size: 19px;font-family: 仿宋">对培训工作有热情,积极性高，具有较好的语言表达能力和沟通能力 </span> </p>
+                <p> <strong><span style="font-size: 19px;font-family: 仿宋">&nbsp;&nbsp;&nbsp; </span></strong><strong><span style="font-size: 19px;font-family: 仿宋">二、招募人数</span></strong> </p>
+                <p> <span style="font-size: 19px;font-family: 仿宋">&nbsp;&nbsp;&nbsp; </span><span style="font-size: 19px;font-family: 仿宋">本次企业文化内训师认证活动招募参训者共32人,其中系统党支部8人，互联网党支部8人，新媒体&amp;营销党支部8人，职能联合党支部8人。</span> </p>
+                <p> <strong><span style="font-size: 19px;font-family: 仿宋">&nbsp;&nbsp;&nbsp; </span></strong><strong><span style="font-size: 19px;font-family: 仿宋">三、报名流程和时间</span></strong> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">采用员工个人自荐报名和部门推荐相结合的方式，由各党支部组织招募报名活动，并将汇总后名单报至党群工作部。报名截止时间为6月10日。</span> </p>
+                <p> <span style="font-size: 19px;font-family: 仿宋">&nbsp;&nbsp; <strong>&nbsp;</strong></span><strong><span style="font-size: 19px;font-family: 仿宋">四、注意事项</span></strong> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">1</span><span style="font-size: 19px;font-family: 仿宋">、为顺利开展企业文化后续公司内宣讲工作，各单位应按照名额要求选拔和推荐优秀员工和管理者担任讲师，以承担后续企业文化宣传和推广工作；</span> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">2</span><span style="font-size: 19px;font-family: 仿宋">、报名人员将统一参加6月下旬的企业文化内训师专业培训，并于7月接受公司企业文化内训师培训认证考核，通过者可获得公司培训师认证资格，承担相关认证课程的授课工作；</span> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">3</span><span style="font-size: 19px;font-family: 仿宋">、获得认证资格的讲师，将按照公司内训师管理办法的规定，给予相应的授课费或其他激励；</span> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">4</span><span style="font-size: 19px;font-family: 仿宋">、公司管理层和各部门负责人自动获得企业文化内训师资格，并承担企业文化宣讲工作。</span> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">5</span><span style="font-size: 19px;font-family: 仿宋">、希望大家积极踊跃报名参加，为公司的企业文化建设贡献力量。</span> </p>
+                <p> <span style="font-size: 19px;font-family: 仿宋">&nbsp;</span> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="font-size: 19px;font-family: 仿宋">企业文化建设工作小组</span> </p>
+                <p style="text-indent: 38px"> <span style="font-size: 19px;font-family: 仿宋">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;2015</span><span style="font-size: 19px;font-family: 仿宋">年5月29日</span> </p>
+                <p> <strong><span style="font-size: 16px;font-family: 宋体">&nbsp;</span></strong> </p>
+                <p> <br/>
+                </p>
+                <p><strong><span lang="EN-US" xml:lang="EN-US"> </span></strong></p>
+              </div>
+              <table cellspacing="0" cellpadding="0" width="90%" style="margin:auto" >
+                <tbody>
+                  <tr>
+                    <td valign="top" width="712" colspan="2"><p align="left">请在此处输入内容<strong>主送：<a name="Text9" id="Text9">公司管理层<span lang="EN-US" xml:lang="EN-US">,</span>总经理办公室<span lang="EN-US" xml:lang="EN-US">,</span>财务部<span lang="EN-US" xml:lang="EN-US">,</span>综合部<span lang="EN-US" xml:lang="EN-US">,</span>人力资源部<span lang="EN-US" xml:lang="EN-US">,</span>党群工作部<span lang="EN-US" xml:lang="EN-US">,</span>管理信息系统部<span lang="EN-US" xml:lang="EN-US">,</span>审计法务部<span lang="EN-US" xml:lang="EN-US">,</span>平台研发部<span lang="EN-US" xml:lang="EN-US">,</span>系统事业部<span lang="EN-US" xml:lang="EN-US">,</span>互联网事业部<span lang="EN-US" xml:lang="EN-US">,</span>新媒体＆营销事业部<span lang="EN-US" xml:lang="EN-US">,</span>市场拓展部（筹）<span lang="EN-US" xml:lang="EN-US">,</span>创新管理办公室<span lang="EN-US" xml:lang="EN-US">,</span>广州基地筹备办公室</a></strong></p></td>
+                  </tr>
+                  <tr>
+                    <td valign="top" width="712" colspan="2"><p align="left"><strong>抄送：<a name="Text10" id="Text10"></a></strong><a name="Text3" id="Text3"></a><strong>中国移动</strong></p></td>
+                  </tr>
+                  <tr>
+                    <td valign="top" width="356"><p align="left">&nbsp;</p></td>
+                    <td valign="top" width="356"><p align="right"><a name="Text5" id="Text5"></a><strong><span lang="EN-US" xml:lang="EN-US">     </span></strong></p></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

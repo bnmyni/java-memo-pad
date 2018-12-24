@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title>Template</title>
+<!--#include virtual="/include.html"  -->
+<!--    <script src="ueditor/js/ueditor.config.js"></script>
+<script src="ueditor/js/ueditor.all.js"></script>-->
+<script type="text/javascript" src="codeDict/queryScript.ajax?codeType=announce_cat,announce_status"></script>
+</head>
+<body>
+<div class="modal-header">
+  <a href="pages/admin/announce/announce_list.shtml"  class="btn" data-dismiss="modal">返回</a>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal" id="view-form-modal" role="form">
+
+    <div class="form-group">
+      <div class="col-sm-11">
+        <p name="content" style="padding-left:10px;" class="form-control-static"></p>
+      </div>
+    </div>
+   
+  </form>
+</div>
+</div>
+
+<!--#include virtual="/include_footer.html"  --> 
+
+<script type="text/javascript">
+	/* 栏目数据加载  */
+	$("#cat").localRender(CodeDict['announce_cat'],{
+		//firstOption:{text:'请选择分类',value:''},
+		keyValue:{text:'value',value:'key'}
+	});
+	var obj_url=ctxPaths+"/lessee/lessee/listExclude.ajax";
+	var view_url 	 = ctxPaths+ '/announce/template/get.ajax';
+	var id=getP("id");
+	var tempdata;
+	$(function($) {
+		
+		//var ue = UE.getEditor('content');
+		$.ajaxSubmit(obj_url, {},
+					function(rtn) {
+						if (rtn.success) {
+							var data  = tempdata=rtn.rows;
+							var html="";
+							//alert(data);
+							console.log(data);
+							for(var i=0 in data){
+								//console.log(data[i]['lesseeName']);
+								if(typeof data[i]['lesseeId']=="undefined"){
+									break;
+								}else{
+									html+="<input  type='checkbox' value='"+data[i]['lesseeId']+"' />"+data[i]['lesseeName'];
+								}
+							}
+							
+							$("#announceObjList1").html(html);
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+		});
+			viewEvent(id);
+			
+	});
+	
+			function viewEvent(id){
+				//alert(id);
+				$.ajaxSubmit(view_url,{'id' : id}, function(data){
+					var  aaa=data.data['announceObjList'];
+					//console.log(tempdata);
+					var html="";
+					$.dataInput($('#view-form-modal').find('.form-control-static'),data.data);
+						for(var i=0 in data){
+								//console.log(data[i]['lesseeName']);
+								if(typeof data[i]['lesseeId']=="undefined"){
+									break;
+								}else{
+									html+="<input  type='checkbox' value='"+data[i]['lesseeId']+"' />"+data[i]['lesseeName'];
+								}
+							}
+						//$("#announceObjList1").html(html);
+				});
+			};
+			
+			</script>
+</body>
+</html>

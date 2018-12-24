@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.ResourceDao">
+	<resultMap type="com.aspire.webbas.portal.common.entity.Resource" id="ResourceMap">		
+		<result property="resourceId" column="RESOURCE_ID" />
+		<result property="resourceKey" column="RESOURCE_KEY" />
+		<result property="resourceName" column="RESOURCE_NAME" />
+		<result property="resourceDesc" column="RESOURCE_DESC" />
+		<result property="categoryId" column="CATEGORY_ID" />
+		<result property="metadataId" column="METADATA_ID" />
+		<result property="authType" column="AUTH_TYPE" />
+		<result property="orderKey" column="ORDER_KEY" javaType="int" jdbcType="NUMERIC"/>  		
+		<result property="domain" column="DOMAIN" />
+	</resultMap>
+	<resultMap id="resourceAndOperationMap" type="hashMap">
+		<result property="wholeright" column="wholeright" />
+		<result property="resourceId" column="resourceId" />
+		<result property="operationKey" column="operationKey" />
+		<result property="categoryId" column="categoryId" />
+	</resultMap>
+	
+	<resultMap id="resourceOfStaffMap" type="HashMap">
+		<result property="resourceId" column="RESOURCE_ID" />
+	</resultMap>
+	
+	<insert id="insertResource" 
+	        parameterType="com.aspire.webbas.portal.common.entity.Resource"
+		useGeneratedKeys="true" keyProperty="resourceId">
+		<![CDATA[
+		INSERT INTO SEC_RESOURCES (
+		       RESOURCE_ID    ,
+		       RESOURCE_KEY   ,
+		       RESOURCE_NAME  ,
+		       RESOURCE_DESC  ,
+		       CATEGORY_ID    ,
+		       METADATA_ID    ,
+		       AUTH_TYPE      ,
+		       ORDER_KEY,		       
+		       DOMAIN         )
+		VALUES(#{resourceId}          ,
+		       #{resourceKey}         ,
+		       #{resourceName}        ,
+		       #{resourceDesc,jdbcType=VARCHAR},
+		       #{categoryId}            ,
+		       #{metadataId,jdbcType=VARCHAR}  ,
+		       #{authType,jdbcType=VARCHAR}  ,
+		       #{orderKey},		       
+		       #{domain,jdbcType=VARCHAR})
+		]]>       
+  	</insert>
+  	
+  	<delete id="deleteResourceByMetadataId" 
+  	         parameterType="string">
+  		<![CDATA[
+  		DELETE 	FROM SEC_RESOURCES
+  		WHERE	METADATA_ID = #{value}
+  		]]>
+  	</delete>
+  	
+	<select id="findResource" 
+  	        resultMap="ResourceMap" 
+  	        parameterType="long">
+		<![CDATA[
+		SELECT  
+		       RESOURCE_ID    ,
+		       RESOURCE_KEY   ,
+		       RESOURCE_NAME  ,
+		       RESOURCE_DESC  ,
+		       CATEGORY_ID    ,
+		       METADATA_ID    ,
+		       AUTH_TYPE    ,
+		       ORDER_KEY,		       
+		       DOMAIN         
+		FROM	SEC_RESOURCES
+		WHERE   RESOURCE_ID = #{value}
+		]]>
+  	</select> 
+  	
+  	<select id="findResourceByKey" 
+  	        resultMap="ResourceMap" 
+  	        parameterType="string">
+		<![CDATA[
+		SELECT
+		       RESOURCE_ID    ,
+		       RESOURCE_KEY   ,
+		       RESOURCE_NAME  ,
+		       RESOURCE_DESC  ,
+		       CATEGORY_ID    ,
+		       METADATA_ID    ,
+		       AUTH_TYPE    ,
+		       ORDER_KEY,		       
+		       DOMAIN         		
+		FROM	SEC_RESOURCES
+		WHERE   RESOURCE_KEY = #{value}
+		]]>
+  	</select>   	
+	
+	<select id="listResource" 
+	        resultMap="ResourceMap" 
+	        parameterType="com.aspire.webbas.portal.common.entity.Resource">
+		<![CDATA[
+		SELECT
+		       RESOURCE_ID    ,
+		       RESOURCE_KEY   ,
+		       RESOURCE_NAME  ,
+		       RESOURCE_DESC  ,
+		       CATEGORY_ID    ,
+		       METADATA_ID    ,
+		       AUTH_TYPE    ,
+		       ORDER_KEY,		       
+		       DOMAIN         
+		FROM    SEC_RESOURCES
+		]]>	  
+		<where>
+		    1=1
+			<if test="resourceKey != null">
+				and RESOURCE_KEY = #{resourceKey}
+			</if>
+			<if test="resourceName != null">
+				 and RESOURCE_NAME like  CONCAT(CONCAT('%', TRIM(#{resourceName})),'%') 
+			</if>
+			<if test="resourceDesc != null">
+				 and RESOURCE_DESC like CONCAT(CONCAT('%', TRIM(#{resourceDesc})),'%')  
+			</if>
+			<if test="categoryId != null">
+				and CATEGORY_ID = #{categoryId}
+			</if>
+			<if test="metadataId != null">
+				and METADATA_ID = #{metadataId}
+			</if>
+			<if test="authType != null">
+				and AUTH_TYPE = #{authType}
+			</if>
+			<if test="domain != null">
+				and domain = #{domain}
+			</if>
+		</where> 
+		
+        order by ORDER_KEY 
+	</select>
+	
+	<select id="listResourceByLoginName" 
+	        resultMap="ResourceMap" 
+	        parameterType="string">    
+		<![CDATA[
+		SELECT
+		       RESOURCE_ID    ,
+		       RESOURCE_KEY   ,
+		       RESOURCE_NAME  ,
+		       RESOURCE_DESC  ,
+		       CATEGORY_ID    ,
+		       METADATA_ID    ,
+		       AUTH_TYPE    ,
+		       ORDER_KEY,		       
+		       DOMAIN         
+		FROM    SEC_RESOURCES
+        WHERE   RESOURCE_ID IN
+                (SELECT RESOURCE_ID
+                FROM    SEC_ROLE_RESOURCE_OPERATION
+                WHERE   ROLE_ID IN
+                        (SELECT ROLE_ID
+                        FROM    SEC_STAFF_DEPARTMENT_ROLE
+                        WHERE   STAFF_ID =  (SELECT STAFF_ID
+                                            FROM    SEC_STAFF
+                                            WHERE   STATUS NOT IN ('EXPIRED', 'DELETED')
+                                                    AND LOGIN_NAME = #{LoginName}
+                                                    AND rownum = 1
+                                            )
+
+                        UNION ALL
+                        SELECT ROLE_ID FROM SEC_ROLE WHERE AUTO_ASSIGN = 1
+                        )
+                )
+		]]>
+	</select>
+	
+	
+	<select id="listResourceByRoleId" 
+	        resultMap="ResourceMap" 
+	        parameterType="long">   
+        SELECT *
+        FROM SEC_RESOURCES
+        WHERE AUTH_TYPE='AUTH' AND RESOURCE_ID IN (
+            SELECT RESOURCE_ID
+            FROM sec_role_resource_operation
+            WHERE ROLE_ID = #{roleId}
+        )
+    </select>
+    
+    
+
+	<select id="listAllResourceAndOperation"  
+	        resultMap="resourceAndOperationMap">
+	  <![CDATA[
+	    select 
+	    	(b.resource_name || '\' || c.operation_name) as wholeright,
+        	 b.resource_id as resourceId,
+        	 c.operation_key as operationKey,
+        	 b.category_id as categoryId
+   		from sec_resources b, sec_operation c
+ 		where b.resource_id = c.resource_id
+ 	    order by b.category_id asc
+ 	  ]]>
+	</select>
+	
+	<select id="listResourceOfStaff"  
+	        resultMap="resourceOfStaffMap" 
+	        parameterType="long">   
+	    SELECT distinct rs.RESOURCE_ID 
+	    FROM 
+		sec_staff_department_role sr,
+		sec_role_resource_operation rs
+		WHERE sr.ROLE_ID = rs.ROLE_ID
+		AND STAFF_ID = #{value}
+	</select>
+</mapper> 

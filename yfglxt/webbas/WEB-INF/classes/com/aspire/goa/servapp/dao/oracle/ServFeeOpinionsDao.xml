@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aspire.goa.servapp.dao.ServFeeOpinionsDao" >
+  <resultMap id="OpinionMap" type="com.aspire.goa.servapp.entity.ServFeeOpinions" >
+    <result property="opinionId" column="OPINION_ID" />
+    <result property="bizId" column="BIZ_ID"/>
+    <result property="sn" column="SN"/>
+    <result property="staffId" column="STAFF_ID"/>
+    <result property="operate" column="OPERATE"/>
+    <result property="opinion" column="OPINION"/>
+    <result property="status" column="STATUS"/>
+    <result property="createTime" column="CREATETIME"/>
+  </resultMap>
+    
+    <insert id="addServFeeOpinion" 
+	        parameterType="com.aspire.goa.servapp.entity.ServFeeOpinions">
+        <![CDATA[
+		INSERT INTO biz_servfeeopinions  (
+		       OPINION_ID     	,
+		       BIZ_ID     		,
+		       STAFF_ID    		,
+		       OPERATE   		,
+		       OPINION   		,
+		       CREATETIME 		,
+		       STATUS 			,
+		       SN   )
+		VALUES(#{opinionId,jdbcType=NUMERIC},
+		       #{bizId,jdbcType=NUMERIC},
+		       #{staffId,jdbcType=NUMERIC},
+		       #{operate,jdbcType=VARCHAR},
+		       #{opinion,jdbcType=VARCHAR},
+               SYSDATE,
+               #{status,jdbcType=VARCHAR},
+               #{sn,jdbcType=NUMERIC})
+		]]>
+    </insert>
+    
+    <select id="listOpinions"
+    		resultMap="OpinionMap" 
+            parameterType="long">
+        <![CDATA[
+		SELECT *
+		FROM   biz_servfeeopinions             
+		WHERE  BIZ_ID = #{bizId}
+		]]>
+    </select>
+    
+    <select id="findStaffOpinion"
+    		resultMap="OpinionMap"
+    		parameterType="java.util.HashMap"> 
+		SELECT *
+		FROM   biz_servfeeopinions             
+		<where>
+			1=1  
+			<if test="operate != null and operate != ''"> 
+				AND OPERATE = '${operate}'
+			</if>
+			<if test="staffId != null and staffId != ''"> 
+				AND STAFF_ID = ${staffId}
+			</if>
+			<if test="bizId != null and bizId != ''"> 
+				AND BIZ_ID = '${bizId}'
+			</if>
+			<if test="status != null and status != ''"> 
+				AND STATUS = '${status}'
+			</if>
+		</where>
+		order by SN desc 
+    </select>
+    
+</mapper>

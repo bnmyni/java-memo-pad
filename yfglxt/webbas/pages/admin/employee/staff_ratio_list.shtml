@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<!--#include virtual="/root.jsp"  -->
+	<title>人员投入信息查询</title>
+	<!--#include virtual="/include.html"  -->
+	<style>
+		html {
+			overflow-x: hidden;
+		}
+		*{font-family:"微软雅黑"; font-size:14px}
+		td {white-space: nowrap;}
+		#queryForm1 td input {
+			width: 95px !important;
+		}
+		.details_pop .modal-content{width:700px;}
+		#grid-tableDetail .addtr{height:33px;line-height: 33px;}
+		#grid-tableDetail .addtr td{border-color: rgb(225, 225, 225); border-style: solid;border-width: thin;}
+		
+		.form-inline .lab-hand{width:8%;text-align: right;}
+		.form-inline .lab-body{width:23%;}
+		.form-inline .lab-body select{width:88%;}
+		.form-inline .lab-body-half{width:25%;}
+		.form-inline .lab-body-half input[type="text"]{width:78%;}
+		.form-inline .lab-body input{width:98%;}
+	</style>
+	<link type="text/css" rel="stylesheet" href="pages/css/app.css">
+	
+</head>
+<body>
+
+	<div id="staffRatio" class="page-content">
+		<div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->
+			<form id="queryForm" onsubmit="return false;" style="font-family:">
+				
+				<div class="form-inline" style="margin-top:10px;">
+					<label class="lab-hand">三级部门：</label>
+					<label class="lab-body-half" >
+						<input class="serviceCode" name="params['department3']" type="checkbox" value="00"  style="margin-left: 10px;"/>&nbsp;应用研发部
+						<input class="serviceCode" name="params['department3']" type="checkbox" value="01" style="margin-left: 27px;"  />&nbsp;平台研发二部				
+					</label>
+					
+					<label class="lab-hand">四级部门：</label>
+					<label class="lab-body">
+						<select name="params['department4']" id="department4">
+							<option value="" >全部</option>
+							<option value="安全系统部" class="serviceCode serviceCode_00">安全系统部</option>
+							<option value="运维系统部" class="serviceCode serviceCode_00">运维系统部</option>
+							<option value="运营系统部" class="serviceCode serviceCode_00">运营系统部</option>
+							<option value="平台开发一部" class="serviceCode serviceCode_01">平台开发一部</option>
+							<option value="平台开发二部" class="serviceCode serviceCode_01">平台开发二部</option>
+							<option value="测试部" class="serviceCode serviceCode_01">测试部</option>
+							<option value="需求部" class="serviceCode serviceCode_01">需求部</option>
+							<option value="架构部" class="serviceCode serviceCode_01">架构部</option>
+						</select>
+					</label>
+					
+					<label class="lab-hand">人员类型：</label>
+					<label class="lab-body">
+						<select name="params['type_']" id="type_">
+							<option value="" >全部</option>
+							<option value="0" >自有</option>
+							<option value="1" >外包</option>
+						</select>
+					</label>
+				</div>
+				<div class="form-inline">
+					
+					
+					<label class="lab-hand">姓名：</label>
+					<label class="lab-body-half">
+						<input type="text" name="params['realName']" id="realName"  placeholder="姓名"  autocomplete="off" />
+					</label>
+					
+					<label class="lab-hand">项目：</label>
+					<label class="lab-body">
+						<select name="params['serviceName']" id="serviceName" >
+							<option value="" >全部</option>
+						</select>
+					</label>
+					
+					<label class="lab-hand">子项目：</label>
+					<label class="lab-body">
+						<select name="params['code']" id="code" >
+							<option value="" >全部</option>
+						</select>
+					</label>
+				</div>
+				<div class="form-inline" >
+					<label class="lab-hand">工号：</label>
+					<label class="lab-body-half">
+						<input type="text" name="params['userNo']" id="userNo"  placeholder="工号"  autocomplete="off" />
+					</label>
+					<label style="width:33%;"></label> 
+					<input type="button" class="btn btn-success" value="查询" id="seachBtn"/>
+					<input type="button" class="btn btn-success" value="导出" id="exportBtn"/>
+					<input type="button" class="btn btn-success" value="数据同步" id="importBtn"/>
+					<input type="reset" class="btn " value="重置" />	
+				</div>			
+			</form>
+			<div class="space-6"></div>
+			<table id="grid-table"></table>
+			<div id="grid-pager"></div>
+			<!-- PAGE CONTENT ENDS -->
+		</div>
+		<!-- 详情 -->
+		<div class="pop_moduless" style="display: none">
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-xs-3" style="display:none;">
+                    <div class="form-group userNo"><label>工号：</label><span></span></div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="form-group realName"><label>姓名：</label><span></span></div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="form-group type_"><label>人员类型：</label><span></span></div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="form-group department3"><label>部门：</label><span></span></div>
+                </div>
+               <!--  <div class="col-xs-5">
+                    <div class="form-group department4"><label>四级部门：</label><span></span></div>
+                </div> -->
+                <!-- <div class="col-xs-5">&nbsp;</div> -->
+                <div class="proj_div col-xs-12" id="proj_div">
+                </div>
+                <div class="col-xs-5">
+                    <div class="form-group">
+                    	<button class='add btn btn-primary btn-sm' onclick='addProject();'><i class='glyphicon glyphicon-download-alt' aria-hidden='true'></i>增加项目</button>
+                    	&nbsp; 
+                    	<button class='add btn btn-primary btn-sm' onclick='saveProject();'><i class='glyphicon glyphicon-download-alt' aria-hidden='true'></i>保存</button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    	</div>
+		
+		<!-- 导入 -->
+		<div class="uploadModule" style="display: none">
+	        <style>
+	        	.upload_pop .modal-content{width: 600px;top: -100px;}
+	            .upload_form{position:relative}
+	            .upload_form .inputBox{margin: 15px 0;}
+	            .upload_form #fileInput{width:300px;}
+	            .upload_form .file{position:absolute;left:436px;top:0;width:94px;height:34px;opacity: 0;
+	                filter:alpha(opacity=0);cursor: pointer}
+	        </style>
+	        <form class="upload_form" action="#" method="post"  enctype="multipart/form-data">
+	            <div class="inputBox">
+	                <i class="excel_icon payroll_icon"></i>
+	                <label class="fl" >导入人员信息：</label>
+	                <input id="fileInput" class="fileInput fl" type="text" placeholder="请选择excel文件" >
+	                <button class=" btn-primary btn-sm"><a href="" style="color:#FFFFFF">选择文件</a>  <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i> </button>
+	                <input class="file" type="file" name="excelfile" onchange="$('.fileInput')[1].value=this.value;" />
+	            </div>
+	            <div class="upload-result text-right"></div>
+	        </form>
+	    </div>
+	</div>
+
+	<!--#include virtual="/include_footer.html"  -->
+	<script src="bpmxJs/jquery/jquery.form.js"></script> 
+	<script src="pages/admin/employee/js/staff_ratio.js"></script> 
+	
+</body>
+</html>

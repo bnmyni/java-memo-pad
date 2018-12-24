@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<iframe id="ifm_style_bridge" name="ifm_proxy" src="" width="0" height="0" style="display:none;" ></iframe>
+<script>
+var getCookie = function(objname){
+	var arrstr = document.cookie.split("; ");
+	for(var i = 0;i < arrstr.length;i ++)
+	{
+		var temp = arrstr[i].split("=");
+		if(temp[0] == objname) return decodeURIComponent(temp[1]);
+	}
+	return null;
+}
+var getP = function(n) {
+	var hrefstr, pos, parastr, para, tempstr;
+	hrefstr = window.location.href.split('#')[0];
+	pos = hrefstr.indexOf("?");
+	parastr = hrefstr.substring(pos + 1);
+	para = parastr.split("&");
+	tempstr = "";
+	for (var i = 0; i < para.length; i++) {
+		tempstr = para[i];
+		pos = tempstr.indexOf("=");
+		if (tempstr.substring(0, pos).toLowerCase() == n.toLowerCase()) {
+			return tempstr.substring(pos + 1);
+		}
+	}
+	return '';
+};
+function  init() {
+	var referrer = decodeURIComponent(getP('referrer'));
+	if (referrer && typeof parent.parent.initIfmStyle === 'function'){
+		referrer += '#' + parent.parent.initIfmStyle();
+		document.getElementById('ifm_style_bridge').src = referrer;
+	}
+}
+init();
+</script>
+</body>
+</html>

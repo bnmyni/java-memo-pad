@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title></title>
+<!--#include virtual="/include.html"  -->
+</head>
+<body>
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1">
+  <tbody>
+    <tr>
+      <td width="70%" rowspan="2" valign="top"><div type="mutilPendtask" url="/server/pendTask!list.action?category=admin_company_remind_pend">
+        <div class="col-xs-12 col-sm-6 widget-container-col ui-sortable" style="min-height: 110px; width:100%">
+        <div class="widget-box" style="opacity: 1; z-index: 0;">
+        <div class="widget-header">
+          <h5 class="widget-title"><img style="width:23px;" src="pages/image/iconfont-gonggao01.png" />最近新闻</h5>
+          <!-- #section:custom/widget-box.toolbar -->
+          <div class="widget-toolbar"> <a href="javascript:;">more>></a> 
+            <!-- /section:custom/widget-box.toolbar --> 
+          </div> 
+          <div class="widget-body">
+            <div class="widget-main">
+              <div class="content"> 
+                <!--table width="100%" border="0" cellspacing="0" class="table_index" id="news-table">
+                  </table-->
+                <div style="width:35%; height:auto; float:left; background:#06F;"><img style="width:280px; height:160px;" src="pages/image/news.jpg" /></div>
+                <div style="width:60%; float:right">
+                  <ul id="newsul">
+                       
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        </div>
+        <div type="mutilPendtask" url="/server/pendTask!list.action?category=admin_company_remind_pend">
+        <div class="col-xs-12 col-sm-6 widget-container-col ui-sortable" style="min-height: 110px; width:100%">
+          <div class="widget-box" style="opacity: 1; z-index: 0;">
+            <div class="widget-header">
+              <h5 class="widget-title"><img style="width:23px;" src="pages/image/iconfont-tongzhigonggao.png" />公告数据</h5>
+              
+              <!-- #section:custom/widget-box.toolbar -->
+              <div class="widget-toolbar"> <a href="javascript:;">more>></a> 
+                <!-- /section:custom/widget-box.toolbar --> 
+              </div>
+              <div class="widget-body">
+                <div class="content"> 
+                  <!--table width="100%" border="0" cellspacing="0" class="table_index" id="announce-table">
+                  </table>
+                  <div id="grid-pager"></div-->
+                  <ul id="announceul">
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div type="mutilPendtask" url="/server/pendTask!list.action?category=admin_company_remind_pend">
+        <div class="col-xs-12 col-sm-6 widget-container-col ui-sortable" style="min-height: 110px; width:100%">
+        
+        <!-- #section:custom/widget-box --> 
+        
+        <!-- /section:custom/widget-box -->
+        
+        <div class="widget-box" style="opacity: 1; z-index: 0;">
+          <div class="widget-header">
+            <h5 class="widget-title"><img style="width:23px;" src="pages/image/iconfont-shuju.png" />信息数据</h5>
+            
+            <!-- #section:custom/widget-box.toolbar -->
+            <div class="widget-toolbar"> <a href="javascript:;">more>></a> 
+              <!-- /section:custom/widget-box.toolbar --> 
+            </div>
+            <div class="widget-body">
+              <div class="widget-main">
+                <div class="content"> 
+                  <!--table width="100%" border="0" cellspacing="0" class="table_index" id="info-table">
+                  </table>
+                  <div id="info-grid-pager"></div-->
+                  <ul id="infoul">
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div type="mutilPendtask" url="javascript:;">
+        <div class="col-xs-12 col-sm-6 widget-container-col ui-sortable" style="min-height: 110px; width:100%">
+        
+        <!-- #section:custom/widget-box --></td>
+      <td width="30%" rowspan="2" valign="top"><div class="col-xs-12 col-sm-6 widget-container-col ui-sortable" style="min-height: 110px; width:100%">
+        
+        <!-- #section:custom/widget-box --> 
+        
+        <!-- /section:custom/widget-box -->
+        
+        <div class="widget-box" style="opacity: 1; z-index: 0;">
+          <div class="widget-header">
+            <h5 class="widget-title">今天天气</h5>
+            
+            <!-- #section:custom/widget-box.toolbar -->
+            <div class="widget-toolbar"> 
+              
+              <!-- /section:custom/widget-box.toolbar --> 
+            </div>
+            <div class="widget-body">
+              <div class="content">
+                <table width="100%" border="0" cellspacing="0" class="table_index">
+                  <div style="font-size:12px"> 
+                    <!--div><font size="+2">深圳市</font><A href="javascript:;">多云11~29<sup>。</sup>C</A></div-->
+                    <!--iframe allowtransparency="true" frameborder="0" width="290" height="96" scrolling="no" src="http://tianqi.2345.com/plugin/widget/index.htm?s=1&z=1&t=0&v=0&d=2&bd=0&k=&f=&q=1&e=1&a=1&c=54511&w=290&h=96&align=center"></iframe-->
+                    <div style="margin-left:20px;"><A href="javascript:;">北风4-5</A></div>
+                    <div style="margin-left:20px;"><A href="javascript:;">空气质量：</A>
+                      <input type="button" value="优"  style="width:80px; background:#093; line-height:26px; color:#FFF; height:26px;">
+                      25</div>
+                    <div style="margin-left:20px;"><font style="color:#F00">
+                      <A href="javascript:;">小李
+                        </FONT>
+                      你好！ </A></div>
+                    <div  style="margin-left:20px;"><A href="javascript:;"><font style="color:#F00">2015年5月20日</font>星期三</A></div>
+                    <div>当日公告&nbsp;&nbsp;<A href="javascript:;">短信问候</A></div>
+                    <div style="margin-top:4PX;">
+                      <input type="text" style="height:30px;" size="25" />
+                      <input class="btn btn-success" style="height:30px; font-size:12px"  type="button" value="OA搜索" />
+                    </div>
+                  </div>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <!-- /section:custom/widget-box -->
+        <div type="mutilPendtask" url="/server/pendTask!list.action?category=admin_company_remind_pend">
+        <div class="col-xs-12 col-sm-6 widget-container-col ui-sortable" style="min-height: 110px; width:100%">
+        <div class="widget-box" style="opacity: 1; z-index: 0;">
+          <div class="widget-header">
+            <h5 class="widget-title">联系热线</h5>
+            <div class="widget-body">
+              <div class="widget-main">
+                <div class="content">
+                  <ul>
+                    <li>总经理信箱：zjlxx@aspirecn.com</li>
+                    <li> MIS服务信箱：helpdesk@aspirecn.com </li>
+                    <li>人力资源部服务热线 </li>
+                    <li> 北京：010-66496044</li>
+                    <li> 深圳：0755-66820666-8346</li>
+                    <li> 广州：020-66849666-3576 </li>
+                    <li> 服务邮箱：hr-service@aspirecn.com</li>
+                    <li> 纪检监察举报热线：010-53264063 </li>
+                    <li> 纪检监察举报信箱：hr-jj@aspirecn.com</li>
+                    <li> 卓望公司运营故障投诉受理 </li>
+                    <li> 运营故障投诉邮箱：yygz@aspirecn.com</li>
+                    <li>受理热线：010-52812200 </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       </div>
+       </div>
+        <div type="mutilPendtask" url="/server/pendTask!list.action?category=admin_company_remind_pend">
+        <div class="col-xs-12 col-sm-6 widget-container-col ui-sortable" style="min-height: 110px; width:100%">
+        <div class="widget-box" style="opacity: 1; z-index: 0;">
+          <div class="widget-header">
+            <h5 class="widget-title">待办事项</h5>
+            
+            <!-- #section:custom/widget-box.toolbar -->
+            <div class="widget-toolbar"> <a href="javascript:;">more>></a> 
+              <!-- /section:custom/widget-box.toolbar --> 
+            </div>
+            <!--table width="100%" border="0" cellspacing="0" class="table_index" id="listPend-table">
+            </table>
+            <div id="listPend-grid-pager"></div-->
+            <ul id="preui">
+            </ul>
+          </div>
+        </div>
+        
+        </div>
+        </div>
+        </td>
+    </tr>
+  </tbody>
+</table>
+<script src="assets/js/date-time/bootstrap-datepicker.min.js"></script> 
+<script src="assets/js/bootstrap-tag.min.js"></script> 
+<script src="assets/js/jqGrid/jquery.jqGrid.min.js"></script> 
+<script src="assets/js/jqGrid/i18n/grid.locale-cn.js"></script> 
+<script src="assets/js/jquery-ui.min.js"></script> 
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script> 
+<script src="assets/js/jquery.validate.min.js"></script> 
+<script src="assets/js/additional-methods.min.js"></script> 
+<script src="assets/js/bootbox.min.js"></script> 
+<!----------------------------------------------------------------------------------------------------------> 
+<!-- ace scripts --> 
+<script type="text/javascript" src="assets/js/ace-elements.min.js"></script> 
+<script>
+				document.write('<script type="text/javascript" src="js/custom/jquery.common-1.0.js?'+(new Date()).getTime() + '"><\/script>');
+				//document.write('<script type="text/javascript" src="js/custom/aspire.ui.js?'+(new Date()).getTime() + '"><\/script>');
+				document.write('<script type="text/javascript" src="js/custom/biz.js?'+(new Date()).getTime() + '"><\/script>');
+				
+		</script> 
+
+<!-- inline scripts related to this page --> 
+<script type="text/javascript">
+			jQuery(function($) {
+				$('#simple-colorpicker-1').ace_colorpicker({pull_right:true}).on('change', function(){
+					var color_class = $(this).find('option:selected').data('class');
+					var new_class = 'widget-box';
+					if(color_class != 'default')  new_class += ' widget-color-'+color_class;
+					$(this).closest('.widget-box').attr('class', new_class);
+				});
+				;
+			////////////////////////新闻////////////////////////
+		$.ajaxSubmit(window.ctxPaths+ "/announce/announce/listIndex.ajax?params['cat']=3", {},
+					function(rtn) {
+						if (rtn.success) {
+							var data = rtn.rows;
+							var html="";
+							
+							for(var i=0 in data){
+								if(typeof data[i]['content']=="undefined"){
+									continue;
+								}else{
+								var id=data[i]["announceId"];
+								var aa="<a href=\"pages/admin/announce/announce_detail.shtml?id="+id+"\"><li>"+data[i]['title']+"</span></li></a>";
+								html+=aa;	
+								}
+							}
+							$(html).appendTo($("#newsul"));
+							//console.log(rtn.rows);
+							//$("#skin").attr("href","assets/css/"+data['styleConfig']+".css");
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+						//////////////////////////////////////////////////////////d
+
+		});
+	
+		//信息---------------------------
+		$.ajaxSubmit(window.ctxPaths + "/announce/announce/listIndex.ajax?params['cat']=2", {},
+					function(rtn) {
+						if (rtn.success) {
+							
+							var data = rtn.rows;
+							var html="";
+							for(var i=0 in data){
+								if(typeof data[i]['content']=="undefined"){
+									continue;
+								}else{
+								var id=data[i]["announceId"];
+								var aa="<a href=\"pages/admin/announce/announce_detail.shtml?id="+id+"\"><li>"+data[i]['title']+"<span style='width:200px; float:right;'>"+data[i]['createTime']+"</span></li></a>";
+								html+=aa;
+								}
+								
+							}
+							$(html).appendTo($("#infoul"));
+							
+							//$("#skin").attr("href","assets/css/"+data['styleConfig']+".css");
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+
+		});
+		//信息
+		$.ajaxSubmit(window.ctxPaths + "/announce/announce/listIndex.ajax?params['cat']=1", {},
+					function(rtn) {
+						if (rtn.success) {
+							
+							var data = rtn.rows;
+							var html="";
+							
+							for(var i=0 in data){
+								if(typeof data[i]['content']=="undefined"){
+									continue;
+								}else{
+									var id=data[i]["announceId"];
+								var aa="<a href=\"pages/admin/announce/announce_detail.shtml?id="+id+"\"><li>"+data[i]['title']+"<span style='width:200px; float:right;'>"+data[i]['createTime']+"</span></li></a>";
+								html+=aa;
+								
+								}
+							}
+							$(html).appendTo($("#announceul"));
+							
+							//$("#skin").attr("href","assets/css/"+data['styleConfig']+".css");
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+
+		});
+		 
+		/////////////////////////////公告待办URL/////////////////////////
+		$.ajaxSubmit(window.ctxPaths + "/announce/announce/listPend.ajax", {},
+					function(rtn) {
+						if (rtn.success) {
+							    
+							var data = rtn.rows;
+							var html="";
+							for(var i=0 in data){
+								if(typeof data[i]['content']=="undefined"){
+									continue;
+								}else{
+								var id=data[i]["announceId"];
+								var aa="<a href=\"pages/admin/announce/announce_detail.shtml?id="+id+"\"><li>"+data[i]['title']+"</li></a>";
+								html+=aa;
+								}
+							}
+							$(html).appendTo($("#preui"));
+							
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+
+		});
+				// scrollables
+				$('.scrollable').each(function () {
+					var $this = $(this);
+					$(this).ace_scroll({
+						size: $this.data('height') || 100,
+						//styleClass: 'scroll-left scroll-margin scroll-thin scroll-dark scroll-light no-track scroll-visible'
+					});
+				});
+				$('.scrollable-horizontal').each(function () {
+					var $this = $(this);
+					$(this).ace_scroll(
+					  {
+						horizontal: true,
+						styleClass: 'scroll-top',//show the scrollbars on top(default is bottom)
+						size: $this.data('width') || 500,
+						mouseWheelLock: true
+					  }
+					).css({'padding-top': 12});
+				});
+				
+				$(window).on('resize.scroll_reset', function() {
+					$('.scrollable-horizontal').ace_scroll('reset');
+				});
+			    $('.widget-container-col').sortable({
+			        connectWith: '.widget-container-col',
+					items:'> .widget-box',
+					opacity:0.8,
+					revert:true,
+					forceHelperSize:true,
+					placeholder: 'widget-placeholder',
+					forcePlaceholderSize:true,
+					tolerance:'pointer',
+					start: function(event, ui){
+						//when an element is moved, it's parent becomes empty with almost zero height.
+						//we set a min-height for it to be large enough so that later we can easily drop elements back onto it
+						ui.item.parent().css({'min-height':ui.item.height()})
+						//ui.sender.css({'min-height':ui.item.height() , 'background-color' : '#F5F5F5'})
+					},
+					update: function(event, ui) {
+						ui.item.parent({'min-height':''})
+						//p.style.removeProperty('background-color');
+					}
+			    });
+			
+			});
+		</script> 
+
+<link rel="stylesheet" href="assets/css/ace.onpage-help.css" />
+<script type="text/javascript"> ace.vars['base'] = '..'; </script> 
+<script src="assets/js/ace/ace.onpage-help.js"></script>
+</html>

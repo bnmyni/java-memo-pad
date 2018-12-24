@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<!--#include virtual="/root.jsp"  -->
+	<title>Lessee</title>
+	<!--#include virtual="/include.html"  -->
+	<style>
+		html {
+			overflow-x: hidden;
+		}
+		*{font-family:"微软雅黑"; font-size:14px}
+		td {white-space: nowrap;}
+		#queryForm1 td input {
+			width: 95px !important;
+		}
+		select{width:120px;}
+	</style>
+	<link type="text/css" rel="stylesheet" href="pages/css/app.css">
+</head>
+<body>
+
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->
+			<form id="queryForm" onsubmit="return false;" style="font-family:">
+				<div class="form-inline">
+					时间：<input type="text" name="params['startDate']"  id="startDate" placeholder="开始时间"   style="width:120px;" autocomplete="off" />
+					&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;<input type="text" name="params['endDate']"  id="endDate" placeholder="结束时间"   style="width:120px;" autocomplete="off" />
+					<!-- &nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('0')"> 近一周 </a> 
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('1')"> 近一月 </a> 
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('3')"> 近一季度 </a>
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('6')"> 近半年 </a>
+					&nbsp;&nbsp;<a href="javascript:void(0)" onclick="fastSetQryDate('12')"> 近一年 </a>
+					 -->
+					&nbsp;&nbsp;
+					工号：<input type="text" name="params['userNo']" id="userNo"  placeholder="工号"   style="width:120px;" autocomplete="off" />
+					&nbsp;&nbsp;
+					姓名：<input type="text" name="params['realname']" id="realname"  placeholder="姓名"   style="width:120px;" autocomplete="off" />
+					&nbsp;&nbsp;
+					人员类型：
+					<select name="params['type_']" id="type_">
+						<option value="" >全部</option>
+						<option value="0" >自有</option>
+						<option value="1" >外包</option>
+					</select>
+				</div>
+				<div class="form-inline" >	
+				<label style="width:78%;"></label>
+					<input type="button" class="btn btn-success" value="查询" id="seachBtn"/>
+					<input type="button" class="btn btn-success" value="导出" id="exportBtn"/>
+					<input type="reset" class="btn " value="重置" />	
+				</div>
+						
+			</form>
+			<div class="space-6"></div>
+			<table id="grid-table"></table>
+			<div id="grid-pager"></div>
+			<!-- PAGE CONTENT ENDS -->
+			
+		</div>
+	</div>
+
+	<!--#include virtual="/include_footer.html"  -->
+ <script src="pages/admin/employee/js/department_overtime_detail.js"></script> 
+
+</body>
+</html>

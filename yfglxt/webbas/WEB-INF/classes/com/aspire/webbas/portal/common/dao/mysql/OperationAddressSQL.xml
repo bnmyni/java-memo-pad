@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.OperationAddressDao">
+	<resultMap type="com.aspire.webbas.portal.common.entity.OperationAddress" id="operationAddressMap">		
+		<result property="addressId" column="ADDRESS_ID"/>
+        <result property="resourceId" column="RESOURCE_ID"/>
+        <result property="operationKey" column="OPERATION_KEY"/>
+        <result property="operationAddressName" column="OPERATION_ADDRESS_NAME"/>
+        <result property="operationAddressUrl" column="OPERATION_ADDRESS_URL"/>
+        <result property="parameterName1" column="PARAMETER_NAME1"/>
+        <result property="parameterValue1" column="PARAMETER_VALUE1"/>
+        <result property="parameterName2" column="PARAMETER_NAME2"/>
+        <result property="parameterValue2" column="PARAMETER_VALUE2"/>
+        <result property="parameterName3" column="PARAMETER_NAME3"/>
+        <result property="parameterValue3" column="PARAMETER_VALUE3"/>
+        <result property="metadataId" column="METADATA_ID"/>
+        <result property="domain" column="DOMAIN"/>
+	</resultMap>
+	
+	<insert id="insertOperationAddress" parameterType="com.aspire.webbas.portal.common.entity.OperationAddress"
+	     useGeneratedKeys="true" keyProperty="addressId">
+        <![CDATA[
+		INSERT  INTO SEC_OPERATION_ADDRESS(
+			    ADDRESS_ID            ,
+		        RESOURCE_ID           ,
+		        OPERATION_KEY         ,
+		        OPERATION_ADDRESS_NAME,
+		        OPERATION_ADDRESS_URL ,
+		        PARAMETER_NAME1       ,
+		        PARAMETER_VALUE1      ,
+		        PARAMETER_NAME2       ,
+		        PARAMETER_VALUE2      ,
+		        PARAMETER_NAME3       ,
+		        PARAMETER_VALUE3      ,
+		        METADATA_ID			  ,
+		        DOMAIN           )
+		VALUES (#{addressId},
+		        #{resourceId}          		 ,
+		        #{operationKey}        		 ,
+		        #{operationAddressName}      ,
+		        #{operationAddressUrl} 		 ,
+		        #{parameterName1,jdbcType=VARCHAR}      ,
+		        #{parameterValue1,jdbcType=VARCHAR}     ,
+		        #{parameterName2,jdbcType=VARCHAR}      ,
+		        #{parameterValue2,jdbcType=VARCHAR}     ,
+		        #{parameterName3,jdbcType=VARCHAR}      ,
+		        #{parameterValue3,jdbcType=VARCHAR}     ,
+		        #{metadataId}          ,
+		        #{domain} )
+		]]>
+    </insert>
+    
+    <delete id="deleteOperationAddress" 
+            parameterType="com.aspire.webbas.portal.common.entity.OperationAddress">
+        DELETE FROM SEC_OPERATION_ADDRESS
+        WHERE RESOURCE_ID=#{resourceId} AND OPERATION_KEY=#{operationKey}
+    </delete>
+
+      <!--根据Id得到一个OperationAddress-->
+     <select id="findOperationAddress" 
+     		 resultMap="operationAddressMap"  
+     		 parameterType="string">
+	  	<![CDATA[
+			SELECT  
+				    ADDRESS_ID            ,
+			        RESOURCE_ID           ,
+			        OPERATION_KEY         ,
+			        OPERATION_ADDRESS_NAME,
+			        OPERATION_ADDRESS_URL ,
+			        PARAMETER_NAME1       ,
+			        PARAMETER_VALUE1      ,
+			        PARAMETER_NAME2       ,
+			        PARAMETER_VALUE2      ,
+			        PARAMETER_NAME3       ,
+			        PARAMETER_VALUE3      ,
+			        METADATA_ID  		  ,
+			        DOMAIN        
+			FROM    SEC_OPERATION_ADDRESS  
+			WHERE  OPERATION_ADDRESS_URL = #{value}
+		]]>
+      </select>
+      
+      <select id="listOperationAddress" 
+              resultMap="operationAddressMap" 
+              parameterType="com.aspire.webbas.portal.common.entity.OperationAddress">
+        <![CDATA[
+		SELECT  
+			    ADDRESS_ID            ,
+		        RESOURCE_ID           ,
+		        OPERATION_KEY         ,
+		        OPERATION_ADDRESS_NAME,
+		        OPERATION_ADDRESS_URL ,
+		        PARAMETER_NAME1       ,
+		        PARAMETER_VALUE1      ,
+		        PARAMETER_NAME2       ,
+		        PARAMETER_VALUE2      ,
+		        PARAMETER_NAME3       ,
+		        PARAMETER_VALUE3      ,
+		        METADATA_ID  		  ,
+		        DOMAIN        
+		FROM    SEC_OPERATION_ADDRESS   
+		]]>
+		<where>
+		    1=1
+			<if test="resourceId != null">
+				and RESOURCE_ID = trim(#{resourceId})
+			</if>
+			<if test="operationKey != null">
+				and OPERATION_KEY = trim(#{operationKey})
+			</if>
+			<if test="operationAddressName != null">
+				 and OPERATION_ADDRESS_NAME like CONCAT(CONCAT('%',trim(#{operationAddressName})),'%')  
+			</if>
+			<if test="operationAddressUrl != null">
+				 and OPERATION_ADDRESS_URL like CONCAT(CONCAT('%',trim(#{operationAddressUrl})),'%')  
+			</if>
+		</where>
+    </select>
+    
+    <select id="findOperationAddressByStaff" 
+            resultType="int" 
+            parameterType="hashmap">
+        <![CDATA[
+		SELECT  count(1) 
+		FROM sec_staff_department_role  sr,
+			 sec_role_resource_operation rs
+		WHERE sr.role_id = rs.role_id 
+			 AND sr.staff_id = #{staffId} 
+		     AND rs.resource_id = #{resourceId} 
+			AND rs.operation_key = #{operationKey}
+		]]>
+    </select>
+    
+    <select id="listOperationAddressByLoginName" 
+            resultMap="operationAddressMap" 
+            parameterType="String">
+        <![CDATA[
+		SELECT
+			    address.ADDRESS_ID            ,
+		        address.RESOURCE_ID           ,
+		        address.OPERATION_KEY         ,
+		        address.OPERATION_ADDRESS_NAME,
+		        address.OPERATION_ADDRESS_URL ,
+		        address.PARAMETER_NAME1       ,
+		        address.PARAMETER_VALUE1      ,
+		        address.PARAMETER_NAME2       ,
+		        address.PARAMETER_VALUE2      ,
+		        address.PARAMETER_NAME3       ,
+		        address.PARAMETER_VALUE3      ,
+		        address.METADATA_ID 		  ,
+		        address.DOMAIN        
+		FROM    SEC_OPERATION_ADDRESS 		address,		                 
+		        sec_role_resource_operation roleOperation
+        WHERE
+	        address.RESOURCE_ID = roleOperation.RESOURCE_ID
+	        AND (roleOperation.ROLE_ID in
+	         (select role_id
+	             from sec_staff_department_role
+	            where staff_id = (SELECT STAFF_ID
+	                                FROM SEC_STAFF
+	                               WHERE STATUS not in ('EXPIRED', 'DELETED')
+	                                 and LOGIN_NAME = #{loginName})
+			  union all
+	        	select role_id from sec_role where auto_assign = 1
+			  )
+			) 
+        	and roleOperation.Operation_Key=address.operation_key
+         ]]>
+    </select>
+	
+	
+	<select id="listOperationAddressByAuthType" 
+	        resultMap="operationAddressMap" 
+	        parameterType="string">
+        <![CDATA[
+		SELECT  
+			    address.ADDRESS_ID            ,
+		        address.RESOURCE_ID           ,
+		        address.OPERATION_KEY         ,
+		        address.OPERATION_ADDRESS_NAME,
+		        address.OPERATION_ADDRESS_URL ,
+		        address.PARAMETER_NAME1       ,
+		        address.PARAMETER_VALUE1      ,
+		        address.PARAMETER_NAME2       ,
+		        address.PARAMETER_VALUE2      ,
+		        address.PARAMETER_NAME3       ,
+		        address.PARAMETER_VALUE3      ,
+		        address.METADATA_ID           ,
+		        address.DOMAIN   
+		FROM    SEC_OPERATION_ADDRESS address, SEC_RESOURCES res
+		WHERE  address.RESOURCE_ID = res.RESOURCE_ID
+			AND res.AUTH_TYPE = #{authType}
+		]]>
+    </select>
+</mapper> 

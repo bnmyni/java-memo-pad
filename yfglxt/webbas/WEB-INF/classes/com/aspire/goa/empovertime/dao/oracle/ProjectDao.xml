@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aspire.goa.empovertime.dao.ProjectDao">
+
+	<sql id="whereClomun">
+		<if test="code_ != null and code_ != ''">
+		and code_ = #{code_}
+		</if>
+		<if test="name_ != null and name_ != ''">
+		and name_ = #{name_}
+		</if>
+		<if test="leader != null and leader != ''">
+		and leader = #{leader}
+		</if>
+		<if test="serviceCode != null and serviceCode != ''">
+		and service_code = #{serviceCode}
+		</if>
+		<if test="serviceName != null and serviceName != ''">
+		and service_name = #{serviceName}
+		</if>
+		<if test="serviceLeader != null and serviceLeader != ''">
+		and service_leader = #{serviceLeader}
+		</if>
+	</sql>
+ 	
+	<insert id="insertProjectList" parameterType="java.util.List" >
+		insert into t_Project (code_,name_,service_code,service_name) 
+		select code_,name_,service_code,service_name from (
+		<foreach collection="list" item="item" index="index" separator="UNION ALL">
+		SELECT 
+		   #{item.code_,jdbcType=VARCHAR} code_,
+		   #{item.name_,jdbcType=VARCHAR} name_,
+		   #{item.serviceCode,jdbcType=VARCHAR} service_code,
+		   #{item.serviceName,jdbcType=VARCHAR} service_name
+		FROM dual
+		</foreach>
+		) a
+	</insert>
+	
+	
+	<select id="query" parameterType="com.aspire.goa.empovertime.entity.ProjectInfo" resultType="com.aspire.goa.empovertime.entity.ProjectInfo">
+		select code_ ,name_,leader,service_code serviceCode,service_name serviceName,service_leader serviceLeader 
+		from t_Project where 1=1 <include refid="whereClomun" />
+	</select>
+	
+	<select id="getList"  parameterType="com.aspire.goa.empovertime.entity.ProjectInfo" resultType="com.aspire.goa.empovertime.entity.ProjectInfo">
+		select code_ ,name_,leader,service_code serviceCode,service_name serviceName,service_leader serviceLeader 
+		from t_Project where 1=1 <include refid="whereClomun" />
+	</select>
+	
+	<update id="update" parameterType="com.aspire.goa.empovertime.entity.ProjectInfo">
+		update t_Project t set 
+		code_ = #{code_}
+		<if test="name_ != null and name_ != ''">
+		, name_ = #{name_}
+		</if>
+		<if test="leader != null and leader != ''">
+		, leader = #{leader}
+		</if>
+		<if test="serviceCode != null and serviceCode != ''">
+		, service_code = #{serviceCode}
+		</if>
+		<if test="serviceName != null and serviceName != ''">
+		, service_name = #{serviceName}
+		</if>
+		<if test="serviceLeader != null and serviceLeader != ''">
+		, service_leader = #{serviceLeader}
+		</if>
+		 where code_ = #{code_}
+		 <include refid="whereClomun" />
+	</update>
+	
+	<insert id="addBackupProjectInfo" parameterType="java.lang.String">
+		create table ${value} as select * from t_Project
+	</insert>
+	
+	<delete id="delProjectInfo">
+		delete from t_Project
+	</delete>
+	
+	<insert id="addRecoverProjectInfo" parameterType="java.lang.String">
+		insert into t_Project select * from ${value}
+	</insert>
+</mapper>

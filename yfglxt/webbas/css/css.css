@@ -1,0 +1,64 @@
+@charset "utf-8";
+html { 
+overflow:hidden; 
+background-color:#ffffff;
+}
+body,input,select,textarea {
+    font-family: "微软雅黑",Arial,sans-serif,Helvetica, Georgia,;
+	font-size: 14px;
+}
+h4 span{
+	font-size:16px;
+}
+.txt-overflow-hidden{
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	word-break:keep-all;
+	display:-moz-inline-box;   
+	display:inline-block;
+}
+/**修正文本显示时不对齐问题*/
+.form-horizontal .form-control-static {
+	width : 304px;
+    padding-top: 4px;
+	word-wrap:break-word;
+	word-break:break-all
+
+
+}
+.control-label{
+	white-space:nowrap; 
+}
+.margin-top-8{
+	margin-top:8px;
+}
+.padding-8{
+	padding : 8px;
+}
+
+/*按钮样式*/
+/**.ui-jqgrid tr.jqgrow td div button{margin:2px;background:#abbac3!important;border-color:#abbac3!important;}
+.ui-jqgrid tr.jqgrow td div button:hover{background:#6fb3e0!important;border-color:#6fb3e0!important;}**/
+.row .col-sm-4 button{background:#6fb3e0!important;border-color:#6fb3e0!important;}
+.row .col-sm-4 button:hover{background:#4f99c6!important;border-color:#6fb3e0!important;}
+/**.form-group div button.btn-warning{background:#fff!important;border-color:#8aafce!important;color:#6688a6!important;}
+.form-group div button.btn-warning:hover{background:#eaf2f8!important;color:#6688a6!important;}
+.form-inline button.btn-purple{background:#6fb3e0!important;border-color:#6fb3e0!important;}
+.form-inline button.btn-purple:hover{background:#4f99c6!important;border-color:#6fb3e0!important;}**/
+
+
+/*表格选中样式*/
+.ui-jqgrid-btable .ui-widget-content.ui-state-highlight{background-color:#cee1ed;}
+
+
+/*搜索条件*/
+.search_tj_bar{border-collapse:collapse;border-spacing:0;border:0;width:100%;margin:0 auto;}
+.search_tj_bar th{border-bottom-width:1px;background:#fff;}
+.search_tj_bar td{text-align:left;background:#fff;padding:5px;border-bottom:#e1e1e1 1px solid;border-right:#e1e1e1 1px solid;}
+.search_tj_bar td.nas{background:#f2f2f2;}
+.search_tj_bar td label{text-align:right;width:90%;float:left;font-weight:bold;font-size:12px;}
+.search_tj_bar td *{font-size:12px;}
+.bs_btn{overflow:hidden;padding:0.5em 0;width:100%;margin:0 auto;}
+.bs_btn button{float:right;margin:0 10px 0 0;}
+

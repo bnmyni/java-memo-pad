@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title>Template</title>
+<!--#include virtual="/include.html"  -->
+<script src="ueditor/ueditor.config.js"></script>
+<script src="ueditor/ueditor.all.js"></script>
+<style>
+input[type='checbox'] {
+	width: 100px;
+	float: left;
+}
+</style>
+<script type="text/javascript" src="codeDict/queryScript.ajax?codeType=announce_cat,announce_status"></script>
+</head>
+<body>
+<div style="display:none" class="breadcrumbs" id="breadcrumbs"> 
+  <script type="text/javascript">try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}</script> 
+</div>
+<div style="width:100%; height:26px;"></div>
+<!--  新增form  -->
+<form id="add-form" style="float:left;"  method="post" class="form-horizontal margin-top-10" role="form" >
+  <div style="width:100%; height:auto; float:left;">
+  <div class="form-group">
+    <label class="col-sm-2 control-label"> 模版名称: </label>
+    <div class="col-sm-8">
+      <input style="width:300px;" type="text" name="tmplName" id="tmplName" placeholder="模版名称"  />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label"> 栏目类型： </label>
+    <div class="col-sm-5">
+      <select name="cat" id="cat" >
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label"> 主题: </label>
+    <div class="col-sm-8">
+      <input style="width:300px;" type="text" name="title" id="title" placeholder="主题"  />
+      <input type="hidden" name="tmplId"  id="tmplId"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label"> 内容: </label>
+    <div class="col-sm-8">
+      <textarea type="text/plain" style="width:800px; height:400px; resize:none;" name="content" id="content" placeholder="内容" ></textarea>
+    </div>
+  </div>
+  <div class="clearfix form-actions">
+    <div class="center"> <a href="pages/admin/announce/template_list.shtml">
+      <button class="btn btn-success" type="submit" id="submitButton"> <i class="ace-icon fa fa-check bigger-110"></i> 保 存 </button>
+      </a> &nbsp; &nbsp; &nbsp; <a id="backBtn" href="#">
+      <button class="btn" type="button" > <i class="ace-icon fa fa-undo bigger-110"></i> 返回 </button>
+      </a> </div>
+  </div>
+</form>
+<!--#include virtual="/include_footer.html"  --> 
+<script type="text/javascript">
+	/* 栏目数据加载  */
+	$("#cat").localRender(CodeDict['announce_cat'],{
+		//firstOption:{text:'请选择分类',value:''},
+		keyValue:{text:'value',value:'key'}
+	});
+	var add_url   = ctxPaths+ '/announce/template/add.ajax';
+	var mod_url   = ctxPaths+ '/announce/template/mod.ajax';
+	var view_url 	 = ctxPaths+ '/announce/template/get.ajax';
+	$(function($) {
+		var ue = UE.getEditor('content');
+			
+		$("#submitButton").click(function(){
+			//alert(getP("id"));
+			var checkbox = '';
+			$("input[type='checkbox']:checked").each(function(){
+				if(checkbox == ''){
+					checkbox += $(this).val();
+				}else{
+					checkbox += ',' + $(this).val();
+				}
+			});
+			add_validator();
+			window.location.href="pages/admin/announce/template_list.shtml";
+			$('#backBtn').trigger('click');	
+		});
+
+		if(getP("id")!=""){
+				editEvent(getP("id"));
+		}
+		
+		$('#backBtn').click(function(){
+			window.history.back(-1);
+		});
+		 
+
+	});
+
+function editEvent(id){
+	$.ajaxSubmit(view_url,{'id': id}, function(data){
+		if(data.success == true){
+			//resetForm($('#add-form'),add_validator);
+			//UE.getEditor('content').addListener("ready", function () {
+			//	UE.getEditor('content').setContent(data.data['content']);
+			//});
+			UE.getEditor('content').ready(function () {
+				UE.getEditor('content').setContent(data.data['content'], false);
+			});
+			$('#add-form').json2Form2(data.data);
+		}else{
+			Q_Alert_Fail(data.message);
+		}
+	});
+}; 
+
+
+function add_validator(){
+		var form=$("#add-form");
+			var url = add_url;
+			if($('#tmplId').val() != ''){
+				url = mod_url;
+			}
+			
+			$.ajax({url:url,
+			type:"POST",
+			dataType:"json",
+			data:form.serialize(),
+			success: function(data){
+				if(data['success']==true){
+					console.log(data);
+					//return;
+					$("#backBtn").trigger('click');	
+				}
+				else {
+					if (rtn.data && rtn.data.message) {
+						Q_Alert_Fail(rtn.data.message, "提示");
+					} else {
+						Q_Alert_Fail('原因未知');
+					}
+				}
+			},
+			error:function(){
+				Q_Alert_Fail('原因未知');
+			}
+			})		
+	$('#backBtn').trigger('click');	
+	window.location.href="pages/admin/announce/template_list.shtml";
+	window.history.back(-1);	
+}
+			
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aspire.goa.empovertime.dao.EmpOverTimeDepDao">
+
+	<sql id="whereComnul">
+	     <if test="department3 != null and  department3 != ''">
+	     	and department3 in (${department3}) 
+	     </if>
+	     <if test="department4 != null and  department4 != ''">
+	     	and department4 = #{department4}
+	     </if>
+	     <!-- <if test="type_ != null and  type_ != ''">
+	     	and b.type_ = #{type_}
+	     </if> -->
+	     <if test="startDate != null and  startDate != ''">
+	     	<![CDATA[ and work_date >= to_date(#{startDate},'YYYY-MM-DD') ]]>
+	     </if>
+	     <if test="endDate != null and  endDate != ''">
+	     	<![CDATA[ and work_date <= to_date(#{endDate},'YYYY-MM-DD') ]]>
+	     </if>
+	</sql>
+	
+	<select id="list" parameterType="com.aspire.goa.empovertime.entity.OverTimeDepartmentVo" resultType="com.aspire.goa.empovertime.entity.OverTimeDepartmentVo">
+		select department3,
+		department4,
+		ztp totalPeople,
+		wtp avgPeople,
+		work_time as worktime,
+		over_time as overtime,
+		trunc(over_time / (ztp + wtp) ,2) averageTime,
+		decode(work_time,
+		0,
+		'0',
+		trunc((over_time / work_time), 4) * 100 || '%') rate,
+		decode(department4,
+		'平台开发一部',
+		1,
+		'平台开发二部',
+		2,
+		'架构部',
+		3,
+		'测试部',
+		4,
+		'需求部',
+		5,
+		'平台研发二部',
+		6,
+		'应用研发部',
+		8,
+		7) order_
+		from (select department3,
+		department4,
+		(select count(1) from t_smt_user su where su.is_delete = '0' and su.type_ = '0' and su.department4 = f.department4) ztp,
+		(select count(1) from t_smt_user su where su.is_delete = '0' and su.type_ = '1' and su.department4 = f.department4) wtp,
+		work_time,
+		over_time
+		from (select a.department3,
+		a.department4,
+		sum(a.work_time) work_time,
+		sum(a.over_time) over_time
+		from T_FULL_TIME_DATA a
+		where a.department3 is not null
+		and a.department4 is not null
+		and a.is_delete = '0'
+		<include refid="whereComnul" />
+
+		group by a.department3, a.department4) f) finals
+		union all
+		select decode(department3, null, '总计', department3) department3,
+		decode(department3, null, '', '小计') department4,
+		ztp tp,
+		wtp tps,
+		work_time as worktime,
+		over_time as overtime,
+		trunc(over_time / (ztp + wtp),2) avg_overtime,
+		decode(work_time, 0, '0', trunc((over_time / work_time), 4) * 100 || '%') ovRatio,
+		decode(department3, null, 10, 9) order_
+		from (select department3,
+		sum(ztp) ztp,
+		sum(wtp) wtp,
+		sum(work_time) work_time,
+		sum(over_time) over_time
+		from (select department3,
+		(select count(1) from t_smt_user su  where su.is_delete = '0' and su.type_ = '0' and su.department3 = f.department3) ztp,
+		(select count(1) from t_smt_user su  where su.is_delete = '0' and su.type_ = '1' and su.department3 = f.department3) wtp,
+		work_time,
+		over_time
+		from (select department3,
+		sum(a.work_time) work_time,
+		sum(a.over_time) over_time
+		from T_FULL_TIME_DATA a
+		where a.department3 is not null and a.is_delete = '0'
+		<include refid="whereComnul" />
+		group by department3) f) ff
+		group by rollup(department3)) finals
+		order by department3, order_
+	</select>
+	
+	<sql id="whereComnulPage">
+		  <if test="params['userNo']  != null and  params['userNo'] != ''">
+	     	and user_no = #{params.userNo}
+	     </if>
+	      <if test="params['realname'] != null and  params['realname'] != ''">
+	     	and user_name = #{params.realname}
+	     </if>
+	     <if test="params['department3'] != null and  params['department3'] != ''">
+	     	and department3 = #{params.department3}
+	     </if>
+	     <if test="params['department4'] != null and  params['department4'] != ''">
+	     	and department4 = #{params.department4}
+	     </if>
+	     <if test="params['startDate'] != null and  params['startDate'] != ''">
+	     	<![CDATA[ and work_date >= to_date(#{params.startDate},'YYYY-MM-DD') ]]>
+	     </if>
+	     <if test="params['endDate'] != null and  params['endDate'] != ''">
+	     	<![CDATA[ and work_date <= to_date(#{params.endDate},'YYYY-MM-DD') ]]>
+	     </if>
+	     
+	</sql>
+	
+	<select id="getDetailList" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" resultType="com.aspire.goa.empovertime.entity.OverTimeDepartmentDetailVo">
+		select a.user_no userNo,a.user_name realname,a.department3,a.department4,sum(a.work_time) workTime,
+        sum(case when a.over_time > 0 then  a.over_time else 0 end) overTime ,
+        decode(sum(work_time),0,0, trunc(sum(case when a.over_time > 0 then  a.over_time else 0 end)/sum(work_time), 4) * 100 ) rate      
+        from T_FULL_TIME_DATA a
+        where 1=1 
+          <include refid = "whereComnulPage" />
+      and a.user_no in (
+          select user_no from t_smt_user b where b.is_delete = '0'
+          <if test="params['type_'] != null and  params['type_'] != ''">
+	     	and b.type_ = #{params.type_}
+	     </if>
+      )
+      group by  a.user_no ,a.user_name,a.department3,a.department4
+	</select>
+	
+	<select id="getDetail" parameterType="com.aspire.goa.empovertime.entity.OverTimeDepartmentDetailVo" resultType="com.aspire.goa.empovertime.entity.OverTimeDepartmentDetailVo">
+		select a.user_no userNo,a.user_name realname,a.department3,a.department4,sum(a.work_time) workTime,
+        sum(case when a.over_time > 0 then  a.over_time else 0 end) overTime ,
+        decode(sum(work_time),0,0, trunc(sum(case when a.over_time > 0 then  a.over_time else 0 end)/sum(work_time), 4) * 100 ) rate      
+        from T_FULL_TIME_DATA a
+        where 1=1 
+         <if test="userNo  != null and  userNo != ''">
+		     	and user_no = #{userNo}
+		     </if>
+		      <if test="realname != null and  realname != ''">
+		     	and user_name = #{realname}
+		     </if>
+		     <if test="department3 != null and  department3 != ''">
+		     	and department3 = #{department3}
+		     </if>
+		     <if test="department4 != null and  department4 != ''">
+		     	and department4 = #{department4}
+		     </if>
+		     <if test="startDate != null and  startDate != ''">
+		     	<![CDATA[ and work_date >= to_date(#{startDate},'YYYY-MM-DD') ]]>
+		     </if>
+		     <if test="endDate != null and  endDate != ''">
+		     	<![CDATA[ and work_date <= to_date(#{endDate},'YYYY-MM-DD') ]]>
+		     </if>
+		     
+      and a.user_no in (
+          select user_no from t_smt_user b where b.is_delete = '0'
+          <if test="type_ != null and type_ != ''">
+		     	and b.type_ = #{type_}
+		     </if>
+      )
+      group by  a.user_no ,a.user_name,a.department3,a.department4
+		order by rate desc
+		
+		
+		
+	</select>
+</mapper>

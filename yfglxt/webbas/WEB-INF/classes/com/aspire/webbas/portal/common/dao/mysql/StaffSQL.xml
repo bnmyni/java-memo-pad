@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.StaffDao">
+	<resultMap type="com.aspire.webbas.portal.common.entity.Staff" id="StaffMap">		
+		<result property="staffId" column="STAFF_ID"/>
+        <result property="loginName" column="LOGIN_NAME"/>
+        <result property="departmentId" column="DEPARTMENT_ID"/>
+        <result property="realName" column="REAL_NAME"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="status" column="STATUS"/>
+        <result property="sex" column="SEX"/>
+        <result property="telephone" column="TELEPHONE"/>
+        <result property="mobile" column="MOBILE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="createUser" column="CREATE_USER"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="expireDate" column="EXPIRE_DATE"/>
+        <result property="passwordExpireDate" column="PASSWORD_EXPIRE_DATE"/>
+        <result property="lockDate" column="LOCK_DATE"/>
+        <result property="lastUpdateDate" column="LAST_UPDATE_DATE"/>
+        <result property="cityId" column="CITY_ID"/>
+	</resultMap>
+	<resultMap id="SecStaffDepartmentRoleKeyMap" type="com.aspire.webbas.portal.common.entity.SecStaffDepartmentRoleKey" >
+    <id column="STAFF_ID" property="staffId" jdbcType="VARCHAR" />
+    <id column="DEPARTMENT_ID" property="departmentId" jdbcType="VARCHAR" />
+    <id column="ROLE_ID" property="roleId" jdbcType="DECIMAL" />
+  </resultMap>
+	
+	<resultMap id="SecStaffExtendPropertyResult" type="com.aspire.webbas.portal.common.entity.StaffExtendProperty">
+        <result property="staffId" column="STAFF_ID"/>
+        <result property="property" column="PROPERTY"/>
+        <result property="value" column="VALUE"/>
+    </resultMap>
+    
+	<insert id="insertStaff" 
+	        parameterType="com.aspire.webbas.portal.common.entity.Staff"
+	    useGeneratedKeys="true" keyProperty="staffId">
+        <![CDATA[
+		INSERT INTO SEC_STAFF  (
+		       STAFF_ID        ,
+		       LOGIN_NAME      ,
+		       DEPARTMENT_ID   ,
+		       REAL_NAME       ,
+		       PASSWORD        ,
+		       STATUS          ,
+		       SEX             ,
+		       TELEPHONE       ,
+		       MOBILE          ,
+		       EMAIL           ,
+		       CREATE_USER     ,
+		       CREATE_DATE     ,
+		       EXPIRE_DATE     ,
+		       PASSWORD_EXPIRE_DATE,
+		       LOCK_DATE	   ,
+               CITY_ID	   ,
+		       LAST_UPDATE_DATE)
+		VALUES(#{staffId},
+		       #{loginName},
+		       #{departmentId,jdbcType=NUMERIC},
+		       #{realName},
+		       #{password},
+		       #{status,jdbcType=VARCHAR},
+		       #{sex,jdbcType=VARCHAR},
+		       #{telephone,jdbcType=VARCHAR},
+		       #{mobile,jdbcType=VARCHAR},
+		       #{email,jdbcType=VARCHAR},
+		       #{createUser},
+		       SYSDATE(),
+		       #{expireDate,jdbcType=DATE},
+		       #{passwordExpireDate,jdbcType=DATE},
+		       #{lockDate,jdbcType=DATE},
+               #{cityId,jdbcType=VARCHAR},  		       
+		       #{lastUpdateDate,jdbcType=DATE})
+		]]>
+    </insert>
+    
+  	<update id="updateStaff" 
+  	        parameterType="com.aspire.webbas.portal.common.entity.Staff">
+        <![CDATA[
+		UPDATE SEC_STAFF     
+		SET    LOGIN_NAME       = #{loginName},         
+		       DEPARTMENT_ID    = #{departmentId,jdbcType=BIGINT},      
+		       REAL_NAME        = #{realName},          
+		       STATUS           = #{status},
+		       SEX              = #{sex},
+		       TELEPHONE        = #{telephone,jdbcType=VARCHAR}, 
+		       MOBILE           = #{mobile,jdbcType=VARCHAR},            
+		       EMAIL            = #{email,jdbcType=VARCHAR},     
+		       CREATE_USER      = #{createUser},        
+		       CREATE_DATE      = #{createDate},
+		       EXPIRE_DATE      = #{expireDate,jdbcType=DATE},   
+		       PASSWORD_EXPIRE_DATE = #{passwordExpireDate,jdbcType=DATE},  
+		       LOCK_DATE		= #{lockDate,jdbcType=DATE},
+               CITY_ID          = #{cityId,jdbcType=VARCHAR},
+		       LAST_UPDATE_DATE = SYSDATE()
+		WHERE  STAFF_ID         = #{staffId}
+		]]>
+    </update>
+    
+    <update id="updateStaffPassword" 
+  	        parameterType="com.aspire.webbas.portal.common.entity.Staff">
+        <![CDATA[
+		UPDATE SEC_STAFF     
+		SET             
+		       STATUS           = #{status},
+		       PASSWORD         = #{password},
+		       PASSWORD_EXPIRE_DATE = #{passwordExpireDate,jdbcType=DATE},  
+		       
+		       LAST_UPDATE_DATE = SYSDATE()
+		WHERE  STAFF_ID         = #{staffId}
+		]]>
+    </update>
+    
+    <delete id="deleteStaff" 
+            parameterType="long">
+        <![CDATA[
+  		UPDATE 	SEC_STAFF
+  		SET		STATUS 	 = 'DELETED'
+  		WHERE	STAFF_ID = #{value}
+  		]]>
+    </delete>
+    
+    <delete id="removeStaff" 
+            parameterType="long">
+        <![CDATA[
+  		DELETE	FROM SEC_STAFF  		
+  		WHERE	STAFF_ID = #{value}
+  		]]>
+    </delete>
+    
+	<select id="findStaff" 
+            resultMap="StaffMap" 
+            parameterType="long">
+        <![CDATA[
+		SELECT *
+		FROM   SEC_STAFF             
+		WHERE  STAFF_ID = #{value}
+		]]>
+    </select>
+    
+    <select id="findStaffByLoginName" 
+            resultMap="StaffMap" 
+            parameterType="string">
+        <![CDATA[
+		SELECT *
+		FROM   SEC_STAFF             
+		WHERE  LOGIN_NAME = #{value} AND STATUS != 'DELETED'
+		]]>
+    </select>
+    
+    <select id="findStaffByNameAndPassword" 
+            resultMap="StaffMap" 
+            parameterType="com.aspire.webbas.portal.common.entity.Staff">
+        <![CDATA[
+		SELECT *
+		FROM   SEC_STAFF             
+		WHERE  LOGIN_NAME = #{loginName} AND PASSWORD = #{password} AND STATUS != 'DELETED'
+		]]>
+    </select>
+    
+    <insert id="insertStaffExtendProperties" 
+            parameterType="com.aspire.webbas.portal.common.entity.StaffExtendProperty">
+        <![CDATA[
+		INSERT INTO SEC_STAFF_EXTEND_PROPERTY (
+		       STAFF_ID	    ,
+		       PROPERTY 	,
+		       VALUE	 	)
+		VALUES(#{staffId}	,
+		       #{property}	,
+		       #{value}		)
+		]]>
+    </insert>
+
+    <delete id="deleteStaffExtendProperties" 
+            parameterType="long">
+        <![CDATA[
+		DELETE FROM SEC_STAFF_EXTEND_PROPERTY
+		WHERE  STAFF_ID = #{value}
+		]]>
+    </delete>
+    
+    <select id="listStaffExtendProperties" 
+            resultMap="SecStaffExtendPropertyResult" 
+            parameterType="long">
+        <![CDATA[
+		SELECT  staff_Id, property, value
+		FROM    SEC_STAFF_EXTEND_PROPERTY 
+		WHERE   STAFF_ID = #{value}
+		]]>
+    </select>
+    
+    <select id="listStaff" 
+            resultMap="StaffMap" 
+            parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page">
+
+        SELECT *
+        FROM SEC_STAFF
+        <where>
+		    1=1  
+		    
+		    <if test="params['keyword'] != null and  params['keyword'] != ''">
+				 and (LOGIN_NAME like CONCAT(CONCAT('%', TRIM(#{params.keyword})), '%') OR REAL_NAME like CONCAT(CONCAT('%', TRIM(#{params.keyword})), '%'))
+			</if> 
+			<if test="params['status'] != null and  params['status'] != ''">
+				and STATUS = trim(#{params.status})
+			</if>
+			<if  test="params['departmentId'] != null and  params['departmentId'] != ''">
+				and DEPARTMENT_ID = trim(#{params.departmentId})
+			</if>
+			<if  test="params['departmentIds'] != null and  params['departmentIds'] != ''">
+				and DEPARTMENT_ID in (${params.departmentIds})
+			</if>
+			<if test="params['status'] == null or  params['status'] == ''">
+				<![CDATA[
+					and STATUS != 'DELETED'
+				]]>
+			</if>
+			
+		    <!--  
+			<if test="loginName != null and loginName != ''">
+				 and LOGIN_NAME like CONCAT(CONCAT('%', TRIM(#{loginName})),'%')  
+			</if>
+			<if test="realName != null and realName != ''">
+				 and REAL_NAME like  CONCAT(CONCAT('%', TRIM(#{realName})), '%') 
+			</if>
+			
+			
+			<if test="departmentId != null and departmentId != ''">
+				and DEPARTMENT_ID = trim(#{departmentId})
+			</if>
+			<if test="others.departmentIds != null and others.departmentIds != ''">
+				and DEPARTMENT_ID in (${others.departmentIds})
+			</if>
+			<if test="others.staffIds != null and others.staffIds != ''">
+				and STAFF_ID in (${others.staffIds})
+			</if>
+			
+			<if test="others.beforeDays != null and others.beforeDays != ''">
+				and  ((last_update_date > SYSDATE() - ${others.beforeDays}) or (status = 'INITIAL' and CREATE_DATE > SYSDATE() - ${others.beforeDays})) 
+			</if>
+			-->
+		</where> 
+        
+    </select>
+    
+    <insert id="insertStaffRoles" 
+            parameterType="hashMap">
+        <![CDATA[
+		INSERT 	INTO SEC_STAFF_DEPARTMENT_ROLE (
+				STAFF_ID		,
+				DEPARTMENT_ID	,
+				ROLE_ID			)
+		VALUES (#{staffId}		, 
+				#{departmentId} ,
+				#{roleId,jdbcType=NUMERIC}		)
+		]]>
+    </insert>
+    
+    <insert id="insertStaffRolesByKey" 
+            parameterType="hashMap">
+        <![CDATA[
+		INSERT 	INTO SEC_STAFF_DEPARTMENT_ROLE
+		SELECT 	#{staffId}, 
+				#{departmentId} ,
+				ROLE_ID
+		FROM	SEC_ROLE
+		WHERE	ROLE_KEY = #{roleKey}
+		]]>
+    </insert>
+    
+    <delete id="deleteStaffRoles" 
+            parameterType="long">
+        <![CDATA[
+		DELETE	FROM SEC_STAFF_DEPARTMENT_ROLE
+		WHERE
+		STAFF_ID 	= #{staffId}
+		]]>
+    </delete>
+    
+    <delete id="deleteStaffRolesByRoleId" 
+            parameterType="long">
+        <![CDATA[
+		DELETE	FROM SEC_STAFF_DEPARTMENT_ROLE
+		WHERE
+		ROLE_ID 	= #{roleId}
+		]]>
+    </delete>
+    
+    <delete id="deleteStaffRolesByStaffIdAndRoleId" 
+            parameterType="hashMap">
+        <![CDATA[
+		DELETE	FROM SEC_STAFF_DEPARTMENT_ROLE
+		WHERE
+		STAFF_ID       = #{staffId}
+		AND ROLE_ID 	= #{roleId}
+		]]>
+    </delete>
+    <delete id="deleteStaffRolesByDepartmentIdAndNotInStaffIds" 
+            parameterType="hashMap">
+        <![CDATA[
+		DELETE	FROM SEC_STAFF_DEPARTMENT_ROLE
+		WHERE
+		DEPARTMENT_ID 	= #{departmentId}
+		]]>
+		<if test="staffIds != null">
+				and STAFF_ID not in 
+				<foreach collection="staffIds" item="item" open="(" separator=","
+					close=")">
+					#{item}
+				</foreach>
+		</if>
+
+    </delete>
+    <select id="listStaffByRole"
+            resultMap="StaffMap" 
+            parameterType="long">
+      <![CDATA[
+        SELECT *
+		  FROM SEC_STAFF
+		 WHERE STATUS != 'DELETED'
+		   AND STAFF_ID IN (SELECT STAFF_ID
+		                      FROM SEC_STAFF_DEPARTMENT_ROLE
+		                     WHERE ROLE_ID = #{roleId})
+       ]]>
+    </select>
+    <select id="listRoleByStaffIds"
+            resultMap="SecStaffDepartmentRoleKeyMap" 
+            parameterType="long">
+      <![CDATA[
+        SELECT *
+		  FROM SEC_STAFF_DEPARTMENT_ROLE
+		 WHERE	1=1
+		]]>
+		<if test="departmentId != null and  departmentId!= ''">
+				and DEPARTMENT_ID=#{departmentId}
+		</if>
+		and STAFF_ID in 
+		<foreach collection="staffIds" item="item" open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+    </select>
+    <update id="clearStaffDepartment" 
+            parameterType="long">
+        <![CDATA[
+		UPDATE  SEC_STAFF
+		SET		DEPARTMENT_ID = null
+		WHERE	DEPARTMENT_ID = #{value}
+		]]>
+    </update>
+    
+    <update id="updateStaffDepartment" 
+            parameterType="hashMap">
+        <![CDATA[
+		UPDATE  SEC_STAFF
+		SET		DEPARTMENT_ID = #{departmentId}
+		WHERE	staff_id in (${staffIds})
+		]]>
+    </update>
+    <update id="updateStaffDepartmentByStaffIds" 
+            parameterType="hashMap">
+        <![CDATA[
+		UPDATE  SEC_STAFF
+		SET	DEPARTMENT_ID = #{departmentId}
+		WHERE	STAFF_ID in 
+		]]>
+		<foreach collection="staffIds" item="item" open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
+    </update>
+</mapper> 

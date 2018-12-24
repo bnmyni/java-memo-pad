@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	类名:     AnnounceObjSql
+	描述:     数据访问语句
+	作者:     王磊
+	时间:     2015-06-06 10:54:59
+ -->
+<mapper namespace="com.aspire.goa.announce.dao.AnnounceObjDao">
+
+	<resultMap type="com.aspire.goa.announce.entity.AnnounceObj" id="baseResultMap">
+		<result property="objId" column="OBJ_ID" jdbcType="VARCHAR"/>
+		<result property="objType" column="OBJ_TYPE" jdbcType="VARCHAR"/>
+		<result property="toDomain" column="TO_DOMAIN" jdbcType="VARCHAR"/>
+		<result property="toObj" column="TO_OBJ" jdbcType="VARCHAR"/>
+		<result property="announceId" column="ANNOUNCE_ID" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="baseWhereClause">
+		<where>
+			<!--
+			1 = 1
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				EXAMPLE_NAME like '%${params.keyword}%'
+			</if>
+			-->
+			<if test="params['keyword'] != null and  params['keyword'] != ''">
+				OBJ_TYPE like '%${params.keyword}%'
+			</if>
+		</where>
+	</sql>
+	<sql id="baseColumnList">
+		OBJ_ID,OBJ_TYPE,TO_DOMAIN,TO_OBJ,ANNOUNCE_ID
+	</sql>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="com.aspire.goa.announce.entity.AnnounceObj">
+		insert into 
+			g_announce_obj(OBJ_ID,OBJ_TYPE,TO_DOMAIN,TO_OBJ,ANNOUNCE_ID) 
+		values(
+			#{objId,jdbcType=VARCHAR} ,
+			#{objType,jdbcType=VARCHAR} ,
+			#{toDomain,jdbcType=VARCHAR} ,
+			#{toObj,jdbcType=VARCHAR} ,
+			#{announceId,jdbcType=VARCHAR} 
+		)
+	</insert>
+	
+	<!-- 列表 -->
+	<select id="list" parameterType="com.aspire.webbas.core.pagination.mybatis.pager.Page" resultMap="baseResultMap">
+		select
+		<include refid="baseColumnList" />
+		from g_announce_obj
+		<if test="params != null">
+			<include refid="baseWhereClause" />
+		</if>
+	</select>
+	
+	<!-- 详情 -->
+	<select id="get" parameterType="String" resultMap="baseResultMap">
+		select 
+		<include refid="baseColumnList"/>
+		from g_announce_obj t where OBJ_ID = #{objId}
+	</select>
+	
+	<!-- 修改 -->
+	<update id="mod" parameterType="com.aspire.goa.announce.entity.AnnounceObj">
+		update g_announce_obj set OBJ_ID = #{objId}
+		<if test="objType != null">
+			, OBJ_TYPE = #{objType}
+		</if>
+		<if test="toDomain != null">
+			, TO_DOMAIN = #{toDomain}
+		</if>
+		<if test="toObj != null">
+			, TO_OBJ = #{toObj}
+		</if>
+		<if test="announceId != null">
+			, ANNOUNCE_ID = #{announceId}
+		</if>
+		where OBJ_ID = #{objId}
+	</update> 
+	
+	<!-- 删除 -->
+	<update id="del" parameterType="string">
+		delete from g_announce_obj where OBJ_ID = #{objId}
+	</update>
+</mapper>

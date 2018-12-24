@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title>Announce</title>
+<!--#include virtual="/include.html"  -->
+<script src="ueditor/ueditor.config.js"></script>
+<script src="ueditor/ueditor.all.js"></script>
+<style>
+input[type='checbox'] {
+	width: 100px;
+	float: left;
+}
+#sendObject{font-size:24px;}
+</style>
+<script type="text/javascript" src="codeDict/queryScript.ajax?codeType=announce_cat,announce_status"></script>
+</head>
+<body>
+<div style="display:none" class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}</script>
+	</div>
+<div style="width:100%; height:40px;"></div>
+<!--  新增form  -->
+<form style="width:100%" id="add-form" style="float:left;"  method="post" class="form-horizontal margin-top-10" role="form" >
+  <div style="width:100%; height:auto; float:left;">
+  <input type="hidden" name="status" value="1"/>
+  
+  <div class="form-group">
+    <label class="col-sm-2 control-label"> 主题: </label>
+    <div class="col-sm-8">
+      <input style="width:300px;" type="text" name="title" id="title" placeholder="主题"  />
+      <input class="btn btn-info btn-sm" type="button" value="使用模板" id="setingTpl">
+      <select style="display:none" name="tpl" id="tpl">
+        <option selected>==请选择模板==</option>
+      </select>
+      <input type="hidden" name="announceId"  id="announceId"/>
+    </div>
+  </div>
+   <div class="form-group">
+    <label class="col-sm-2 control-label">栏目类型:</label>
+    <div class="col-sm-5">
+      
+      <select name="cat" id="cat" >
+      </select>
+      <input type="hidden" name="toDomains" id="toDomains">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label"> 内容: </label>
+    <div class="col-sm-8">
+      
+      <textarea type="text/plain" style="width:800px; height:400px; resize:none;" name="content" id="content" placeholder="" ></textarea>
+    </div>
+  </div>
+ 
+  
+  <div class="form-group">
+    <label class="col-sm-2 control-label">  </label>
+    <div class="col-sm-8">
+      
+      <div id="sendObject" > <input type="checkbox" name="" value="短信" >短信<input type="checkbox" name="" value="微信" >微信<input type="checkbox" name="" value="邮件" >邮件<p>通知方式勾选后，将以对应方式提醒相关用户</p></div>
+
+    </div>
+  </div>
+<div style="width:100%" class="clearfix form-actions">
+    <div class="center">
+      <button class="btn btn-success" type="button" id="submitButton">
+      <i class="ace-icon fa fa-check bigger-110"></i> 发布
+      </button>
+   
+      <a  id="backBtn" class="btn " href="pages/admin/announce/announce_list.shtml">
+       <i class="ace-icon fa fa-undo bigger-110"></i> 返回 
+      </a> </div>
+  </div>
+  </div>
+  </form>
+
+  
+
+<!--#include virtual="/include_footer.html"  --> 
+<script type="text/javascript">
+/* 栏目数据加载  */
+$("#cat").localRender(CodeDict['announce_cat'],{
+//firstOption:{text:'请选择分类',value:''},
+keyValue:{text:'value',value:'key'}
+});
+var obj_url=ctxPaths+"/lessee/lessee/listExclude.ajax?isExclude=1";
+var template_list_url  = ctxPaths+ '/announce/template/list.ajax';
+var get_url  = ctxPaths+ "/announce/template/get.ajax";
+var tpl_list_url  = ctxPaths+ '/announce/template/list.ajax';
+var list_url  = ctxPaths+ '/announce/announce/list.ajax';
+var add_url   = ctxPaths+ '/announce/announce/add.ajax';
+var mod_url   = ctxPaths+ '/announce/announce/mod.ajax';
+var del_url   = ctxPaths+ '/announce/announce/del.ajax';
+var view_url 	 = ctxPaths+ '/announce/announce/get.ajax';
+$(function($) {
+var ue = UE.getEditor('content');
+$("#submitButton").click(function(){
+//alert(getP("id"));
+var checkbox = '';
+$("input[type='checkbox']:checked").each(function(){
+	if(checkbox == ''){
+		checkbox += $(this).val();
+	}else{
+		checkbox += ',' + $(this).val();
+	}
+});
+$("#toDomains").val(checkbox);
+	add_validator();
+	window.location.href=window.location.href=ctxPaths+"/pages/admin/announce/announce_list.shtml";
+	$('#backBtn').trigger('click');
+});
+$("#setingTpl").click(function(){
+$("#tpl").css({"display":""});
+});
+
+	editEvent(getP("id"));
+
+
+$.ajaxSubmit(tpl_list_url, {},
+		function(rtn) {
+			if (rtn.success) {
+				var data = rtn.rows;
+				var html="";
+				//console.log(data);
+				for(var i=0 in data){
+					if(typeof data[i]['title']=="undefined"){
+						break;
+					}else{
+						html+="<option value="+data[i]['tmplId']+">"+data[i]['title']+"</option>";
+					}
+				}
+				$("#tpl").html("<option selected value=''>请选择</option>"+html);
+			} else {
+				if (rtn.data && rtn.data.message) {
+					Q_Alert_Fail(rtn.data.message, "提示");
+				} else {
+					Q_Alert_Fail('原因未知');
+				}
+			}
+
+});
+$.ajaxSubmit(obj_url, {},
+		function(rtn) {
+			if (rtn.success) {
+				var data = rtn.rows;
+				var html="";
+				//console.log(data);
+				console.log(new Date());
+			} else {
+				if (rtn.data && rtn.data.message) {
+					Q_Alert_Fail(rtn.data.message, "提示");
+				} else {
+					Q_Alert_Fail('原因未知');
+				}
+			}
+
+});
+
+
+$.ajaxSubmit(obj_url, {},
+		function(rtn) {
+			if (rtn.success) {
+				var data = rtn.rows;
+				var html="";
+				//alert(data);
+				//console.log(data);
+				for(var i=0 in data){
+					//console.log(data[i]['lesseeName']);
+					if(typeof data[i]['lesseeName']=="undefined"){
+						break;
+					}else{
+						html+="<input style='margin-left:20px;'  type='checkbox' value="+data[i]['lesseeId']+" >"+data[i]['lesseeName'];
+					}
+				}
+				//$("#sendObject").html(html);
+			} else {
+				if (rtn.data && rtn.data.message) {
+					Q_Alert_Fail(rtn.data.message, "提示");
+				} else {
+					Q_Alert_Fail('原因未知');
+				}
+			}
+});
+$("#tpl").change(function(){
+		var tplval=$("#tpl  option:selected").val();
+		//console.log(tplval);
+		$.ajaxSubmit(get_url,{'id': tplval}, function(data){
+			if(data.success == true){
+				$("#title").val(data.data['title']);
+				var ue=UE.getEditor('content');
+				
+					ue.setContent(data.data['content']);
+				
+				
+			}else{
+				Q_Alert_Fail(data.message);
+			}
+		});
+})
+});
+
+function editEvent(id){
+	$.ajaxSubmit(view_url,{'id': id}, function(data){
+		if(data.success == true){
+			//resetForm($('#add-form'),add_validator);
+			console.log(data);
+			//UE.getEditor('content').setContent(data.data['content']);
+			var ue=UE.getEditor('content');
+			//判断ueditor 编辑器是否创建成功
+			//ue.addListener("ready", function () {
+			// editor准备好之后才可以使用
+			setTimeout(function(){
+					ue.setContent(data.data['content']);
+			},800);
+				
+			//});
+			$('#add-form').json2Form2(data.data);
+		}else{
+			Q_Alert_Fail(data.message);
+		}
+	});
+}; 
+
+
+function add_validator(){
+	
+		var form=$("#add-form");
+			var url = add_url;
+			if($('#announceId').val() != ''){
+				url = mod_url;
+			}
+			
+			$.ajax({url:url,
+			type:"POST",
+			dataType:"json",
+			data:form.serialize(),
+			success: function(data){
+				if(data['success']==true){
+					console.log(data);
+					//return;
+					window.location.href=ctxPaths+"/pages/admin/announce/announce_list.shtml";
+					$('#backBtn').trigger('click');
+					history.go(-1);
+					
+				}
+				else {
+					if (rtn.data && rtn.data.message) {
+						Q_Alert_Fail(rtn.data.message, "提示");
+					} else {
+						Q_Alert_Fail('原因未知');
+					}
+				}
+			},
+			error:function(){
+				Q_Alert_Fail('原因未知');
+			}
+			});
+			$('#backBtn').trigger('click');		
+	history.go(-1)
+}
+
+</script>
+</body>
+</html>

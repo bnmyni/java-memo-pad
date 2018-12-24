@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+    <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aspire.webbas.portal.common.dao.DepartmentDao">
+	<resultMap type="com.aspire.webbas.portal.common.entity.Department" id="DepartmentMap">		
+		<result property="departmentId" column="DEPARTMENT_ID" /> 
+	    <result property="departmentName" column="DEPARTMENT_NAME" />
+	    <result property="departmentDesc" column="DEPARTMENT_DESC" />
+	    <result property="parentId" column="PARENT_ID" />
+	    <result property="email" column="EMAIL" />  
+	    <result property="address" column="ADDRESS" />
+	    <result property="addSub" column="ADD_SUB" />
+	    <result property="createUser" column="CREATE_USER" />
+	    <result property="createDate" column="CREATE_DATE" />    
+	    <result property="lastUpdateDate" column="LAST_UPDATE_DATE" />
+	    <result property="domain" column="DOMAIN" />
+	</resultMap>
+	
+	
+	
+	<insert id="insertDepartment" 
+	        parameterType="com.aspire.webbas.portal.common.entity.Department"
+			useGeneratedKeys="true" keyProperty="departmentId">
+		<![CDATA[
+		INSERT INTO SEC_DEPARTMENT  (
+		       DEPARTMENT_ID   	    ,
+		       DEPARTMENT_NAME 		,
+		       DEPARTMENT_DESC 		,
+		       PARENT_ID       		,
+		       EMAIL           		,
+		       ADDRESS         		,
+		       ADD_SUB         		,
+		       CREATE_USER     		,
+		       CREATE_DATE     		,
+		       LAST_UPDATE_DATE		,
+		       DOMAIN          		)
+		VALUES(#{departmentId},
+		       #{departmentName},
+		       #{departmentDesc,jdbcType=VARCHAR},
+		       #{parentId,jdbcType=NUMERIC},
+		       #{email,jdbcType=VARCHAR},
+		       #{address,jdbcType=VARCHAR},
+		       #{addSub},
+		       #{createUser},
+		       SYSDATE(),
+		       SYSDATE(),
+		       #{domain,jdbcType=VARCHAR})
+		]]>       
+  	</insert>
+  	
+  	<update id="updateDepartment" 
+  			parameterType="com.aspire.webbas.portal.common.entity.Department">
+		<![CDATA[
+		UPDATE SEC_DEPARTMENT
+		SET    DEPARTMENT_NAME  = #{departmentName},
+		       DEPARTMENT_DESC  = #{departmentDesc,jdbcType=VARCHAR},
+		       PARENT_ID        = #{parentId,jdbcType=NUMERIC},
+		       EMAIL            = #{email,jdbcType=VARCHAR},
+		       ADDRESS          = #{address,jdbcType=VARCHAR},
+		       LAST_UPDATE_DATE = SYSDATE(),
+		       DOMAIN           = #{domain,jdbcType=VARCHAR}
+		WHERE  DEPARTMENT_ID    = #{departmentId}
+		]]>
+	</update>  
+
+  	<delete id="deleteDepartment" 
+  			parameterType="string">
+  		<![CDATA[
+  		DELETE 	FROM SEC_DEPARTMENT
+  		WHERE	DEPARTMENT_ID = #{value}
+  		]]>
+  	</delete>
+  	
+	<select id="findDepartment" 
+  	        resultMap="DepartmentMap" 
+  	        parameterType="string">
+		<![CDATA[
+		SELECT  *
+		FROM	SEC_DEPARTMENT
+		WHERE   DEPARTMENT_ID = #{value}
+		]]>
+  	</select>
+  	
+  	<select id="listDepartment" 
+  	        resultMap="DepartmentMap" 
+  	        parameterType="com.aspire.webbas.portal.common.entity.Department">
+  	        
+		SELECT  *
+		FROM    SEC_DEPARTMENT 
+		<where>
+		    1=1  
+			<if test="departmentName != null and departmentName != ''">
+				 and DEPARTMENT_NAME like CONCAT(CONCAT('%', TRIM(#{departmentName})),'%')  
+			</if>
+			<if test="departmentDesc != null and departmentDesc != ''">
+				 and DEPARTMENT_DESC like  CONCAT(CONCAT('%', TRIM(#{departmentDesc})), '%') 
+			</if>
+			<if test="parentId != null and parentId != ''">
+				and PARENT_ID = #{parentId}
+			</if>
+			<if test="others.keyword != null and others.keyword != ''">
+				 and (DEPARTMENT_NAME like CONCAT(CONCAT('%', TRIM(#{others.keyword})), '%') OR DEPARTMENT_DESC like CONCAT(CONCAT('%', TRIM(#{others.keyword})), '%'))
+			</if> 
+			<if test="departmentId != null and departmentId != ''">
+				and DEPARTMENT_ID = #{departmentId}
+			</if>
+			<if test="others.departmentIds != null and others.departmentIds != ''">
+				and DEPARTMENT_ID in (${others.departmentIds})
+			</if>
+		</where> 
+		<!--  
+        <dynamic prepend="WHERE">    
+           
+            <isNotEmpty prepend="AND" property="dynamicFields.staffId">
+                department_id in (select distinct s.department_id from sec_staff s where s.staff_id = #dynamicFields.staffId#  ) 
+            </isNotEmpty>
+            
+        </dynamic>
+        -->   
+	</select>
+	<select id="listPathFromRootToCurrentDepartmentId" resultMap="DepartmentMap" parameterType="string">
+       call sec_department_list_root(#{departmentId},0)
+    </select>
+    
+    <select id="listSelfAndSubDepartmentByDepartmentId" resultMap="DepartmentMap" parameterType="string">
+        call sec_department_list_root(#{departmentId},1)
+    </select>
+    
+	<insert id="insertDepartmentRoles" 
+	        parameterType="hashMap">
+		<![CDATA[
+		INSERT 	INTO SEC_DEPARTMENT_ROLE (
+				DEPARTMENT_ID			 ,
+				ROLE_ID					 )
+		VALUES (#{departmentId},
+				#{roleId,jdbcType=NUMERIC}	  )
+		]]>       
+  	</insert>
+  	
+  	<delete id="deleteDepartmentRoles" 
+  	        parameterType="long">
+		<![CDATA[
+		DELETE 	FROM SEC_DEPARTMENT_ROLE
+		WHERE  	DEPARTMENT_ID = #{departmentId}
+		]]> 
+  	</delete>   
+  	
+  	<delete id="deleteDepartmentRolesByRoleId" 
+  	        parameterType="long">
+		<![CDATA[
+		DELETE 	FROM SEC_DEPARTMENT_ROLE
+		WHERE  	ROLE_ID = #{roleId}
+		]]> 
+  	</delete>
+  	
+  	<delete id="deleteDepartmentRolesByRoleIdAndDeptId" 
+  	        parameterType="hashmap">
+		<![CDATA[
+		DELETE 	FROM SEC_DEPARTMENT_ROLE
+		WHERE  	department_id = #{departmentId}
+		 AND ROLE_ID = #{roleId}
+		]]> 
+  	</delete>      
+</mapper> 

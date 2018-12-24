@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title>Announce</title>
+<!--#include virtual="/include.html"  -->
+<script src="ueditor/ueditor.config.js"></script>
+<script src="ueditor/ueditor.all.js"></script>
+<style>
+input[type='checbox'] {
+	width: 100px;
+	float: left;
+}
+</style>
+<script type="text/javascript" src="codeDict/queryScript.ajax?codeType=announce_cat,announce_status"></script>
+</head>
+<body>
+<div style="display:none" class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}</script>
+	</div>
+<div style="width:100%; height:40px;"></div>
+<!--  新增form  -->
+<h4 class="lighter">
+    <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
+    <a href="#modal-wizard" data-toggle="modal" class="pink"> Wizard Inside a Modal Box </a>
+</h4>
+<div class="modal-dialog">
+  <div class="modal-content">
+      <div class="modal-header" data-target="#modal-step-contents">
+          
+          
+          <ul class="wizard-steps">
+              <li data-target="#modal-step1" class="complete">
+                  <span class="step">1</span>
+                  <span class="title">Validation states</span>
+              </li>
+
+              <li data-target="#modal-step2" class="active">
+                  <span class="step">2</span>
+                  <span class="title">Alerts</span>
+              </li>
+
+              <!--li data-target="#modal-step3" class="">
+                  <span class="step">3</span>
+                  <span class="title">Payment Info</span>
+              </li>
+
+              <li data-target="#modal-step4" class="">
+                  <span class="step">4</span>
+                  <span class="title">Other Info</span>
+              </li-->
+          </ul>
+      </div>
+
+      <div class="modal-body step-content" id="modal-step-contents">
+          
+          <form id="add-form" style="float:left;"   method="post" class="form-horizontal margin-top-10" role="form" >
+  <div style="width:100%; height:auto; float:left;">
+  <input type="hidden" name="status" value="1"/>
+          <div class="step-pane" id="modal-step1">
+              <div class="center">
+                 <div class="form-group">
+                    <label class="col-sm-2 control-label"> 主题: </label>
+                    <div class="col-sm-8">
+                      <input style="width:300px;" type="text" name="title" id="title" placeholder="主题"  />
+                      <input class="btn btn-info btn-sm" type="button" value="使用模板" id="setingTpl">
+                      <select style="display:none" name="tpl" id="tpl">
+                        <option selected>==请选择模板==</option>
+                      </select>
+                      <input type="hidden" name="announceId"  id="announceId"/>
+                    </div>
+                  </div>
+                   <div class="form-group">
+                    <label class="col-sm-2 control-label"> 栏目类型： </label>
+                    <div class="col-sm-5">
+                      
+                      <select name="cat" id="cat" >
+                      </select>
+                      <input type="hidden" name="toDomains" id="toDomains">
+                    </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="step-pane active" id="modal-step2">
+              <div class="center">
+                   
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"> 内容: </label>
+                    <div class="col-sm-8">
+                      
+                      <textarea type="text/plain" style="width:800px; height:400px; resize:none;" name="content" id="content" placeholder="内容" ></textarea>
+                    </div>
+                  </div>
+                 
+                  
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"> 发布对象: </label>
+                    <div class="col-sm-8">
+                      
+                      <div id="sendObject" > </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+
+          <!--div class="step-pane" id="modal-step3">
+              <div class="center">
+                  <h4 class="blue">Step 3</h4>
+              </div>
+          </div>
+
+          <div class="step-pane" id="modal-step4">
+              <div class="center">
+                  <h4 class="blue">Step 4</h4>
+              </div>
+          </div-->
+      </div>
+
+      <div class="modal-footer wizard-actions">
+          <button class="btn btn-sm btn-prev">
+              <i class="ace-icon fa fa-arrow-left"></i>
+              Prev
+          </button>
+
+          <button class="btn btn-success btn-sm btn-next" data-last="Finish">
+              Next
+              
+          <i class="ace-icon fa fa-arrow-right icon-on-right"></i></button>
+
+          <button class="btn btn-danger btn-sm pull-left" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              Cancel
+          </button>
+      </div>
+  </div>
+</div>
+                                
+                                
+                                
+                                
+
+  
+ 
+  <div class="clearfix form-actions">
+    <div class="center">
+     <a href="pages/admin/announce/announce_list.shtml"> <button class="btn btn-success" type="submit" id="submitButton">
+      <i class="ace-icon fa fa-check bigger-110"></i> 保 存
+      </button>
+      </a>
+      <a  id="backBtn" href="pages/admin/announce/announce_list.shtml">
+      <button class="btn " type="button"  data-dismiss="modal"> <i class="ace-icon fa fa-undo bigger-110"></i> 返回 </button>
+      </a> </div>
+  </div>
+</form>
+
+
+
+
+		<script src="assets/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		<script src="assets/js/fuelux/fuelux.wizard.min.js"></script>
+		<script src="assets/js/jquery.validate.min.js"></script>
+		<script src="assets/js/additional-methods.min.js"></script>
+		<script src="assets/js/bootbox.min.js"></script>
+		<script src="assets/js/jquery.maskedinput.min.js"></script>
+		<script src="assets/js/select2.min.js"></script>
+		<!-- ace scripts -->
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+				$('[data-rel=tooltip]').tooltip();
+				$(".select2").css('width','200px').select2({allowClear:true})
+				.on('change', function(){
+					$(this).closest('form').validate().element($(this));
+				}); 
+				var $validation = false;
+				$('#fuelux-wizard')
+				.ace_wizard({
+					//step: 2 //optional argument. wizard will jump to step "2" at first
+				})
+				.on('change' , function(e, info){
+					if(info.step == 1 && $validation) {
+						if(!$('#validation-form').valid()) return false;
+					}
+				})
+				.on('finished', function(e) {
+					bootbox.dialog({
+						message: "Thank you! Your information was successfully saved!", 
+						buttons: {
+							"success" : {
+								"label" : "OK",
+								"className" : "btn-sm btn-primary"
+							}
+						}
+					});
+				}).on('stepclick', function(e){
+					//e.preventDefault();//this will prevent clicking and selecting steps
+				});
+			
+			
+				//jump to a step
+				$('#step-jump').on('click', function() {
+					var wizard = $('#fuelux-wizard').data('wizard')
+					wizard.currentStep = 3;
+					wizard.setState();
+				})
+				//determine selected step
+				//wizard.selectedItem().step
+			
+			
+			
+				//hide or show the other form which requires validation
+				//this is for demo only, you usullay want just one form in your application
+				$('#skip-validation').removeAttr('checked').on('click', function(){
+					$validation = this.checked;
+					if(this.checked) {
+						$('#sample-form').hide();
+						$('#validation-form').removeClass('hide');
+					}
+					else {
+						$('#validation-form').addClass('hide');
+						$('#sample-form').show();
+					}
+				})
+			
+			
+			
+				//documentation : http://docs.jquery.com/Plugins/Validation/validate
+			
+			
+				$.mask.definitions['~']='[+-]';
+				$('#phone').mask('(999) 999-9999');
+			
+				jQuery.validator.addMethod("phone", function (value, element) {
+					return this.optional(element) || /^\(\d{3}\) \d{3}\-\d{4}( x\d{1,6})?$/.test(value);
+				}, "Enter a valid phone number.");
+			
+				$('#validation-form').validate({
+					errorElement: 'div',
+					errorClass: 'help-block',
+					focusInvalid: false,
+					rules: {
+						email: {
+							required: true,
+							email:true
+						},
+						password: {
+							required: true,
+							minlength: 5
+						},
+						password2: {
+							required: true,
+							minlength: 5,
+							equalTo: "#password"
+						},
+						name: {
+							required: true
+						},
+						phone: {
+							required: true,
+							phone: 'required'
+						},
+						url: {
+							required: true,
+							url: true
+						},
+						comment: {
+							required: true
+						},
+						date: {
+							required: true,
+							date: true
+						},
+						state: {
+							required: true
+						},
+						platform: {
+							required: true
+						},
+						subscription: {
+							required: true
+						},
+						gender: 'required',
+						agree: 'required'
+					},
+			
+					messages: {
+						email: {
+							required: "Please provide a valid email.",
+							email: "Please provide a valid email."
+						},
+						password: {
+							required: "Please specify a password.",
+							minlength: "Please specify a secure password."
+						},
+						subscription: "Please choose at least one option",
+						gender: "Please choose gender",
+						agree: "Please accept our policy"
+					},
+			
+			
+					highlight: function (e) {
+						$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+					},
+			
+					success: function (e) {
+						$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+						$(e).remove();
+					},
+			
+					errorPlacement: function (error, element) {
+						if(element.is(':checkbox') || element.is(':radio')) {
+							var controls = element.closest('div[class*="col-"]');
+							if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+							else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+						}
+						else if(element.is('.select2')) {
+							error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+						}
+						else if(element.is('.chosen-select')) {
+							error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+						}
+						else error.insertAfter(element.parent());
+					},
+			
+					submitHandler: function (form) {
+					},
+					invalidHandler: function (form) {
+					}
+				});
+			
+				
+				
+				
+				$('#modal-wizard .modal-header').ace_wizard();
+				$('#modal-wizard .wizard-actions .btn[data-dismiss=modal]').removeAttr('disabled');
+				
+				
+				/**
+				$('#date').datepicker({autoclose:true}).on('changeDate', function(ev) {
+					$(this).closest('form').validate().element($(this));
+				});
+				
+				$('#mychosen').chosen().on('change', function(ev) {
+					$(this).closest('form').validate().element($(this));
+				});
+				*/
+			})
+		</script>
+<!--#include virtual="/include_footer.html"  --> 
+<script type="text/javascript">
+	/* 栏目数据加载  */
+	$("#cat").localRender(CodeDict['announce_cat'],{
+		//firstOption:{text:'请选择分类',value:''},
+		keyValue:{text:'value',value:'key'}
+	});
+	var obj_url=ctxPaths+"/lessee/lessee/listExclude.ajax?isExclude=1";
+	var template_list_url  = ctxPaths+ '/announce/template/list.ajax';
+	var get_url  = ctxPaths+ "/announce/template/get.ajax";
+	var tpl_list_url  = ctxPaths+ '/announce/template/list.ajax';
+	var list_url  = ctxPaths+ '/announce/announce/list.ajax';
+	var add_url   = ctxPaths+ '/announce/announce/add.ajax';
+	var mod_url   = ctxPaths+ '/announce/announce/mod.ajax';
+	var del_url   = ctxPaths+ '/announce/announce/del.ajax';
+	var view_url 	 = ctxPaths+ '/announce/announce/get.ajax';
+	$(function($) {
+		var ue = UE.getEditor('content');
+		$("#submitButton").click(function(){
+			//alert(getP("id"));
+			var checkbox = '';
+			$("input[type='checkbox']:checked").each(function(){
+				if(checkbox == ''){
+					checkbox += $(this).val();
+				}else{
+					checkbox += ',' + $(this).val();
+				}
+			});
+			$("#toDomains").val(checkbox);
+			if(getP("id")!=""){
+				editEvent(getP("id"));
+			}else{
+				add_validator();
+				window.location.href="pages/admin/announce/announce_list.shtml";
+				$('#backBtn').trigger('click');
+			}
+		});
+		$("#setingTpl").click(function(){
+			$("#tpl").css({"display":""});
+		});
+		if(getP("id")!=""){
+				editEvent(getP("id"));
+		}
+		 
+		$.ajaxSubmit(tpl_list_url, {},
+					function(rtn) {
+						if (rtn.success) {
+							var data = rtn.rows;
+							var html="";
+							//console.log(data);
+							for(var i=0 in data){
+								if(typeof data[i]['title']=="undefined"){
+									break;
+								}else{
+									html+="<option value="+data[i]['tmplId']+">"+data[i]['title']+"</option>";
+								}
+							}
+							$("#tpl").html("<option selected value=''>请选择</option>"+html);
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+
+		});
+		
+		
+			$.ajaxSubmit(obj_url, {},
+					function(rtn) {
+						if (rtn.success) {
+							var data = rtn.rows;
+							var html="";
+							//console.log(data);
+							console.log(new Date());
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+
+		});
+		
+		
+		$.ajaxSubmit(obj_url, {},
+					function(rtn) {
+						if (rtn.success) {
+							var data = rtn.rows;
+							var html="";
+							//alert(data);
+							//console.log(data);
+							for(var i=0 in data){
+								console.log(data[i]['lesseeName']);
+								if(typeof data[i]['lesseeName']=="undefined"){
+									break;
+								}else{
+									html+="<input style='margin-left:20px;'  type='checkbox' value="+data[i]['lesseeId']+" >"+data[i]['lesseeName'];
+								}
+							}
+							$("#sendObject").html(html);
+						} else {
+							if (rtn.data && rtn.data.message) {
+								Q_Alert_Fail(rtn.data.message, "提示");
+							} else {
+								Q_Alert_Fail('原因未知');
+							}
+						}
+		});
+		$("#tpl").change(function(){
+					var tplval=$("#tpl  option:selected").val();
+					//console.log(tplval);
+					$.ajaxSubmit(get_url,{'id': tplval}, function(data){
+						if(data.success == true){
+							console.log(data.data);
+							$("#title").val(data.data['title']);
+							var ue=UE.getEditor('content');
+							//判断ueditor 编辑器是否创建成功
+					       // ue.addListener("ready", function () {
+					        // editor准备好之后才可以使用
+					        ue.setContent(data.data['content']);
+					 
+					       // });
+							//UE.getEditor('content').setContent(data.data['content']);
+							//$("#content").html(data.data['content']);
+						}else{
+							Q_Alert_Fail(data.message);
+						}
+					});
+			})
+	});
+
+			function editEvent(id){
+				$.ajaxSubmit(view_url,{'id': id}, function(data){
+				    if(data.success == true){
+						//resetForm($('#add-form'),add_validator);
+						//console.log(data);
+						//UE.getEditor('content').setContent(data.data['content']);
+						var ue=UE.getEditor('content');
+						//判断ueditor 编辑器是否创建成功
+				        ue.addListener("ready", function () {
+				        // editor准备好之后才可以使用
+				        ue.setContent(data.data['content']);
+				 
+				        });
+						$('#add-form').json2Form2(data.data);
+					}else{
+						Q_Alert_Fail(data.message);
+					}
+				});
+			}; 
+			
+			
+			function add_validator(){
+				
+					var form=$("#add-form");
+						var url = add_url;
+						if($('#announceId').val() != ''){
+							url = mod_url;
+						}
+						
+						$.ajax({url:url,
+						type:"POST",
+						dataType:"json",
+						data:form.serialize(),
+						success: function(data){
+							if(data['success']==true){
+								console.log(data);
+								//return;
+								$('#backBtn').trigger('click');
+								history.go(-1);
+								
+							}
+							else {
+								if (rtn.data && rtn.data.message) {
+									Q_Alert_Fail(rtn.data.message, "提示");
+								} else {
+									Q_Alert_Fail('原因未知');
+								}
+							}
+						},
+						error:function(){
+							Q_Alert_Fail('原因未知');
+						}
+						});
+						$('#backBtn').trigger('click');		
+				history.go(-1)
+			}
+			
+			</script>
+</body>
+</html>

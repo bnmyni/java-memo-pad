@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!--#include virtual="/root.jsp"  -->
+<title>Announce</title>
+<!--#include virtual="/include.html"  -->
+</head>
+<body class="mainbg">
+<form method="post" action="GWQB_Submit_V2.aspx?SID=7&amp;MID=97028&amp;UAType=1&amp;GWLX=5" onsubmit="javascript:return WebForm_OnSubmit();" id="form1" style="text-align: center;" enctype="multipart/form-data">
+  <div class="aspNetHidden"></div>
+  <div id="master">
+    <div id="pubGlobal_main_content2">
+      <div id="mainbg"> 
+        <!--头部导航-->
+        <div id="headliucheng"></div>
+        <!--页面主体-->
+        <div class="layoutwhite" id="g">
+          <div id="ContentPlaceHolder1_UpdatePanel1"> </div>
+          <div id="ContentPlaceHolder1_ValidationSummary1" style="display:none;"> </div>
+          <div id="ContentPlaceHolder1_panelInput"><!--帮助提醒-->
+            <tr>
+              <td align="right"></td>
+            </tr>
+            <tr>
+              <td id="ContentPlaceHolder1_td_Submit" width="42%" align="right"><input type="button"  class="btn btn-success" value="预览并提交"  id="ContentPlaceHolder1_btnSubmit" class="button" />
+                <input type="button" class="btn btn-success"  value="关闭" id="ContentPlaceHolder1_btnClose"  /></td>
+            </tr>
+            <div id="ContentPlaceHolder1_ValidationSummary2" style="height:35px;width:105px;display:none;"> </div>
+            <table width="90%" class="table table-striped table-bordered table-hover" border="0" align="center" cellpadding="3" cellspacing="3">
+              <tr>
+                <td class="center"><h2>
+                  卓望公司发文稿纸
+                  </hw></td>
+              </tr>
+            </table>
+            <div id="ContentPlaceHolder1_upFWFW">
+              <table class="table table-striped table-bordered table-hover" border="1">
+                <tr>
+                  <td align="left" colspan="4"><span id="ContentPlaceHolder1_info" style="color:Red;">提示：1、此流程依据《卓望公司公文处理办法》制定，仅适用于公司通用类公文及签报流程提请与审核，全体员工均可发起。<BR/>
+                    2、请勿使用此流程发起有关项目管理、商务采购、财务报销、印章及资质等既有专用流程的事项。</span></td>
+                </tr>
+                <tr>
+                  <td colspan="4" style="line-height: 25px; text-align: left; margin-top: 10px; font-weight: bold;
+                                    font-size: 15px; margin-bottom: 5px;"> 申请信息区 </td>
+                </tr>
+                <tr>
+                  <th> <span id="ContentPlaceHolder1_lblwbk">申请单编号</span> </th>
+                  <td align="left"><label for="textfield"></label>
+                  <input type="text" name="textfield" id="textfield"></td>
+                  <th> 拟稿日期 :</th>
+                  <td align="left"><span id="ContentPlaceHolder1_lblBillDate">2015-07-04</span></td>
+                </tr>
+                <tr>
+                  <th> 拟稿人 :</th>
+                  <td align="left"><span id="ContentPlaceHolder1_lblBillEmpName">
+                    <input type="text" name="textfield2" id="textfield2">
+                  </span></td>
+                  <th> 联系方式 :</th>
+                  <td align="left"><input name="ctl00$ContentPlaceHolder1$lblLxfs" type="text" value="/13902253031" size="19" id="ContentPlaceHolder1_lblLxfs" class="TextBox" style="width:80%;" /></td>
+                </tr>
+                <tr>
+                  <th> <span id="ContentPlaceHolder1_Label1">拟稿部门:</span> </th>
+                  <td colspan="3"><span id="ContentPlaceHolder1_lblBillDept">平台研发部</span></td>
+                </tr>
+                <tr id="ContentPlaceHolder1_tr_GWZL">
+                  <th> 公文种类 :</th>
+                  <td colspan="3"><select name="ctl00$ContentPlaceHolder1$ddlGWZL" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$ddlGWZL\&#39;,\&#39;\&#39;)&#39;, 0)" id="ContentPlaceHolder1_ddlGWZL">
+                      <option selected="selected" value=""></option>
+                      <option value="规范类公文： （1）规定、（2）办法、（3）细则">规范类公文： （1）规定、（2）办法、（3）细则</option>
+                      <option value="指挥类公文：（4）决议（决定）、（5）意见、（6）批复">指挥类公文：（4）决议（决定）、（5）意见、（6）批复</option>
+                      <option value="任免类公文：（7）任免书">任免类公文：（7）任免书</option>
+                      <option value="告知类公文（非规范类）：（8）通知、（9）通报">告知类公文（非规范类）：（8）通知、（9）通报</option>
+                      <option value="签报类公文：（10）请示、（11）报告、（12）建议议案">签报类公文：（10）请示、（11）报告、（12）建议议案</option>
+                      <option value="商洽类公文：（15.1）外部单位向我司来文来函">商洽类公文：（15.1）外部单位向我司来文来函</option>
+                      <option value="商洽类公文：（15.2）我司对外部单位去（回）函">商洽类公文：（15.2）我司对外部单位去（回）函</option>
+                      <option value="计划方案类公文：（16）商业计划、（17）战略（发展）规划、（18）解决方案">计划方案类公文：（16）商业计划、（17）战略（发展）规划、（18）解决方案</option>
+                    </select>
+                    <span id="ContentPlaceHolder1_RequiredFieldValidator2" class="ErrorInfo" style="color:Red;visibility:hidden;">*</span></td>
+                </tr>
+                <tr>
+                  <th> <span id="ContentPlaceHolder1_Label2">阅读权限</span> </th>
+                  <td align="left"><span id="ContentPlaceHolder1_rblYDQX" class="radio_style" style="color:Black;font-size:13px;font-weight:normal;text-decoration:none;">
+                    <input id="ContentPlaceHolder1_rblYDQX_0" type="radio" name="ctl00$ContentPlaceHolder1$rblYDQX" value="仅限相关部门" checked="checked" />
+                    <label for="ContentPlaceHolder1_rblYDQX_0">仅限相关部门</label>
+                    <input id="ContentPlaceHolder1_rblYDQX_1" type="radio" name="ctl00$ContentPlaceHolder1$rblYDQX" value="公告至EIP全员知晓" />
+                    <label for="ContentPlaceHolder1_rblYDQX_1">公告至EIP全员知晓</label>
+                    </span></td>
+                  <th> <span id="ContentPlaceHolder1_Label6">密级</span> </th>
+                  <td align="left"><select name="ctl00$ContentPlaceHolder1$ddlMJ001" id="ContentPlaceHolder1_ddlMJ001" style="width:50%;">
+                      <option value="一般">一般</option>
+                      <option value="秘密">秘密</option>
+                      <option value="机密">机密</option>
+                    </select></td>
+                </tr>
+                <tr>
+                  <th> <span id="ContentPlaceHolder1_Label5">标题</span> </th>
+                  <td align="left" colspan="3"><input name="ctl00$ContentPlaceHolder1$txtBT" type="text" size="19" id="ContentPlaceHolder1_txtBT" class="TextBox" onchange="bt()" style="width:80%;" />
+                    <span id="ContentPlaceHolder1_RequiredFieldValidator1" class="ErrorInfo" style="color:Red;visibility:hidden;">标题不能为空!</span></td>
+                </tr>
+                <tr style="display: none">
+                  <th> <span id="ContentPlaceHolder1_Label23">主题词</span> </th>
+                  <td align="left" colspan="3"><input name="ctl00$ContentPlaceHolder1$txtZTC" type="text" size="19" id="ContentPlaceHolder1_txtZTC" class="TextBox" style="width:90%;" /></td>
+                </tr>
+                <tr id="ContentPlaceHolder1_tr_ZSBM">
+                  <th> <span id="ContentPlaceHolder1_Label20">主送部门</span> </th>
+                  <td align="left" colspan="3"><span id="ContentPlaceHolder1_rbtnJG" class="radio_style" style="color:Black;font-size:13px;font-weight:normal;text-decoration:none;">
+                    <input id="ContentPlaceHolder1_rbtnJG_0" type="radio" name="ctl00$ContentPlaceHolder1$rbtnJG" value="内部机构" checked="checked" />
+                    <label >内部机构</label>
+                    </span> &nbsp;&nbsp; <span id="ContentPlaceHolder1_Label7">外部机构：</span> <span id="ContentPlaceHolder1_rbtbWB" >
+                    <input id="ContentPlaceHolder1_rbtbWB_0" type="radio" name="ctl00$ContentPlaceHolder1$rbtbWB" value="移动公司" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$rbtbWB$0\&#39;,\&#39;\&#39;)&#39;, 0)" />
+                    <label for="">移动公司</label>
+                    <input id="" type="radio"  value="非移动公司"  />
+                    <label for="ContentPlaceHolder1_rbtbWB_1">非移动公司</label>
+                    </span> <br />
+                    <div id="ContentPlaceHolder1_panelNB">
+                      <input name="ctl00$ContentPlaceHolder1$txtZBBM" type="text" value="系统事业部" size="19" id="ContentPlaceHolder1_txtZBBM" class="TextBox" ContentEditable="false" style="width:74%;" />
+                      <input name="ctl00$ContentPlaceHolder1$txtZBBMID" type="text" value="D01100" size="19" id="ContentPlaceHolder1_txtZBBMID" class="TextBox" style="width:1px;display: none;" />
+                      <a href="#XGPSBMzs" > 选择</a> <a href="#XGPSBMzs" onclick='clearInnerXML_Local("ContentPlaceHolder1_txtZBBM","ContentPlaceHolder1_txtZBBMID","2")'> 清空</a> <a name="XGPSBMzs"></a> <span id="ContentPlaceHolder1_RequiredFieldValidator8" class="ErrorInfo" style="color:Red;visibility:hidden;">*</span> <br />
+                    </div>
+                    <span id="ContentPlaceHolder1_Label41" style="color:Red;">提示：1、此处所填主送部门应与正文开头的称谓一致；<BR/>
+                    2、主送部门不具会签权限，如需会签请在“会签部门”选项里点选相关部门”。<br />
+                    3、只可通过选择【主送】、【抄送】部门，不可通过直接编辑正文描述</span></td>
+                </tr>
+                <tr id="ContentPlaceHolder1_tr_CSBM">
+                  <th> <span id="ContentPlaceHolder1_Label3">抄送部门</span> </th>
+                  <td align="left" colspan="3"><input name="ctl00$ContentPlaceHolder1$tbCSBM" type="text" size="19" id="ContentPlaceHolder1_tbCSBM" class="TextBox" ContentEditable="false" style="width:74%;" />
+                    <input name="ctl00$ContentPlaceHolder1$tbCSBMID" type="text" size="19" id="ContentPlaceHolder1_tbCSBMID" class="TextBox" style="width:1px;display: none;" />
+                    <a href="#XGPSBM" > 选择</a> <a href="#XGPSBM" > 清空</a> <a name="XGPSBM"></a></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div id="div_word">
+            	<textarea cols="130" rows="20" ></textarea>
+          </div>
+          <div id="ContentPlaceHolder1_panelInput2">
+            <div id="ContentPlaceHolder1_UpdatePanel2">
+              <table class="table table-striped table-bordered table-hover">
+                <tr>
+                  <th> </th>
+                  <th></th>
+                  <th> </th>
+                  <th></th>
+                </tr>
+                <tr id="ContentPlaceHolder1_tr_GHLC">
+                  <th> <span id="ContentPlaceHolder1_Label9">固化流程</span> </th>
+                  <td align="left" colspan="3"><span id="ContentPlaceHolder1_lbGHSP">黄玉标-->任恒军-->王巍-->沈岩</span></td>
+                </tr>
+                <tr id="ContentPlaceHolder1_tr_HQBM">
+                  <th> <span id="ContentPlaceHolder1_Label14">会签（部门）</span> </th>
+                  <td colspan="3" align="left"><table style="width: 100%;">
+                      <tr>
+                        <td><input name="ctl00$ContentPlaceHolder1$tbHQBM" type="text" size="19" id="ContentPlaceHolder1_tbHQBM" class="TextBox" ContentEditable="false" style="width:40%;" />
+                          <input name="ctl00$ContentPlaceHolder1$tbHQBMID" type="text" size="19" id="ContentPlaceHolder1_tbHQBMID" class="TextBox" style="width:1px;display: none;" />
+                          <a href="#XGPSBM45" onclick="fun_ShowDialogLoginName('ContentPlaceHolder1_hfSid','ContentPlaceHolder1_hfProj','1','G','ContentPlaceHolder1_tbHQBM','ContentPlaceHolder1_tbHQBMID','9999');"> 选择</a> <a href="#XGPSBM45" onclick='clearInnerXML("ContentPlaceHolder1_tbHQBM","ContentPlaceHolder1_tbHQBMID")'> 清空</a>
+                          <input type="button"  value="添加" id="ContentPlaceHolder1_btnHqAdd" class="btn btn_success" /></td>
+                      </tr>
+                      <tr>
+                        <td><div id="ContentPlaceHolder1_pHq" style="width:100%;">
+                            <div> </div>
+                          </div></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <tr id="ContentPlaceHolder1_tr_zh">
+                  <th> <span id="ContentPlaceHolder1_Label27">知会（个人）</span> </th>
+                  <td align="left" colspan="3"><table style="width: 100%;">
+                      <tr>
+                        <td><input name="ctl00$ContentPlaceHolder1$tbZH" type="text" size="19" id="ContentPlaceHolder1_tbZH" class="TextBox" ContentEditable="false" style="width:40%;" />
+                          <input name="ctl00$ContentPlaceHolder1$tbZHID" type="text" size="19" id="ContentPlaceHolder1_tbZHID" class="TextBox" style="width:1px;display: none;" />
+                          <a href="#XGPSBM6" onclick="fun_ShowDialogLoginName('ContentPlaceHolder1_hfSid','ContentPlaceHolder1_hfProj','1','U','ContentPlaceHolder1_tbZH','ContentPlaceHolder1_tbZHID','9999');"> 选择</a> <a href="#XGPSBM6" onclick='clearInnerXML("ContentPlaceHolder1_tbZH","ContentPlaceHolder1_tbZHID")'> 清空</a> <span id="ContentPlaceHolder1_rblZH" class="radio_style" style="color:Black;font-size:13px;font-weight:normal;text-decoration:none;">
+                          <input id="ContentPlaceHolder1_rblZH_0" type="radio" name="ctl00$ContentPlaceHolder1$rblZH" value="1" checked="checked" />
+                          <label for="ContentPlaceHolder1_rblZH_0">审批结束后知会</label>
+                          <input id="ContentPlaceHolder1_rblZH_1" type="radio" name="ctl00$ContentPlaceHolder1$rblZH" value="2" />
+                          <label for="ContentPlaceHolder1_rblZH_1">提交后知会</label>
+                          </span>
+                          <input type="submit"  value="添加" id="ContentPlaceHolder1_btnZhAdd" class="btn" /></td>
+                      </tr>
+                      <tr>
+                        <td><div> </div></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <tr id="ContentPlaceHolder1_tr_dztx">
+                  <th> <span id="ContentPlaceHolder1_Label31">定制提醒</span> </th>
+                  <td align="left" colspan="3"><input id="ContentPlaceHolder1_cbDZTS" type="checkbox" name="ctl00$ContentPlaceHolder1$cbDZTS" />
+                    <label for="ContentPlaceHolder1_cbDZTS">关注此单</label></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <br />
+          <div id="ContentPlaceHolder1_UpdatePanel52">
+            <div id="ContentPlaceHolder1_UCFileUpload_uPanel">
+              <div>
+                <table class="tablelist" cellspacing="0" cellpadding="0" id="ContentPlaceHolder1_UCFileUpload_gvFileUploads" style="border-color:Silver;border-width:1px;border-style:solid;width:90%;border-collapse:collapse;">
+                  <caption>
+                  附件列表 (请使用卓望公司标准VI办公模板) <a href='http://eip.aspirecn.com/wdzx/VI/Forms/AllItems.aspx' target='_blank'><font color='red'>下载模板</font></a>
+                  </caption>
+                  <tr>
+                    <td colspan="6"><div style="height: 30px; width: 100%;">
+                        <p> 没有查询到符合条件的记录。</p>
+                      </div></td>
+                  </tr>
+                </table>
+              </div>
+              <table id="ContentPlaceHolder1_UCFileUpload_tbFileUpLoad" class="table table-striped table-bordered table-hover">
+                <tr>
+                  <td align="left"><input type="file" name="ctl00$ContentPlaceHolder1$UCFileUpload$FileUpload" id="ContentPlaceHolder1_UCFileUpload_FileUpload" class="FileUpload" style="width:324px;" />
+                    <input type="submit"  class="btn btn-success" value="上 传" onclick="SaveDocument();" id="ContentPlaceHolder1_UCFileUpload_Button1" title="上传附件" class="FileButton" />
+                    <span class="redfont"> <span id="ContentPlaceHolder1_UCFileUpload_lblUploadMessage" style="color:Red;"></span></span></td>
+                </tr>
+                <tr>
+                  <td align="left"><span id="ContentPlaceHolder1_UCFileUpload_lblMessage" style="color:Red;"></span></td>
+                </tr>
+              </table>
+              <table id="ContentPlaceHolder1_UCFileUpload_Table1" class="newformitem">
+                <tr>
+                  <td align="left"><span id="ContentPlaceHolder1_UCFileUpload_lts" style="color:Red;">提示：撤回、驳回后每次重新提交申请，历次提交的附件都将显示为历史版本以供前后对比；流程终审完结后，将只显示经过审批的最终版本附件。</span></td>
+                </tr>
+                <tr>
+                  <td align="left"><span id="ContentPlaceHolder1_UCFileUpload_lls">历史版本</span></td>
+                </tr>
+              </table>
+              <div id="dgv" style="display: none;">
+                <div>
+                  <table class="tablelist" cellspacing="0" cellpadding="0" id="ContentPlaceHolder1_UCFileUpload_gvFileUploads_OLD" style="border-color:Silver;border-width:1px;border-style:solid;width:90%;border-collapse:collapse;">
+                    <tr>
+                      <td colspan="5"><div style="height: 30px; width: 100%;">
+                          <p> 没有查询到符合条件的记录。</p>
+                        </div></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <input type="hidden" name="ctl00$ContentPlaceHolder1$UCFileUpload$hfAttachment" id="ContentPlaceHolder1_UCFileUpload_hfAttachment" />
+              <input type="hidden" name="ctl00$ContentPlaceHolder1$UCFileUpload$hfFileType" id="ContentPlaceHolder1_UCFileUpload_hfFileType" />
+              <input type="hidden" name="ctl00$ContentPlaceHolder1$UCFileUpload$hfWebURL" id="ContentPlaceHolder1_UCFileUpload_hfWebURL" />
+              <input type="hidden" name="ctl00$ContentPlaceHolder1$UCFileUpload$hfVersion" id="ContentPlaceHolder1_UCFileUpload_hfVersion" value="1" />
+              <input type="hidden" name="ctl00$ContentPlaceHolder1$UCFileUpload$hfVersion_sub" id="ContentPlaceHolder1_UCFileUpload_hfVersion_sub" value="1" />
+            </div>
+            <script language="javascript" type="text/javascript">
+    function gvFileUpLoads_Old() {
+        if (document.getElementById("dgv").style.display == "none") {
+            document.getElementById("dgv").style.display = "block";
+            document.getElementById("iJJ").src = "../../../Images/jian.gif";
+        }
+        else {
+            document.getElementById("dgv").style.display = "none"
+            document.getElementById("iJJ").src = "../../../Images/jia.gif";
+        }
+
+    }
+</script> 
+          </div>
+          <div style="width:90%;vertical-align:bottom">
+            <div style="float:left;text-align:left;font-size:16px;font-weight:bold;width:50%">审批日志列表</div>
+            <div style="float:right;text-align:right;width:49%"><a id="ContentPlaceHolder1_UCApproveLog_btnLookAll" class="LinkButton" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$UCApproveLog$btnLookAll&#39;,&#39;&#39;)" style="background-color:Transparent;">查看所有日志</a></div>
+          </div>
+          <div> </div>
+          <table class="newformitem">
+            <tr>
+              <td colspan="6" align="center"> 保密制度 </td>
+            </tr>
+            <tr>
+              <td colspan="6" align="left"><font color="red">根据卓望公司《公文处理办法》及相关保密制度规定，本页面/邮件/附件涉及的公文内容为保密信息，仅供卓望公司内部指定对象使用。请您对本页面/邮件/附件的有关内容严格保密，不得以任何理由和方式向公司内、外无关人员散布、泄漏此公文的相关信息。公司已对此采取适当的技术预防与追溯措施。对失密、泄密者，将按照公司有关规定予以纪律、经济处理；对情节严重者，将予以解雇并追究其法律责任。</font></td>
+            </tr>
+          </table>
+          <br />
+          <!--页面底部-->
+          <div class="layout" style="clear: both">
+            <div></div>
+          </div>
+        </div>
+        <div class="pubGlobal_conblk05-b"> </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("ContentPlaceHolder1_ValidationSummary1"), document.getElementById("ContentPlaceHolder1_ValidationSummary2"));
+var Page_Validators =  new Array(document.getElementById("ContentPlaceHolder1_RequiredFieldValidator2"), document.getElementById("ContentPlaceHolder1_RequiredFieldValidator1"), document.getElementById("ContentPlaceHolder1_RequiredFieldValidator8"));
+//]]>
+</script> 
+  <script type="text/javascript">
+//<![CDATA[
+var ContentPlaceHolder1_ValidationSummary1 = document.all ? document.all["ContentPlaceHolder1_ValidationSummary1"] : document.getElementById("ContentPlaceHolder1_ValidationSummary1");
+ContentPlaceHolder1_ValidationSummary1.showmessagebox = "True";
+ContentPlaceHolder1_ValidationSummary1.showsummary = "False";
+ContentPlaceHolder1_ValidationSummary1.validationGroup = "Submit";
+var ContentPlaceHolder1_ValidationSummary2 = document.all ? document.all["ContentPlaceHolder1_ValidationSummary2"] : document.getElementById("ContentPlaceHolder1_ValidationSummary2");
+ContentPlaceHolder1_ValidationSummary2.showmessagebox = "True";
+ContentPlaceHolder1_ValidationSummary2.showsummary = "False";
+ContentPlaceHolder1_ValidationSummary2.displaymode = "List";
+ContentPlaceHolder1_ValidationSummary2.validationGroup = "Submit";
+var ContentPlaceHolder1_RequiredFieldValidator2 = document.all ? document.all["ContentPlaceHolder1_RequiredFieldValidator2"] : document.getElementById("ContentPlaceHolder1_RequiredFieldValidator2");
+ContentPlaceHolder1_RequiredFieldValidator2.controltovalidate = "ContentPlaceHolder1_ddlGWZL";
+ContentPlaceHolder1_RequiredFieldValidator2.errormessage = "请选择[公文种类]";
+ContentPlaceHolder1_RequiredFieldValidator2.validationGroup = "Submit";
+ContentPlaceHolder1_RequiredFieldValidator2.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+ContentPlaceHolder1_RequiredFieldValidator2.initialvalue = "";
+var ContentPlaceHolder1_RequiredFieldValidator1 = document.all ? document.all["ContentPlaceHolder1_RequiredFieldValidator1"] : document.getElementById("ContentPlaceHolder1_RequiredFieldValidator1");
+ContentPlaceHolder1_RequiredFieldValidator1.controltovalidate = "ContentPlaceHolder1_txtBT";
+ContentPlaceHolder1_RequiredFieldValidator1.errormessage = "请输入[标题]";
+ContentPlaceHolder1_RequiredFieldValidator1.validationGroup = "Submit";
+ContentPlaceHolder1_RequiredFieldValidator1.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+ContentPlaceHolder1_RequiredFieldValidator1.initialvalue = "";
+var ContentPlaceHolder1_RequiredFieldValidator8 = document.all ? document.all["ContentPlaceHolder1_RequiredFieldValidator8"] : document.getElementById("ContentPlaceHolder1_RequiredFieldValidator8");
+ContentPlaceHolder1_RequiredFieldValidator8.controltovalidate = "ContentPlaceHolder1_txtZBBM";
+ContentPlaceHolder1_RequiredFieldValidator8.errormessage = "请选择[主送部门]";
+ContentPlaceHolder1_RequiredFieldValidator8.validationGroup = "Submit";
+ContentPlaceHolder1_RequiredFieldValidator8.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+ContentPlaceHolder1_RequiredFieldValidator8.initialvalue = "";
+//]]>
+</script> 
+  <script type="text/javascript">
+//<![CDATA[
+(function() {var fn = function() {$get("ScriptManager1_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();
+(function(id) {
+    var e = document.getElementById(id);
+    if (e) {
+        e.dispose = function() {
+            Array.remove(Page_ValidationSummaries, document.getElementById(id));
+        }
+        e = null;
+    }
+})('ContentPlaceHolder1_ValidationSummary1');
+
+(function(id) {
+    var e = document.getElementById(id);
+    if (e) {
+        e.dispose = function() {
+            Array.remove(Page_ValidationSummaries, document.getElementById(id));
+        }
+        e = null;
+    }
+})('ContentPlaceHolder1_ValidationSummary2');
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        
+document.getElementById('ContentPlaceHolder1_RequiredFieldValidator2').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('ContentPlaceHolder1_RequiredFieldValidator2'));
+}
+
+document.getElementById('ContentPlaceHolder1_RequiredFieldValidator1').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('ContentPlaceHolder1_RequiredFieldValidator1'));
+}
+
+document.getElementById('ContentPlaceHolder1_RequiredFieldValidator8').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('ContentPlaceHolder1_RequiredFieldValidator8'));
+}
+//]]>
+</script>
+</form>
+</body>
+</html>

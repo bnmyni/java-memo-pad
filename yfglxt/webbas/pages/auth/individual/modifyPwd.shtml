@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<!--#include virtual="/root.jsp"  -->
+		<title></title>
+		<!--#include virtual="/include.html"  -->
+	</head>
+	<body>
+
+	<div class="page-content">
+	<div class="page-header">
+						<h1>
+							个人信息
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								修改密码
+							</small>
+						</h1>
+					</div>
+	<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+	<form id="modifyPwdForm" class="form-horizontal" role="form" onsubmit="return false;">
+		<div class="form-group">
+			<label for="oldPassword" class="col-sm-3 control-label no-padding-right"><span class="red">*</span>旧密码：</label>
+			<div class="col-sm-4">
+				<input type="password" name="oldPassword"
+									id="oldPassword" class="col-sm-12"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right"></label>
+			<div class="col-sm-9">
+			<p class="green">(密码长度最短6位，最长20位，数字、字母、特殊符号组成，并且必须同时包含数字和字母)</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="newPassword" class="col-sm-3 control-label no-padding-right"><span class="red">*</span>新密码：</label>
+			<div class="col-sm-4">
+				<input type="password" name="newPassword"
+									id="newPassword" class="col-sm-12"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="newPasswordConfirm" class="col-sm-3 control-label no-padding-right"><span class="red">*</span>再次确认新密码：</label>
+			<div class="col-sm-4">
+				<input type="password" name="newPasswordConfirm" 
+									id="newPasswordConfirm" class="col-sm-12"/>
+			</div>
+		</div>
+
+		<div class="clearfix form-actions">
+									<div class="center">
+										<button class="btn btn-info" type="submit" id="submitButton">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											保 存
+										</button>
+
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn" type="button" id="resetBtn">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											重 置
+										</button>
+									</div>
+								</div>
+	</form>
+	</div>
+	</div>
+</div>
+<!--#include virtual="/include_footer.html"  -->
+<script type="text/javascript" src="pages/auth/js/modifyPwd.js"></script>
+</body>
+</html>
